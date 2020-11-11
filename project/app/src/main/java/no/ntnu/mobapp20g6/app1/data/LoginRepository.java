@@ -53,8 +53,6 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-
-
     public void login(String username, String password, Consumer<Result<LoggedInUser>> resultCallback) {
         // handle login
         dataSource.login(username, password,(Result<LoggedInUser> result)->{
@@ -64,6 +62,16 @@ public class LoginRepository {
             resultCallback.accept(result);
 
         } );
+    }
+
+    /**
+     * Create user account, same signatur as login
+     * @param creationCallback Result.Success(true) = OK, (false) = bad input - Result.Error = ERR
+     */
+    public void create(String username, String password, String firstname, String lastname, Consumer<Result<Boolean>> creationCallback) {
+        dataSource.createAccount(username,password,firstname,lastname,(creationResult)->{
+            creationCallback.accept(creationResult);
+        });
     }
 
     /**

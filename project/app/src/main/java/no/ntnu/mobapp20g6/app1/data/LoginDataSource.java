@@ -3,6 +3,7 @@ package no.ntnu.mobapp20g6.app1.data;
 import android.util.Log;
 
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
+import no.ntnu.mobapp20g6.app1.data.model.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,7 +72,55 @@ public class LoginDataSource {
 
     }
 
-    public void createAccount(String username, String )
+    /**
+     * Create a user account
+     * @param username username of user
+     * @param pwd password of user
+     * @param firstname first name of user
+     * @param lastname last name of user
+     * @param creationResultCallback result of creation:
+     *                               Result.Success(true) = Creation OK
+     *                               Result.Success(false) = Creation STOPPED, bad input
+     *                               Result.Error = Server gave other error code
+     *
+     */
+    public void createAccount(
+            String username, String pwd, String firstname, String lastname,
+            Consumer<Result<Boolean>> creationResultCallback
+    ) {
+        try {
+            Call<User> createUserCall = authService.createUser(firstname,lastname,pwd,username);
+            createUserCall.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        // OK, return true
+                        Log.d("OK-AUTH","Created user OK: " + username);
+                        creationResultCallback.accept(new Result.Success<Boolean>(true));
+                    } else if (response.code() == 400) {
+                        Log.d("FAIL-AUTH","Invalid input");
+                        creationResultCallback.accept(new Result.Success<Boolean>(false));
+                    } else {
+                        Log.d("FAIL-AUTH","Server error");
+                        creationResultCallback.accept(new Result.Error(new Exception("Server")));
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.d("FAIL-AUTH","No connection");
+                    creationResultCallback.accept(new Result.Error(new IOException("Connection fail " + t.getCause())));
+
+                }
+            });
+
+
+        } catch (Exception e) {
+            Log.d("FAIL-AUTH","Client error");
+            creationResultCallback.accept(new Result.Error(new Exception("Client error")));
+        }
+    }
 
 
     public void logout() {
