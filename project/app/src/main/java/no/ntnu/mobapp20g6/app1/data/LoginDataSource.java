@@ -153,8 +153,6 @@ public class LoginDataSource {
                         renewedUsrCallback.accept(new Result.Error(new Exception("Not allowed")));
                     } else if(response.code() == 401){
                         renewedUsrCallback.accept(new Result.Error(new Exception("Not authorized")));
-                    } else if(response.code() == 401){
-                        renewedUsrCallback.accept(new Result.Error(new Exception("Not authorized")));
                     } else {
                         renewedUsrCallback.accept(new Result.Error(new Exception("Server errror")));
                     }
