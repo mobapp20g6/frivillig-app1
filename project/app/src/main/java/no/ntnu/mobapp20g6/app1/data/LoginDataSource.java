@@ -122,6 +122,42 @@ public class LoginDataSource {
         }
     }
 
+    public void changepassword(String token, String oldpass, String newpass, String username,Consumer<Result<Boolean>> validResult) {
+        try {
+            if (token == null) {
+                validResult.accept(new Result.Error(new Exception("Token")));
+                Log.d("FAIL-AUTH","Token cannot be null when trying to reset passwd");
+            } else {
+                Call<Void> changePwdCall = authService.changePassword(token,username,newpass,oldpass);
+                changePwdCall.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            validResult.accept(new Result.Success<Boolean>(true));
+                        } else if (response.code() == 400) {
+                            // Bad requiest, check input parameters
+                            validResult.accept(new Result.Success<Boolean>(false));
+                        } else {
+                            // Not allowed or not authenticated
+                            validResult.accept(new Result.Error(new Exception("Not allowed")));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.d("FAIL-AUTH","No connection");
+                        validResult.accept(new Result.Error(new IOException("Connection fail " + t.getCause())));
+
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            Log.d("FAIL-AUTH","Client error");
+            validResult.accept(new Result.Error(new Exception("Client error")));
+        }
+    }
+
 
     public void logout() {
         // TODO: This is not implemented on server, as tokens expire automatically
@@ -139,33 +175,42 @@ public class LoginDataSource {
      */
     public void renew(LoggedInUser currentUser, Consumer<Result<LoggedInUser>> renewedUsrCallback) {
         try {
-            Call<Void> renewCall = authService.renewSession();
-            renewCall.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        String token = response.headers().get("Authorization");
-                        LoggedInUser user = currentUser;
-                        user.setUserToken(token);
-                        Log.d("OK-AUTH","Renew token OK for: " + user.getUserEmail());
-                        renewedUsrCallback.accept(new Result.Success<LoggedInUser>(user));
-                    } else if(response.code() == 403){
-                        renewedUsrCallback.accept(new Result.Error(new Exception("Not allowed")));
-                    } else if(response.code() == 401){
-                        renewedUsrCallback.accept(new Result.Error(new Exception("Not authorized")));
-                    } else {
-                        renewedUsrCallback.accept(new Result.Error(new Exception("Server errror")));
+            String token = currentUser.getUserToken();
+            if (token == null) {
+                renewedUsrCallback.accept(new Result.Error(new Exception("Token")));
+                Log.d("FAIL-AUTH","Token cannot be null when trying renew session");
+            }
+            else {
+                Call<Void> renewCall = authService.renewSession(token);
+                renewCall.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            String token = response.headers().get("Authorization");
+                            LoggedInUser user = currentUser;
+                            user.setUserToken(token);
+                            Log.d("OK-AUTH","Renew token OK for: " + user.getUserEmail());
+                            renewedUsrCallback.accept(new Result.Success<LoggedInUser>(user));
+                        } else if(response.code() == 403){
+                            renewedUsrCallback.accept(new Result.Error(new Exception("Not allowed")));
+                        } else if(response.code() == 401){
+                            renewedUsrCallback.accept(new Result.Error(new Exception("Not authorized")));
+                        } else {
+                            renewedUsrCallback.accept(new Result.Error(new Exception("Server errror")));
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    renewedUsrCallback.accept(new Result.Error(new IOException("Communication error")));
-                }
-            });
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        renewedUsrCallback.accept(new Result.Error(new IOException("Communication error")));
+                    }
+                });
+
+            }
 
         } catch (Exception e) {
-
+            Log.d("FAIL-AUTH","Client error");
+            renewedUsrCallback.accept(new Result.Error(new Exception("Client error")));
         }
     }
 

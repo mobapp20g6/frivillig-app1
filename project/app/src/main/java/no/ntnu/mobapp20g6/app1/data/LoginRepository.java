@@ -75,10 +75,28 @@ public class LoginRepository {
     }
 
     /**
+     * Reset the password for the provided username. Token provided by currently logged in user
+     * will be used to try to change the password. The user is logged out if SUCCESS. Result
+     * can be used to display a message etc. MUST BE LOGGED IN! TODO: NOT TESTED
+     * @param username the username (email)
+     * @param oldpass the old password needed for normal users or a bad input is thrown
+     * @param newpass the new password
+     * @param resetCallbackResult Result.Success(true=OK|false=bad input) Result.Error = ERR
+     */
+    public void changePassword(String username, String oldpass, String newpass, Consumer<Result<Boolean>> resetCallbackResult) {
+        dataSource.changepassword(user.getUserToken(),oldpass,newpass,username, (Result<Boolean> validInputResult)->{
+            if (validInputResult instanceof Result.Success) {
+               logout();
+            }
+            resetCallbackResult.accept(validInputResult);
+        });
+    }
+
+    /**
      * This function checks is the current session is expired, and renews the session
      * @param isRenewedResult This callback returns true if the session was renewed
      *                        If not nessecary or failed it returns false and logs out the user.
-     *                        TODO: not tested
+     *                        MUST BE LOGGED IN! TODO: not tested
      */
     private void checkAndRenewSessionIfNeeded(Consumer<Boolean> isRenewedResult) {
         if (user.isTokenExpired()) {

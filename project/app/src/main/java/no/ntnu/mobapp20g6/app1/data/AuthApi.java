@@ -30,6 +30,7 @@ public interface AuthApi {
     @FormUrlEncoded
     @POST(PREFIX + "/changepwd")
     Call<Void> changePassword(
+            @Header("Authorization") String auth,
             @Field("email") String email,
             @Field("pwd") String pwd,
             @Field("oldpwd") String oldpwd
@@ -43,6 +44,8 @@ public interface AuthApi {
     );
 
     @GET(PREFIX + "/renew")
-    Call<Void> renewSession();
+    Call<Void> renewSession(
+            @Header("Authorization") String auth
+    );
 
 }
