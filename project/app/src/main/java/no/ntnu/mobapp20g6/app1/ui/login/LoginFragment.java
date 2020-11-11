@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.R;
 
 public class LoginFragment extends Fragment {
@@ -127,6 +129,11 @@ public class LoginFragment extends Fragment {
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         }
+        Activity main = (MainActivity)getActivity();
+        TextView navMainText = main.findViewById(R.id.nav_user_name);
+        TextView navUnderText = main.findViewById(R.id.nav_user_mail);
+        navMainText.setText("Welcome " + model.getDisplayName() + "!");
+        navUnderText.setText("What shall we display ? email, group ?");
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

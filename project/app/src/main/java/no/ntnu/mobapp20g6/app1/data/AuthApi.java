@@ -42,4 +42,7 @@ public interface AuthApi {
             @Field("pwd") String pwd
     );
 
+    @GET(PREFIX + "/renew")
+    Call<Void> renewSession();
+
 }

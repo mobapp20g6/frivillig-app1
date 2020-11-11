@@ -39,11 +39,21 @@ public class LoginRepository {
         dataSource.logout();
     }
 
+    /**
+     * Other classes can use this with isLoggedIn() to get the auth token
+     * @return if logged in a token, else null
+     */
+    public String getToken() {
+        return this.user.getUserToken();
+    }
+
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }
+
+
 
     public void login(String username, String password, Consumer<Result<LoggedInUser>> resultCallback) {
         // handle login
@@ -55,4 +65,27 @@ public class LoginRepository {
 
         } );
     }
+
+    /**
+     * This function checks is the current session is expired, and renews the session
+     * @param isRenewedResult This callback returns true if the session was renewed
+     *                        If not nessecary or failed it returns false and logs out the user.
+     *                        TODO: not tested
+     */
+    private void checkAndRenewSessionIfNeeded(Consumer<Boolean> isRenewedResult) {
+        if (user.isTokenExpired()) {
+            dataSource.renew(user, (Result<LoggedInUser> userWithNewTokenResult)->{
+                if (userWithNewTokenResult instanceof Result.Success) {
+                    setLoggedInUser(((Result.Success<LoggedInUser>) userWithNewTokenResult).getData());
+                    isRenewedResult.accept(true);
+                } else {
+                    isRenewedResult.accept(false);
+                    setLoggedInUser(null);
+                }
+            });
+        } else {
+            isRenewedResult.accept(false);
+        }
+    }
+
 }

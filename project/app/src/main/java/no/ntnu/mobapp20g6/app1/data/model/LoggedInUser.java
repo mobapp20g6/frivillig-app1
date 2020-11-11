@@ -20,6 +20,8 @@ public class LoggedInUser extends User{
         super.setUserEmail(email);
     }
 
+    public LoggedInUser() {};
+
     public String getUserToken() {
         return userToken.toString();
     }
