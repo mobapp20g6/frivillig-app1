@@ -10,13 +10,13 @@ public class RestService {
 
     private static Retrofit retrofit;
 
-    private AuthApi authService;
+    //private AuthApi authService;
 
     public RestService() {
 
 
 
-        authService = retrofit.create(AuthApi.class);
+        //authService = retrofit.create(AuthApi.class);
     }
 
     public static Retrofit getRetrofitClient() {
