@@ -1,18 +1,39 @@
 package no.ntnu.mobapp20g6.app1.data.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 public class Group {
 
+    @Expose
+    @SerializedName("id")
     private Long groupId;
 
+    @Expose
+    @SerializedName("name")
     private String groupName;
 
-    private Date created;
+    @Expose
+    @SerializedName("created")
+    private Date groupCreated;
 
-    private Long organizationID;
+    @Expose
+    @SerializedName("originationId")
+    private Long groupOrganizationId;
 
-    private String description;
+    @Expose
+    @SerializedName("description")
+    private String groupDescription;
+
+    @Expose
+    @SerializedName("location")
+    private Location location;
+
+    @Expose
+    @SerializedName("picture")
+    private Picture picture;
 
     public Group() {
     }
@@ -21,8 +42,8 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setGroupDescription(String groupDescription) {
+        this.groupDescription = groupDescription;
     }
 
     public Long getGroupId() {
@@ -33,15 +54,23 @@ public class Group {
         return groupName;
     }
 
-    public Date getCreated() {
-        return created;
+    public Date getGroupCreated() {
+        return groupCreated;
     }
 
-    public Long getOrganizationID() {
-        return organizationID;
+    public Long getGroupOrganizationId() {
+        return groupOrganizationId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getGroupDescription() {
+        return groupDescription;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public Picture getPicture() {
+        return picture;
     }
 }
