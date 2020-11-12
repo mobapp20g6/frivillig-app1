@@ -35,4 +35,28 @@ public class User {
     public User() {
     }
 
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public Date getUserCreated() {
+        return userCreated;
+    }
+
+    public String getUserState() {
+        return userState;
+    }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public String getUserLastName() {
+        return userLastName;
+    }
 }
