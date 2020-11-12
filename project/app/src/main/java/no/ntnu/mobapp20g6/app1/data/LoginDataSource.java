@@ -231,17 +231,22 @@ public class LoginDataSource {
                     Call<LoggedInUser> call,
                     Response<LoggedInUser> response
             ) {
-                LoggedInUser user = response.body();
-                Log.d("OK-AUTH","Retrieved user info for:" + user.getUserEmail());
-                result.accept(new Result.Success<>(response.body()));
+                if(response.isSuccessful()) {
+                    LoggedInUser user = response.body();
+                    Log.d("OK-AUTH","Retrieved user info for:" + user.getUserEmail());
+                    result.accept(new Result.Success<>(response.body()));
+                } else {
+                    result.accept(new Result.Error(new Exception("Unable to get user data")));
+                    Log.d("ERROR-AUTH","Unable to get user data after logging in");
+                }
             }
 
             @Override
             public void onFailure(
                     Call<LoggedInUser> call, Throwable t
             ) {
-                result.accept(new Result.Error(new Exception("Unable to get user data")));
-                Log.d("ERROR-AUTH","Unable to get user data after logging in");
+                result.accept(new Result.Error(new Exception("Communication error")));
+                Log.d("ERROR-AUTH","Unable to get user data, server responded with error");
             }
         });
     }

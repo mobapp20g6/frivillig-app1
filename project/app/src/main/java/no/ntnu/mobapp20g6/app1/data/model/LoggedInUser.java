@@ -20,6 +20,7 @@ public class LoggedInUser extends User{
         super.setUserEmail(email);
     }
 
+    // Used in runtime by serialization
     public LoggedInUser() {};
 
     public String getUserToken() {
