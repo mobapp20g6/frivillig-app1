@@ -6,17 +6,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestService {
-    public static String DOMAIN = "http://localhost";
+    public static String DOMAIN = "http://10.0.2.2:8080/appsrv-1.0/";
 
     private static Retrofit retrofit;
 
-    //private AuthApi authService;
+    private AuthApi authService;
 
     public RestService() {
 
 
 
-        //authService = retrofit.create(AuthApi.class);
+        authService = retrofit.create(AuthApi.class);
     }
 
     public static Retrofit getRetrofitClient() {
