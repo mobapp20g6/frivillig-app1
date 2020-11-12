@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.api;
+package no.ntnu.mobapp20g6.app1.data.api;
 
 import androidx.annotation.Nullable;
 

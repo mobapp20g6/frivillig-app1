@@ -40,6 +40,7 @@ public class Task {
     private User creator;
 
     @Expose
+    @SerializedName("picture")
     private Picture picture;
 
     public Long getId() {
