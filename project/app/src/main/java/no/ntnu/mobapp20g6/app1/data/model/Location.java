@@ -16,6 +16,9 @@ public class Location {
 
     private String country;
 
+    public Location() {
+    }
+
     public String getLocationID() {
         return locationID;
     }

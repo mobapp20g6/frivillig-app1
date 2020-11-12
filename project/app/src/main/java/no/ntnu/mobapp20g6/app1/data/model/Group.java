@@ -14,6 +14,9 @@ public class Group {
 
     private String description;
 
+    public Group() {
+    }
+
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
