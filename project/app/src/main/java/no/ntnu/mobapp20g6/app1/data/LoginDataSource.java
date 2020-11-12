@@ -2,6 +2,7 @@ package no.ntnu.mobapp20g6.app1.data;
 
 import android.util.Log;
 
+import no.ntnu.mobapp20g6.app1.data.api.AuthApi;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.User;
 import retrofit2.Call;
