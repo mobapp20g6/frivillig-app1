@@ -11,22 +11,23 @@ import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface PictureApi {
+    String PREFIX = "resources/image/";
 
-    @GET("getimage")
+    @GET(PREFIX + "getimage")
     Call<Picture> getPicture(
             @Query("name") String id,
             @Query("width") int width
     );
 
     @Multipart
-    @POST
+    @POST(PREFIX + "settaskimage")
     Call<Task> setTaskPicture(
             @Part("taskid") Long taskId,
             @Part("image")RequestBody picture
             );
 
     @Multipart
-    @POST
+    @POST(PREFIX + "setgrouplogo")
     Call<Task> setGroupPicture(
             @Part("groupid") Long groupId,
             @Part("image")RequestBody picture
