@@ -13,7 +13,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class DataSource {
+public class TaskDataSource {
     private final ServiceApi serviceApi;
 
     //http response codes
@@ -23,7 +23,7 @@ public class DataSource {
     private static final int FORBIDDEN = 403;
     private static final int NOT_FOUND = 404;
 
-    public DataSource() {
+    public TaskDataSource() {
         Retrofit rest = RestService.getRetrofitClient();
         serviceApi = rest.create(ServiceApi.class);
     }
