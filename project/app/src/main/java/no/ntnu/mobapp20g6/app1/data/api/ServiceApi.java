@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -76,5 +77,70 @@ public interface ServiceApi {
     Call<Void> joinTask(
             @Header("Authorization") String token,
             @Field("id") Long taskId
+    );
+
+    @FormUrlEncoded
+    @POST(PREFIX + "creategroup")
+    Call<Group> createGroup (
+            @Header("Authorization") String token,
+            @Field("title") String title,
+            @Nullable@Field("orgid") Long orgId
+    );
+
+    @FormUrlEncoded
+    @PUT(PREFIX + "updategroup")
+    Call<Group> updateGroup(
+            @Header("Authorization") String token,
+            @Nullable@Field("title") String title,
+            @Nullable@Field("description") String description,
+            @Query("id") Long groupId
+    );
+
+    @FormUrlEncoded
+    @POST(PREFIX + "addusertogroup")
+    Call<Void> addUserToGroup(
+            @Header("Authorization") String token,
+            @Field("userid") String userId,
+            @Field("groupid") Long groupId
+    );
+
+    @FormUrlEncoded
+    @POST(PREFIX + "getallgrouptasks")
+    Call<List<Task>> getAllGroupTasks(
+            @Header("Authorization") String token,
+            @Query("groupid") Long groupId
+    );
+
+    @FormUrlEncoded
+    @GET(PREFIX + "isownerofgroup")
+    Call<Void> isOwnerOfGroup(
+            @Header("Authorization") String token,
+            @Query("groupid") Long groupId
+    );
+
+    @FormUrlEncoded
+    @GET(PREFIX + "addlocation")
+    Call<Task> addLocationToTask(
+            @Header("Authorization") String token,
+            @Field("taskid") Long taskId,
+            @Nullable@Field("lat") String latitude,
+            @Nullable@Field("long") String longitude,
+            @Nullable@Field("street") String streetAddr,
+            @Nullable@Field("city") String city,
+            @Nullable@Field("postcode") Long postal,
+            @Nullable@Field("country") String country
+    );
+
+    @FormUrlEncoded
+    @GET(PREFIX + "addlocation")
+    Call<Group> addLocationToGroup(
+            @Header("Authorization") String token,
+            @Field("groupid") Long groupId,
+            @Nullable@Field("lat") String latitude,
+            @Nullable@Field("long") String longitude,
+            @Nullable@Field("street") String streetAddr,
+            @Nullable@Field("city") String city,
+            @Nullable@Field("postcode") Long postal,
+            @Nullable@Field("country") String country
     );
 }
