@@ -22,4 +22,10 @@
     <string name="mock_loginuser">thedonald@example.com</string>
     <string name="mock_loginpwd">123abc</string>
 
+    <string name="create_group_text">Create Group</string>
+    <string name="create_group_title_text">Title: </string>
+    <string name="create_group_title_input">Title of group…</string>
+    <string name="create_group_description_text">Description: </string>
+    <string name="create_group_description_hint">Write a short description</string>
+
 </resources>
