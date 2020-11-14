@@ -123,7 +123,6 @@ public interface ServiceApi {
     Call<Task> addLocationToTask(
             @Header("Authorization") String token,
             @Field("taskid") Long taskId,
-            @Nullable@Field("groupid") Long groupId,
             @Nullable@Field("lat") String latitude,
             @Nullable@Field("long") String longitude,
             @Nullable@Field("street") String streetAddr,
@@ -136,7 +135,6 @@ public interface ServiceApi {
     @GET(PREFIX + "addlocation")
     Call<Group> addLocationToGroup(
             @Header("Authorization") String token,
-            @Nullable@Field("taskid") Long taskId,
             @Field("groupid") Long groupId,
             @Nullable@Field("lat") String latitude,
             @Nullable@Field("long") String longitude,
