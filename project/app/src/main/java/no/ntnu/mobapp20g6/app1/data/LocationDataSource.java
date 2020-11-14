@@ -92,7 +92,7 @@ public class LocationDataSource {
                 String token, Long taskId, Long groupId,
                 String latitude, String longitude,
                 String streetAddr, String city, Long postal, String country,
-                Consumer<Result<Task>> addLocationToGroupCallBack) {
+                Consumer<Result<Group>> addLocationToGroupCallBack) {
             try {
                 if (token == null) {
                     Log.d("FAIL_ADD_LOCATION_TO_GROUP", "Token cannot be null when trying add location to task");

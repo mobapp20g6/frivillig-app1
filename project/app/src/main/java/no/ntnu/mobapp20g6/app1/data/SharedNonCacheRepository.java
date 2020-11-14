@@ -65,4 +65,27 @@ public class SharedNonCacheRepository {
         });
     }
 
+    public void addLocationToTask(String token, Long taskId, Long groupId,
+                                  String latitude, String longitude,
+                                  String streetAddr, String city, Long postal, String country,
+                                  Consumer<Result<Task>> addLocationToTaskCallBack) {
+        locationDataSource.addLocationToTask(token, taskId, groupId,
+                latitude, longitude,
+                streetAddr, city, postal, country,
+                (addLocationToTaskResult) -> {
+            addLocationToTaskCallBack.accept(addLocationToTaskResult);
+                });
+    }
+
+    public void addLocationToGroup(String token, Long taskId, Long groupId,
+                                   String latitude, String longitude,
+                                   String streetAddr, String city, Long postal, String country,
+                                   Consumer<Result<Group>> addLocationToGroupCallBack) {
+        locationDataSource.addLocationToGroup(token, taskId, groupId,
+                latitude, longitude,
+                streetAddr, city, postal, country,
+                (addLocationToGroupResult) -> {
+            addLocationToGroupCallBack.accept(addLocationToGroupResult);
+                });
+    }
 }
