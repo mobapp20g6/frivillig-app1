@@ -1,5 +1,6 @@
 package no.ntnu.mobapp20g6.app1.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.Calendar;
@@ -25,6 +26,18 @@ public class TaskRepository {
         liveDataTaskList = new MutableLiveData<>();
         liveDataAssignedTasks = new MutableLiveData<>();
         liveDataOwnedTasks = new MutableLiveData<>();
+    }
+
+    public LiveData<List<Task>> getLiveDataTaskList() {
+        return liveDataTaskList;
+    }
+
+    public LiveData<List<Task>> getLiveDataAssignedTasks() {
+        return liveDataAssignedTasks;
+    }
+
+    public LiveData<List<Task>> getLiveDataOwnedTasks() {
+        return liveDataOwnedTasks;
     }
 
     public static TaskRepository getInstance(TaskDataSource taskDataSource) {
