@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.data.api;
 
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.User;
