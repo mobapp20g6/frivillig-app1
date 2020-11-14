@@ -30,7 +30,7 @@ public class GroupDataSource {
     }
 
     public void createGroup(
-            String token, String title, Long orgId,
+            String token, String title, String description, Long orgId,
             Consumer<Result<Group>> createGroupCallBack) {
         try {
             if (token == null) {
@@ -38,7 +38,7 @@ public class GroupDataSource {
                 createGroupCallBack.accept(new Result.Error(new Exception("Token")));
             } else {
 
-                Call<Group> createGroupCall = serviceApi.createGroup(token, title, orgId);
+                Call<Group> createGroupCall = serviceApi.createGroup(token, title, description, orgId);
                 createGroupCall.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
