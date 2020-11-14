@@ -17,7 +17,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ServiceApi {
-    String PREFIX = "/resources/service/";
+    String PREFIX = "resources/service/";
 
     @GET(PREFIX + "listtasks")
     Call<List<Task>> getAllTasks(
