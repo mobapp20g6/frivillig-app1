@@ -1,5 +1,6 @@
 package no.ntnu.mobapp20g6.app1.data.api;
 
+import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.model.Picture;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import okhttp3.MultipartBody;
@@ -31,7 +32,7 @@ public interface PictureApi {
 
     @Multipart
     @POST(PREFIX + "setgrouplogo")
-    Call<Task> setGroupPicture(
+    Call<Group> setGroupPicture(
             @Header("Authorization") String token,
             @Part("groupid") Long groupId,
             @Part("image") MultipartBody.Part picture

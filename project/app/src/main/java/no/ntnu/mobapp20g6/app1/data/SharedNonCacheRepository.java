@@ -15,17 +15,19 @@ public class SharedNonCacheRepository {
 
     private static volatile SharedNonCacheRepository instance;
 
-    private GroupDataSource groupDataSource;
-    private LocationDataSource locationDataSource;
+    private final GroupDataSource groupDataSource;
+    private final LocationDataSource locationDataSource;
+    private final PictureDataSource pictureDataSource;
 
-    private SharedNonCacheRepository(GroupDataSource groupDataSource, LocationDataSource locationDataSource) {
+    private SharedNonCacheRepository(GroupDataSource groupDataSource, LocationDataSource locationDataSource, PictureDataSource pictureDataSource) {
         this.groupDataSource = groupDataSource;
         this.locationDataSource = locationDataSource;
+        this.pictureDataSource = pictureDataSource;
     }
 
-    public static SharedNonCacheRepository getInstance(GroupDataSource groupDataSource, LocationDataSource locationDataSource) {
+    public static SharedNonCacheRepository getInstance(GroupDataSource groupDataSource, LocationDataSource locationDataSource, PictureDataSource pictureDataSource) {
         if (instance == null) {
-            instance = new SharedNonCacheRepository(groupDataSource, locationDataSource);
+            instance = new SharedNonCacheRepository(groupDataSource, locationDataSource, pictureDataSource);
         }
         return instance;
     }
@@ -87,5 +89,13 @@ public class SharedNonCacheRepository {
                 (addLocationToGroupResult) -> {
             addLocationToGroupCallBack.accept(addLocationToGroupResult);
                 });
+    }
+
+    public void setTaskImage(String token, Long taskId, String picturePath, Consumer<Result<Task>>setTaskImageCallback) {
+        pictureDataSource.setTaskImage(token, taskId, picturePath, setTaskImageCallback);
+    }
+
+    public void setGroupLogo(String token, Long groupId, String picturePath, Consumer<Result<Group>>setGroupLogoCallback) {
+        pictureDataSource.setGroupLogo(token, groupId, picturePath, setGroupLogoCallback);
     }
 }

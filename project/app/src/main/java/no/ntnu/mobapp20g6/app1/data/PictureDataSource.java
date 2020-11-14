@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import no.ntnu.mobapp20g6.app1.data.api.PictureApi;
+import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -82,13 +83,13 @@ public class PictureDataSource {
     }
 
     public void setGroupLogo(String token, Long groupId, String picturePath,
-                             Consumer<Result<Task>>setGroupLogoCallback) {
+                             Consumer<Result<Group>>setGroupLogoCallback) {
         try {
             if (token != null) {
-                Call<Task> setGroupLogoCall = pictureApi.setTaskPicture(token, groupId, preparePicture(picturePath, "group_logo"));
-                setGroupLogoCall.enqueue(new Callback<Task>() {
+                Call<Group> setGroupLogoCall = pictureApi.setGroupPicture(token, groupId, preparePicture(picturePath, "group_logo"));
+                setGroupLogoCall.enqueue(new Callback<Group>() {
                     @Override
-                    public void onResponse(Call<Task> call, Response<Task> response) {
+                    public void onResponse(Call<Group> call, Response<Group> response) {
                         switch (response.code()) {
                             case OK:
                                 Log.d("OK-SET_GROUP_LOGO", "Group logo was set.");
@@ -117,7 +118,7 @@ public class PictureDataSource {
                     }
 
                     @Override
-                    public void onFailure(Call<Task> call, Throwable t) {
+                    public void onFailure(Call<Group> call, Throwable t) {
                         Log.d("FAIL-SET_GROUP_LOGO", "No connection");
                         setGroupLogoCallback.accept(new Result.Error(new IOException("Connection fail " + t.getCause())));
                     }
