@@ -15,9 +15,9 @@ public class TaskRepository {
     private static volatile TaskRepository instance;
     private final TaskDataSource taskDataSource;
 
-    private MutableLiveData<List<Task>> liveDataTaskList;
-    private MutableLiveData<List<Task>> liveDataAssignedTasks;
-    private MutableLiveData<List<Task>> liveDataOwnedTasks;
+    private final MutableLiveData<List<Task>> liveDataTaskList;
+    private final MutableLiveData<List<Task>> liveDataAssignedTasks;
+    private final MutableLiveData<List<Task>> liveDataOwnedTasks;
 
     //For singleton access
     private TaskRepository(TaskDataSource taskDataSource) {
