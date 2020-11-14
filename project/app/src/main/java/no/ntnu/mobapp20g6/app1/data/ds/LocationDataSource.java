@@ -1,10 +1,12 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.data.ds;
 
 import android.util.Log;
 
 import java.io.IOException;
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.data.RestService;
+import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.api.ServiceApi;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.model.Task;

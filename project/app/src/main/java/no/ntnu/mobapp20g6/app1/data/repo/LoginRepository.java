@@ -1,7 +1,9 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.data.repo;
 
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.data.Result;
+import no.ntnu.mobapp20g6.app1.data.ds.LoginDataSource;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 
 /**

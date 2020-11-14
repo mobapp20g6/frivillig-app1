@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import no.ntnu.mobapp20g6.app1.data.LoginRepository;
+import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.R;

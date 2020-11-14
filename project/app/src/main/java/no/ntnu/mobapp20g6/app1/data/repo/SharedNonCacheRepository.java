@@ -1,8 +1,12 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.data.repo;
 
 import java.util.List;
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.data.Result;
+import no.ntnu.mobapp20g6.app1.data.ds.GroupDataSource;
+import no.ntnu.mobapp20g6.app1.data.ds.LocationDataSource;
+import no.ntnu.mobapp20g6.app1.data.ds.PictureDataSource;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 

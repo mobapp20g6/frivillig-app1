@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.data.repo;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.data.Result;
+import no.ntnu.mobapp20g6.app1.data.ds.TaskDataSource;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 
 public class TaskRepository {
