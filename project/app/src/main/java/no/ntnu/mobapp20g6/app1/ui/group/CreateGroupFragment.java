@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.ui.group;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -11,15 +11,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import no.ntnu.mobapp20g6.app1.R;
 
-public class CreateGroup extends Fragment {
+public class CreateGroupFragment extends Fragment {
 
     private CreateGroupViewModel mViewModel;
 
-    public static CreateGroup newInstance() {
-        return new CreateGroup();
+    public static CreateGroupFragment newInstance() {
+        return new CreateGroupFragment();
     }
 
     @Override
@@ -29,10 +31,27 @@ public class CreateGroup extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        final Button createButton = view.findViewById(R.id.create_group_create_button);
+        final EditText nameEdit = view.findViewById(R.id.create_group_name_input);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nameEdit.getText().length() == 0) {
+                    nameEdit.setError("Name of group is required.");
+                }
+            }
+        });
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(CreateGroupViewModel.class);
         // TODO: Use the ViewModel
+
     }
 
 }

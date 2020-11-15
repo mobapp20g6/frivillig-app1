@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.ui.group;
 
 import androidx.lifecycle.ViewModel;
 
