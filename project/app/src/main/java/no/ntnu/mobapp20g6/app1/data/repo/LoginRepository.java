@@ -46,7 +46,7 @@ public class LoginRepository {
      * @return if logged in a token, else null
      */
     public String getToken() {
-        return this.user.getUserToken();
+        return this.user.getTokenWithBearer();
     }
 
     private void setLoggedInUser(LoggedInUser user) {
@@ -86,7 +86,7 @@ public class LoginRepository {
      * @param resetCallbackResult Result.Success(true=OK|false=bad input) Result.Error = ERR
      */
     public void changePassword(String username, String oldpass, String newpass, Consumer<Result<Boolean>> resetCallbackResult) {
-        dataSource.changepassword(user.getUserToken(),oldpass,newpass,username, (Result<Boolean> validInputResult)->{
+        dataSource.changepassword(user.getTokenWithBearer(),oldpass,newpass,username, (Result<Boolean> validInputResult)->{
             if (validInputResult instanceof Result.Success) {
                logout();
             }
