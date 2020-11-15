@@ -22,4 +22,8 @@
     <string name="mock_loginuser">thedonald@example.com</string>
     <string name="mock_loginpwd">123abc</string>
 
+    <string name="task_item_title">"Task title"</string>
+    <string name="task_item_participant_count">"2 / 5"</string>
+    <string name="task_list_title">"My Assigned Tasks"</string>
+
 </resources>
