@@ -178,7 +178,7 @@ public class LoginDataSource {
      */
     public void renew(LoggedInUser currentUser, Consumer<Result<LoggedInUser>> renewedUsrCallback) {
         try {
-            String token = currentUser.getUserToken();
+            String token = currentUser.getTokenWithBearer();
             if (token == null) {
                 renewedUsrCallback.accept(new Result.Error(new Exception("Token")));
                 Log.d("FAIL-AUTH","Token cannot be null when trying renew session");
@@ -236,6 +236,7 @@ public class LoginDataSource {
             ) {
                 if(response.isSuccessful()) {
                     LoggedInUser user = response.body();
+                    user.setUserToken(token);
                     Log.d("OK-AUTH","Retrieved user info for:" + user.getUserEmail());
                     result.accept(new Result.Success<>(response.body()));
                 } else {
