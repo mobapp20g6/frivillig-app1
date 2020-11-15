@@ -36,10 +36,6 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        //To know what list recyclerView shall show.
-        Bundle args = getArguments();
-        String listToShow = args.getString("listToShow", "public");
-
         NavController navController = NavHostFragment.findNavController(getParentFragment());
         View root = inflater.inflate(R.layout.task_list_fragment, container, false);
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
@@ -60,52 +56,16 @@ public class TaskListFragment extends Fragment {
         recyclerView.setAdapter(taskListViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        switch(listToShow) {
-
-            case "public":
-                taskListViewModel.loadPublicTasks(listResult -> {
-                    //Snackbar is a small text view.
-                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load public tasks.", Snackbar.LENGTH_LONG);
-                    listResultMsg.setTextColor(Color.YELLOW);
-                    if(listResult == null) {
-                        listResultMsg.show();
-                    } else {
-                        listResultMsg.dismiss();
-                    }
-                });
-                break;
-
-            case "own":
-                taskListViewModel.loadOwnTasks(listResult -> {
-                    //Snackbar is a small text view.
-                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load own tasks.", Snackbar.LENGTH_LONG);
-                    listResultMsg.setTextColor(Color.YELLOW);
-                    if(listResult == null) {
-                        listResultMsg.show();
-                    } else {
-                        listResultMsg.dismiss();
-                    }
-                });
-                break;
-
-            case "assigned":
-                taskListViewModel.loadAssignedTasks(listResult -> {
-                    //Snackbar is a small text view.
-                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load assigned tasks.", Snackbar.LENGTH_LONG);
-                    listResultMsg.setTextColor(Color.YELLOW);
-                    if(listResult == null) {
-                        listResultMsg.show();
-                    } else {
-                        listResultMsg.dismiss();
-                    }
-                });
-                break;
-
-            default:
-                Snackbar listResultMsg = Snackbar.make(root, "Went into default case when trying to load tasks.", Snackbar.LENGTH_LONG);
-                listResultMsg.setTextColor(Color.YELLOW);
+        taskListViewModel.loadPublicTasks(listResult -> {
+            //Snackbar is a small text view.
+            Snackbar listResultMsg = Snackbar.make(root, "Unable to load public tasks.", Snackbar.LENGTH_LONG);
+            listResultMsg.setTextColor(Color.YELLOW);
+            if(listResult == null) {
                 listResultMsg.show();
-        }
+            } else {
+                listResultMsg.dismiss();
+            }
+        });
 
         return root;
     }

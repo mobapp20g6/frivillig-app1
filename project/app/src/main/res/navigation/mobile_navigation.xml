@@ -27,4 +27,9 @@
         android:name="no.ntnu.mobapp20g6.app1.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/nav_public_tasks"
+        android:name="no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListFragment"
+        android:label="fragment_public_tasks"
+        tools:layout="@layout/task_list_fragment" />
 </navigation>
