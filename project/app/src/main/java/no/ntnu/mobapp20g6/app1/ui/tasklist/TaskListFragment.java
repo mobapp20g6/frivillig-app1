@@ -1,5 +1,6 @@
 package no.ntnu.mobapp20g6.app1.ui.tasklist;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
@@ -39,8 +41,9 @@ public class TaskListFragment extends Fragment {
         NavController navController = NavHostFragment.findNavController(getParentFragment());
         View root = inflater.inflate(R.layout.task_list_fragment, container, false);
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
-        taskListViewAdapter = new TaskListViewAdapter(new ArrayList<Task>(), onClick -> {
+        taskListViewAdapter = new TaskListViewAdapter(new ArrayList<>(), onClick -> {
             //TODO Implement functionality when opening a task.
+            System.out.println("A task was clicked.");
         });
 
         final FloatingActionButton newTaskFab = root.findViewById(R.id.task_list_fab);
@@ -48,6 +51,7 @@ public class TaskListFragment extends Fragment {
             newTaskFab.setVisibility(View.VISIBLE);
             newTaskFab.setOnClickListener(onClick -> {
                 //TODO Implement functionality when creating a task. Use navController to go to new fragment.
+                System.out.println("New task fab was clicked.");
             });
         }
 
@@ -66,6 +70,8 @@ public class TaskListFragment extends Fragment {
                 listResultMsg.dismiss();
             }
         });
+
+        taskListViewModel.getPublicTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
 
         return root;
     }
