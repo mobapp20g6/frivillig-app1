@@ -27,4 +27,10 @@
         android:name="no.ntnu.mobapp20g6.app1.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/nav_group"
+        android:name="no.ntnu.mobapp20g6.app1.ui.group.CreateGroupFragment"
+        android:label="Create Group"
+        tools:layout="@layout/create_group_fragment" />
 </navigation>
