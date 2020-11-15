@@ -10,6 +10,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_group">Group</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in_short">Log in</string>
@@ -23,9 +24,13 @@
     <string name="mock_loginpwd">123abc</string>
 
     <string name="create_group_text">Create Group</string>
-    <string name="create_group_title_text">Title: </string>
-    <string name="create_group_title_input">Title of group…</string>
+    <string name="create_group_name_text">Name: </string>
+    <string name="create_group_Name_input_hint">Name of group…</string>
     <string name="create_group_description_text">Description: </string>
-    <string name="create_group_description_hint">Write a short description</string>
-
+    <string name="create_group_description_input_hint">Write a short description</string>
+    <string name="create_group_orgid_text">Organization Number</string>
+    <string name="create_group_orgid_input_hint">Organization number…</string>
+    <string name="create_group_cancel_button_text">Cancel</string>
+    <string name="create_group_create_button_text">Create</string>
+    <string name="create_group_brreg_button_text">BRREG</string>
 </resources>
