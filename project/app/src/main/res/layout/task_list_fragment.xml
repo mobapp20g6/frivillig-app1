@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.tasklist.TaskListFragment">
+    tools:context=".ui.tasklist.TaskListFragment"
+    android:background = "@color/cardview_dark_background">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/task_list_fab"
@@ -14,11 +15,15 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
         android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="50dp"
+        app:rippleColor="@color/black" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,7 +44,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/task_list_title"
                 android:textAlignment="center"
-                android:textColor="#000000"
+                android:textColor="@color/design_default_color_background"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="56dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:paddingBottom="?attr/actionBarSize"
