@@ -4,23 +4,30 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.data.RestService;
+import no.ntnu.mobapp20g6.app1.data.api.PictureApi;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 
 public class TaskListViewAdapter extends RecyclerView.Adapter<TaskListViewAdapter.ViewHolder> {
     private List<Task> taskList;
     private final RecyclerViewClickListener listener;
+    private final Picasso picasso;
 
-    public TaskListViewAdapter(List<Task> taskList, RecyclerViewClickListener listener) {
+    public TaskListViewAdapter(List<Task> taskList, Picasso picasso, RecyclerViewClickListener listener) {
         this.taskList = taskList;
         this.listener = listener;
+        this.picasso = picasso;
     }
 
     @NonNull
@@ -36,6 +43,10 @@ public class TaskListViewAdapter extends RecyclerView.Adapter<TaskListViewAdapte
         Task task = taskList.get(position);
         holder.title.setText(task.getTitle());
         holder.participantCount.setText(task.getParticipantCount() + " / " + task.getParticipantLimit());
+        if(task.getPicture() != null && !task.getPicture().getId().isEmpty()) {
+            System.out.println("Loading picture for task: " + task.getTitle());
+            picasso.load(RestService.DOMAIN + PictureApi.PREFIX + "getimage?name=" + task.getPicture().getId() + "&width=" + "480").into(holder.imageView);
+        }
         holder.bind(task, listener);
     }
 
@@ -60,11 +71,13 @@ public class TaskListViewAdapter extends RecyclerView.Adapter<TaskListViewAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView participantCount;
+        ImageView imageView;
 
         public ViewHolder(@NonNull View taskView) {
             super(taskView);
             title = taskView.findViewById(R.id.task_item_title);
             participantCount = taskView.findViewById(R.id.task_item_participant_count);
+            imageView = taskView.findViewById(R.id.task_item_picture);
         }
 
         public void bind(final  Task task, final RecyclerViewClickListener listener) {

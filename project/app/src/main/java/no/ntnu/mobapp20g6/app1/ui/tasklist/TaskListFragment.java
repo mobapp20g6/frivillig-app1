@@ -37,7 +37,8 @@ public class TaskListFragment extends Fragment {
         NavController navController = NavHostFragment.findNavController(getParentFragment());
         View root = inflater.inflate(R.layout.task_list_fragment, container, false);
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
-        taskListViewAdapter = new TaskListViewAdapter(new ArrayList<>(), onClick -> {
+        taskListViewAdapter = new TaskListViewAdapter(new ArrayList<>(), taskListViewModel.loadPicasso(getContext()),
+                onClick -> {
             //TODO Implement functionality when opening a task.
             System.out.println("A task was clicked.");
         });
