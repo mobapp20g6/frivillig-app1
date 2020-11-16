@@ -31,6 +31,10 @@ public class User {
     @SerializedName("lastName")
     private String userLastName;
 
+    @Expose
+    @SerializedName("memberOfGroup")
+    private Group userGroup;
+
 
     public User() {
     }
@@ -58,5 +62,9 @@ public class User {
 
     public String getUserLastName() {
         return userLastName;
+    }
+
+    public Group getUserGroup() {
+        return userGroup;
     }
 }

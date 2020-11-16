@@ -21,5 +21,9 @@
     <string name="ic_menu_login">Login</string>
     <string name="mock_loginuser">thedonald@example.com</string>
     <string name="mock_loginpwd">123abc</string>
+    <string name="menu_login">Login</string>
+    <string name="menu_account">My account</string>
+    <string name="ic_nav_account">User account</string>
+    <string name="mismatch_password">passwords must match</string>
 
 </resources>

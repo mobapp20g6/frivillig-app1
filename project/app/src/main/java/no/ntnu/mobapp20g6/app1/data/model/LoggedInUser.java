@@ -31,6 +31,9 @@ public class LoggedInUser extends User{
     public String getUserToken() {
         return userToken.toString();
     }
+    public String getUserTokenIssuer() {
+        return userToken.getIssuer();
+    }
 
     public void setUserToken(String token) {
         Log.d("OK-AUTH",": Wrote token to user " + super.getUserEmail());
