@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
+    android:padding="16dp"
     tools:context=".ui.account.UserAccount">
 
     <TextView
@@ -26,7 +27,7 @@
         android:id="@+id/fragment_account_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="John Appleseed"
+        android:text="John Bernhard Appleseed"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/design_default_color_background"
         app:layout_constraintBottom_toTopOf="@+id/account_info"
@@ -38,7 +39,8 @@
         android:id="@+id/account_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/design_default_color_on_secondary"
         app:layout_constraintBottom_toTopOf="@id/account_resetpw"
         app:layout_constraintEnd_toEndOf="parent"
@@ -144,9 +146,10 @@
         android:id="@+id/account_resetpw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/design_default_color_on_secondary"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/account_session_remain_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_info">
@@ -159,18 +162,18 @@
             android:text="Reset password"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/account_resetpw_sub"
+            app:layout_constraintBottom_toTopOf="@id/account_resetpw_sub"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/account_resetpw" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/account_resetpw_sub"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:background="@color/white"
             android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5">
@@ -215,8 +218,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:backgroundTint="@android:color/holo_green_dark"
                 android:text="Reset password"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/account_resetpw_cancel"
                 app:layout_constraintTop_toBottomOf="@+id/resetpass_verify" />
@@ -226,7 +231,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/design_default_color_error"
-                android:text="Cancel"
+                android:text="Clear"
                 app:layout_constraintBottom_toBottomOf="@+id/account_resetpw_ok"
                 app:layout_constraintEnd_toStartOf="@+id/account_resetpw_ok"
                 app:layout_constraintStart_toStartOf="parent"
