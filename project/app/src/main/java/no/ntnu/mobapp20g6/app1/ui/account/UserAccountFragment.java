@@ -17,15 +17,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
-import no.ntnu.mobapp20g6.app1.data.model.User;
 
 public class UserAccountFragment extends Fragment {
 
@@ -58,6 +55,8 @@ public class UserAccountFragment extends Fragment {
         final Button btnResetPass = root.findViewById(R.id.account_resetpw_ok);
         final Button btnResetClear = root.findViewById(R.id.account_resetpw_cancel);
 
+        btnResetPass.setEnabled(false);
+
         final TextView sessionFooter = root.findViewById(R.id.account_session_remain_text);
 
         userAccountViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), new Observer<LoggedInUser>() {
@@ -65,7 +64,7 @@ public class UserAccountFragment extends Fragment {
             public void onChanged(LoggedInUser user) {
                 String firstname = user.getUserFirstName();
                 String lastname = user.getUserLastName();
-                if (firstname.length()+lastname.length() < 32) {
+                if (firstname.length()+lastname.length() > 32) {
                     userName.setText(firstname);
                 } else {
                     userName.setText(firstname + " " + lastname);
@@ -87,7 +86,7 @@ public class UserAccountFragment extends Fragment {
             }
         });
 
-        userAccountViewModel.refreshCurrentUser();
+        userAccountViewModel.fetchUserFromServer();
 
         return root;
     }

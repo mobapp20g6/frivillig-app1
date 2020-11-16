@@ -31,7 +31,7 @@ public class UserAccountViewModel extends ViewModel {
         }
     }
 
-    public void refreshCurrentUser() {
+    public void fetchUserFromServer() {
         loginRepository.updateLoggedInUser(success -> {
             if (success) {
                 loadLoggedInUser();
@@ -45,6 +45,10 @@ public class UserAccountViewModel extends ViewModel {
 
     public LiveData getResetPasswordResult() {
         return this.resetPasswordResult;
+    }
+
+    public void resetPasswordFormChanged(String currentpass, String newpass, String verifypass) {
+
     }
 
 
