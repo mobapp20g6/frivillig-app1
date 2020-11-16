@@ -24,11 +24,13 @@ import android.widget.Toast;
 
 import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
+import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
 
 public class LoginFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
-
+    private UserAccountViewModel userAccountViewModel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -42,6 +44,8 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+        userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
+                .get(UserAccountViewModel.class);
 
         final EditText usernameEditText = view.findViewById(R.id.username);
         final EditText passwordEditText = view.findViewById(R.id.password);

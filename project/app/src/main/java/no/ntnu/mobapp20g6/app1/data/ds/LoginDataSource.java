@@ -217,6 +217,20 @@ public class LoginDataSource {
         }
     }
 
+    public void getUserInfo(LoggedInUser currentUser, Consumer<Result<LoggedInUser>> receivedUserResult) {
+        try {
+            String token = currentUser.getTokenWithBearer();
+            if (token == null) {
+                receivedUserResult.accept(new Result.Error(new Exception("Token")));
+                Log.d("FAIL-AUTH","Token cannot be null when trying to get user info");
+            } else {
+                getLoginUserInfo(token,receivedUserResult);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * This helper is used in login , and takes the input of an authenticated token
      * and username. It retrieves a User object from the server, and writes the information into
