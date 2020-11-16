@@ -1,5 +1,7 @@
 package no.ntnu.mobapp20g6.app1.data.model;
 
+import android.util.Log;
+
 import com.auth0.android.jwt.JWT;
 
 import java.time.Clock;
@@ -23,13 +25,21 @@ public class LoggedInUser extends User{
     // Used in runtime by serialization
     public LoggedInUser() {};
 
+    public String getTokenWithBearer() {
+        return  "Bearer " + userToken.toString();
+    }
     public String getUserToken() {
         return userToken.toString();
     }
 
     public void setUserToken(String token) {
-        this.userToken = new JWT(token);
-
+        Log.d("OK-AUTH",": Wrote token to user " + super.getUserEmail());
+        try {
+            token = token.replace("Bearer ", "");
+            this.userToken = new JWT(token);
+        } catch (Exception e) {
+            Log.d("ERR-AUTH",": Unable to parse token from Bearer header");
+        }
     }
 
     public Date getExpireTime() {

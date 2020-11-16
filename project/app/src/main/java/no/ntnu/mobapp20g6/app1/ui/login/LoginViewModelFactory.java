@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import no.ntnu.mobapp20g6.app1.data.LoginDataSource;
-import no.ntnu.mobapp20g6.app1.data.LoginRepository;
+import no.ntnu.mobapp20g6.app1.data.ds.LoginDataSource;
+import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

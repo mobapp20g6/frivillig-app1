@@ -1,5 +1,6 @@
 package no.ntnu.mobapp20g6.app1.data;
 
+import no.ntnu.mobapp20g6.app1.data.api.AuthApi;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -13,7 +14,6 @@ public class RestService {
     private AuthApi authService;
 
     public RestService() {
-
 
 
         authService = retrofit.create(AuthApi.class);
