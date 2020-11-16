@@ -197,7 +197,7 @@
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="your new password"
-                android:inputType="numberPassword"
+                android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="@+id/resetpass_old"
                 app:layout_constraintStart_toStartOf="@+id/resetpass_old"
                 app:layout_constraintTop_toBottomOf="@+id/resetpass_old" />
@@ -254,4 +254,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_resetpw" />
 
+    <ProgressBar
+        android:id="@+id/account_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/account_resetpw"
+        app:layout_constraintTop_toTopOf="@id/account_resetpw"
+        app:layout_constraintVertical_bias="0.3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

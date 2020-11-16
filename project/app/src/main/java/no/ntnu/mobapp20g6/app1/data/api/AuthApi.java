@@ -8,6 +8,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface AuthApi {
     public static String PREFIX = "resources/auth";
@@ -28,7 +29,7 @@ public interface AuthApi {
 
 
     @FormUrlEncoded
-    @POST(PREFIX + "/changepwd")
+    @PUT(PREFIX + "/changepwd")
     Call<Void> changePassword(
             @Header("Authorization") String auth,
             @Field("email") String email,
