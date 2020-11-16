@@ -24,7 +24,9 @@
 
     <string name="task_item_title">"Task title"</string>
     <string name="task_item_participant_count">"2 / 5"</string>
-    <string name="task_list_title">"Assigned Tasks"</string>
+    <string name="task_list_title">"Public Tasks"</string>
     <string name="ic_menu_public_tasks">Public Tasks</string>
+    <string name="ic_menu_own_tasks">Own Tasks</string>
+    <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
 
 </resources>
