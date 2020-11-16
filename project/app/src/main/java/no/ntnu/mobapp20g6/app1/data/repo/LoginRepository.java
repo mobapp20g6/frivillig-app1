@@ -2,6 +2,7 @@ package no.ntnu.mobapp20g6.app1.data.repo;
 
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.ds.LoginDataSource;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
@@ -116,11 +117,13 @@ public class LoginRepository {
      * @param resetCallbackResult Result.Success(true=OK|false=bad input) Result.Error = ERR
      */
     public void changePassword(String username, String oldpass, String newpass, Consumer<Result<Boolean>> resetCallbackResult) {
-        dataSource.changepassword(user.getTokenWithBearer(),oldpass,newpass,username, (Result<Boolean> validInputResult)->{
-            if (validInputResult instanceof Result.Success) {
-               logout();
+        dataSource.changepassword(user.getTokenWithBearer(),oldpass,newpass,username, (Result<Boolean> changePasswordResult)->{
+            if (changePasswordResult instanceof Result.Success) {
+                Boolean success = ((Result.Success<Boolean>) changePasswordResult).getData();
+                if (success == true)
+                    logout();
             }
-            resetCallbackResult.accept(validInputResult);
+            resetCallbackResult.accept(changePasswordResult);
         });
     }
 

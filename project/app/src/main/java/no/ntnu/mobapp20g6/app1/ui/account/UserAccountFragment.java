@@ -3,12 +3,15 @@ package no.ntnu.mobapp20g6.app1.ui.account;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,7 +31,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 
 public class UserAccountFragment extends Fragment {
@@ -38,12 +43,15 @@ public class UserAccountFragment extends Fragment {
     }
 
     private UserAccountViewModel userAccountViewModel;
+    private NavController navController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userAccountViewModel =
+        this.navController = NavHostFragment.findNavController(getParentFragment());
+
+        this.userAccountViewModel =
                 new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory()).get(UserAccountViewModel.class);
     }
     @Override
@@ -51,7 +59,11 @@ public class UserAccountFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_useraccount, container, false);
 
-        userAccountViewModel.fetchUserFromServer();
+        if (userAccountViewModel.isUserLoggedIn()) {
+            userAccountViewModel.fetchUserFromServer();
+        } else {
+            navController.navigate(R.id.action_nav_account_to_nav_login);
+        }
 
         return root;
     }
@@ -78,28 +90,6 @@ public class UserAccountFragment extends Fragment {
         btnResetPass.setEnabled(false);
 
         final TextView sessionFooter = view.findViewById(R.id.account_session_remain_text);
-
-        userAccountViewModel.getResetPasswordResult().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean passwordResetSuccess) {
-                loading.setVisibility(View.GONE);
-                btnResetPass.setEnabled(true);
-                btnResetClear.setEnabled(true);
-                fieldNewPass.setEnabled(true);
-                fieldOldPass.setEnabled(true);
-                fieldNewVerifyPass.setEnabled(true);
-                //FIXME: remove this when work
-                //fieldNewPass.setText("");
-                //fieldOldPass.setText("");
-                //fieldNewVerifyPass.setText("");
-                if (passwordResetSuccess) {
-                    snackbar.setText("Success, password has been changed! Logging out").setTextColor(Color.GREEN);
-                } else {
-                    snackbar.setText("Failed, ensure that the old password is correct!").setTextColor(Color.YELLOW);
-                }
-                snackbar.show();
-            }
-        });
 
         userAccountViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), new Observer<LoggedInUser>() {
             @Override
@@ -189,7 +179,41 @@ public class UserAccountFragment extends Fragment {
                 fieldNewPass.setEnabled(false);
                 fieldOldPass.setEnabled(false);
                 fieldNewVerifyPass.setEnabled(false);
-                userAccountViewModel.doPasswordReset(fieldOldPass.getText().toString(),fieldNewPass.getText().toString());
+                userAccountViewModel.doPasswordReset(fieldOldPass.getText().toString(),fieldNewPass.getText().toString(), (result) -> {
+                    loading.setVisibility(View.GONE);
+                    btnResetPass.setEnabled(true);
+                    btnResetClear.setEnabled(true);
+                    //FIXME: remove this when work
+                    if (result instanceof Result.Success) {
+                        Boolean success = ((Result.Success<Boolean>) result).getData();
+                        if (success) {
+                            fieldNewPass.setText("");
+                            fieldOldPass.setText("");
+                            fieldNewVerifyPass.setText("");
+                            snackbar.setText("Success, password changed! Logging out").setTextColor(Color.GREEN);
+
+                            //Reset side menu to default
+                            //TODO: Fix nav menu to reflect loggedin status
+
+                            Activity main = (MainActivity)getActivity();
+                            TextView navMainText = main.findViewById(R.id.nav_user_name);
+                            TextView navUnderText = main.findViewById(R.id.nav_user_mail);
+                            navMainText.setText(R.string.nav_header_title);
+                            navUnderText.setText(R.string.nav_header_subtitle);
+                            navController.navigate(R.id.action_nav_account_to_nav_login);
+                        } else {
+                            snackbar.setText("Error, check if current password is correct!").setTextColor(Color.YELLOW);
+                        }
+                    } else {
+                        snackbar.setText("Error, unable to reset password. Try again later!").setTextColor(Color.RED);
+                        navController.navigate(R.id.action_nav_account_self);
+
+                    }
+                    fieldNewPass.setEnabled(true);
+                    fieldOldPass.setEnabled(true);
+                    fieldNewVerifyPass.setEnabled(true);
+                    snackbar.show();
+                });
             }
         });
 
@@ -199,6 +223,9 @@ public class UserAccountFragment extends Fragment {
                 fieldNewPass.setText("");
                 fieldOldPass.setText("");
                 fieldNewVerifyPass.setText("");
+                fieldNewPass.setEnabled(true);
+                fieldOldPass.setEnabled(true);
+                fieldNewVerifyPass.setEnabled(true);
             }
         });
     }

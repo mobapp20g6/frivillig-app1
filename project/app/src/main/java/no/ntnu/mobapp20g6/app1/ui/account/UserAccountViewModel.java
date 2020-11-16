@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.function.Consumer;
+
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
@@ -13,7 +15,8 @@ import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 public class UserAccountViewModel extends ViewModel {
     // TODO: Implement the ViewModel
     private MutableLiveData<UserAccountResetFormState> resetFormstate = new MutableLiveData<>();
-    private MutableLiveData<Boolean> resetPasswordResult = new MutableLiveData<>();
+    //TODO: Remove to limit complexity
+    //private MutableLiveData<Boolean> resetPasswordResult = new MutableLiveData<>();
     private MutableLiveData<LoggedInUser> currentUserLiveData;
     private LoginRepository loginRepository;
 
@@ -52,9 +55,6 @@ public class UserAccountViewModel extends ViewModel {
         return this.resetFormstate;
     }
 
-    public LiveData<Boolean> getResetPasswordResult() {
-        return this.resetPasswordResult;
-    }
 
     public void resetPasswordDataChanged(String oldpass, String newpass, String verifypass) {
         if (!(isPasswordValid(oldpass))) {
@@ -69,11 +69,11 @@ public class UserAccountViewModel extends ViewModel {
 
     }
 
-    private Boolean isPasswordValid(@Nullable String oldpassword) {
-        if (oldpassword == null || oldpassword.isEmpty()) {
-            return false;
-        } else {
+    private Boolean isPasswordValid(@Nullable String password) {
+        if (password != null && !(password.isEmpty()) && (password.length() >= 6)) {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -82,17 +82,13 @@ public class UserAccountViewModel extends ViewModel {
     }
 
 
-    public void doPasswordReset(String oldpassword, String newpassword) {
+    public void doPasswordReset(String oldpassword, String newpassword, Consumer<Result<Boolean>> changePwdResultCallback) {
         if (loginRepository.isLoggedIn()) {
             loginRepository.changePassword(loginRepository.getCurrentUser().getUserEmail(),oldpassword,newpassword,(callbackResult) -> {
-                if (callbackResult instanceof Result.Success) {
-                    this.resetPasswordResult.setValue(((Result.Success<Boolean>) callbackResult).getData());
-                } else {
-                    this.resetPasswordResult.setValue(false);
-                }
+                changePwdResultCallback.accept(callbackResult);
             });
         } else {
-            this.resetPasswordResult.setValue(false);
+            changePwdResultCallback.accept(new Result.Error(new Exception("Not logged in")));
         }
     }
 }

@@ -26,10 +26,21 @@
         android:id="@+id/nav_login"
         android:name="no.ntnu.mobapp20g6.app1.ui.login.LoginFragment"
         android:label="@string/menu_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_nav_login_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/nav_account"
         android:name="no.ntnu.mobapp20g6.app1.ui.account.UserAccountFragment"
         android:label="@string/menu_account"
-        tools:layout="@layout/fragment_useraccount" />
+        tools:layout="@layout/fragment_useraccount" >
+        <action
+            android:id="@+id/action_nav_account_to_nav_login"
+            app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_account_self"
+            app:destination="@id/nav_account" />
+    </fragment>
 </navigation>

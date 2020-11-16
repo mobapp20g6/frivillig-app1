@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -31,6 +33,9 @@ public class LoginFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
     private UserAccountViewModel userAccountViewModel;
+
+    private NavController navController;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -46,6 +51,9 @@ public class LoginFragment extends Fragment {
                 .get(LoginViewModel.class);
         userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
                 .get(UserAccountViewModel.class);
+
+
+        navController = NavHostFragment.findNavController(getParentFragment());
 
         final EditText usernameEditText = view.findViewById(R.id.username);
         final EditText passwordEditText = view.findViewById(R.id.password);
@@ -138,6 +146,7 @@ public class LoginFragment extends Fragment {
         TextView navUnderText = main.findViewById(R.id.nav_user_mail);
         navMainText.setText("Welcome " + model.getDisplayName() + "!");
         navUnderText.setText("What shall we display ? email, group ?");
+        navController.navigate(R.id.action_nav_login_to_nav_home);
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
