@@ -5,17 +5,20 @@
     android:id="@+id/account_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
     tools:context=".ui.account.UserAccount">
 
     <TextView
         android:id="@+id/fragment_acocunt_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="101dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginTop="16dp"
         android:text="Welcome"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/fragment_account_username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.33"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,6 +28,7 @@
         android:layout_height="wrap_content"
         android:text="John Appleseed"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textColor="@color/design_default_color_background"
         app:layout_constraintBottom_toTopOf="@+id/account_info"
         app:layout_constraintEnd_toEndOf="@id/account_info"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +38,8 @@
         android:id="@+id/account_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
+        android:background="@color/design_default_color_on_secondary"
         app:layout_constraintBottom_toTopOf="@id/account_resetpw"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,9 +49,11 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="Account info"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/account_info_created_box"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/account_info" />
@@ -56,7 +63,8 @@
             android:id="@+id/account_info_created_box"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/white"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -137,6 +145,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:background="@color/design_default_color_on_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/account_info">
@@ -145,9 +155,11 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_margin="16dp"
             android:text="Reset password"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/account_resetpw_sub"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -156,9 +168,9 @@
             android:id="@+id/account_resetpw_sub"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/white"
             android:padding="8dp"
-            android:layout_margin="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5">
@@ -167,7 +179,6 @@
                 android:id="@+id/resetpass_old"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="your current password"
                 android:inputType="textPassword"
@@ -179,7 +190,7 @@
                 android:id="@+id/resetpass_new"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="your new password"
                 android:inputType="numberPassword"
@@ -191,7 +202,7 @@
                 android:id="@+id/resetpass_verify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="verify password"
                 android:inputType="textPassword"
@@ -199,8 +210,42 @@
                 app:layout_constraintStart_toStartOf="@+id/resetpass_new"
                 app:layout_constraintTop_toBottomOf="@+id/resetpass_new" />
 
+            <Button
+                android:id="@+id/account_resetpw_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@android:color/holo_green_dark"
+                android:text="Reset password"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/account_resetpw_cancel"
+                app:layout_constraintTop_toBottomOf="@+id/resetpass_verify" />
+
+            <Button
+                android:id="@+id/account_resetpw_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/design_default_color_error"
+                android:text="Cancel"
+                app:layout_constraintBottom_toBottomOf="@+id/account_resetpw_ok"
+                app:layout_constraintEnd_toStartOf="@+id/account_resetpw_ok"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/account_resetpw_ok" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/account_session_remain_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Session remaining: 1d 22m 15s"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_resetpw" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
