@@ -7,7 +7,6 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
-    android:background="#4CAF50"
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
@@ -15,35 +14,16 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/task_item_picture"
+        android:layout_width="125dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="250dp">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="250dp">
-
-            <ImageView
-                android:id="@+id/task_item_picture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#4D8F00"
-                android:scaleType="centerCrop"
-                app:srcCompat="@android:drawable/ic_menu_crop" />
-        </androidx.cardview.widget.CardView>
-
-    </androidx.cardview.widget.CardView>
+        android:scaleType="centerCrop"
+        app:srcCompat="@android:drawable/ic_menu_crop" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,7 +32,7 @@
 
             <TextView
                 android:id="@+id/task_item_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
                 android:text="@string/task_item_title"
@@ -67,7 +47,7 @@
 
             <TextView
                 android:id="@+id/task_item_participant_count"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -76,10 +56,10 @@
                 android:textAlignment="textEnd"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/task_item_title"
-                app:layout_constraintVertical_bias="0.929" />
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

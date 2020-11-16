@@ -46,6 +46,10 @@ public class TaskListFragment extends Fragment {
             System.out.println("A task was clicked.");
         });
 
+        //Set title of the view.
+        TextView title = root.findViewById(R.id.task_list_title);
+        title.setText(R.string.ic_menu_public_tasks);
+
         final FloatingActionButton newTaskFab = root.findViewById(R.id.task_list_fab);
         if(taskListViewModel.isLoggedIn()) {
             newTaskFab.setVisibility(View.VISIBLE);
