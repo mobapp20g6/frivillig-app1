@@ -2,6 +2,7 @@ package no.ntnu.mobapp20g6.app1.ui.tasklist;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -35,6 +36,7 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         NavController navController = NavHostFragment.findNavController(getParentFragment());
+        int lastUsedNav = navController.getCurrentDestination().getId();
         View root = inflater.inflate(R.layout.task_list_fragment, container, false);
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
         taskListViewAdapter = new TaskListViewAdapter(new ArrayList<>(), taskListViewModel.loadPicasso(getContext()),
@@ -44,8 +46,7 @@ public class TaskListFragment extends Fragment {
         });
 
         //Set title of the view.
-        TextView title = root.findViewById(R.id.task_list_title);
-        title.setText(R.string.ic_menu_public_tasks);
+        setDisplayName(root, lastUsedNav);
 
         final FloatingActionButton newTaskFab = root.findViewById(R.id.task_list_fab);
         if(taskListViewModel.isLoggedIn()) {
@@ -61,19 +62,83 @@ public class TaskListFragment extends Fragment {
         recyclerView.setAdapter(taskListViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        taskListViewModel.loadPublicTasks(listResult -> {
-            //Snackbar is a small text view.
-            Snackbar listResultMsg = Snackbar.make(root, "Unable to load public tasks.", Snackbar.LENGTH_LONG);
-            listResultMsg.setTextColor(Color.YELLOW);
-            if(listResult == null) {
-                listResultMsg.show();
-            } else {
-                listResultMsg.dismiss();
-            }
-        });
-
-        taskListViewModel.getPublicTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
+        setRecyclerViewList(root, lastUsedNav);
 
         return root;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private void setDisplayName(View root, int lastUsedNav) {
+        TextView title;
+        switch (lastUsedNav) {
+            case R.id.nav_public_tasks:
+                title = root.findViewById(R.id.task_list_title);
+                title.setText(R.string.ic_menu_public_tasks);
+                break;
+
+            case R.id.nav_assigned_tasks:
+                title = root.findViewById(R.id.task_list_title);
+                title.setText(R.string.ic_menu_assigned_tasks);
+                break;
+
+            case R.id.nav_own_tasks:
+                title = root.findViewById(R.id.task_list_title);
+                title.setText(R.string.ic_menu_own_tasks);
+                break;
+
+            default:
+        }
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private void setRecyclerViewList(View root, int lastUsedNav) {
+        switch (lastUsedNav) {
+            case R.id.nav_public_tasks:
+                taskListViewModel.loadPublicTasks(listResult -> {
+                    //Snackbar is a small text view.
+                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load public tasks.", Snackbar.LENGTH_LONG);
+                    listResultMsg.setTextColor(Color.YELLOW);
+                    if(listResult == null) {
+                        listResultMsg.show();
+                    } else {
+                        listResultMsg.dismiss();
+                    }
+                });
+
+                taskListViewModel.getPublicTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
+                break;
+
+            case R.id.nav_assigned_tasks:
+                taskListViewModel.loadAssignedTasks(listResult -> {
+                    //Snackbar is a small text view.
+                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load assigned tasks.", Snackbar.LENGTH_LONG);
+                    listResultMsg.setTextColor(Color.YELLOW);
+                    if(listResult == null) {
+                        listResultMsg.show();
+                    } else {
+                        listResultMsg.dismiss();
+                    }
+                });
+
+                taskListViewModel.getAssignedTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
+                break;
+
+            case R.id.nav_own_tasks:
+                taskListViewModel.loadOwnTasks(listResult -> {
+                    //Snackbar is a small text view.
+                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load own tasks.", Snackbar.LENGTH_LONG);
+                    listResultMsg.setTextColor(Color.YELLOW);
+                    if(listResult == null) {
+                        listResultMsg.show();
+                    } else {
+                        listResultMsg.dismiss();
+                    }
+                });
+
+                taskListViewModel.getOwnTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
+                break;
+
+            default:
+        }
     }
 }

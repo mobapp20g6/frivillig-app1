@@ -23,5 +23,13 @@
             android:id="@+id/nav_public_tasks"
             android:icon="@android:drawable/ic_menu_view"
             android:title="@string/ic_menu_public_tasks" />
+        <item
+            android:id="@+id/nav_own_tasks"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="@string/ic_menu_own_tasks" />
+        <item
+            android:id="@+id/nav_assigned_tasks"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="@string/ic_menu_assigned_tasks" />
     </group>
 </menu>
