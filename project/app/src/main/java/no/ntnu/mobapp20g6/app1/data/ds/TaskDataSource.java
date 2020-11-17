@@ -142,6 +142,7 @@ public class TaskDataSource {
                 Log.d("FAIL-LIST_MY_TASK", "Token cannot be null when trying to get tasks");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Log.d("FAIL-LIST_MY_TASK", "Client error");
             listOwnedTasksCallback.accept(new Result.Error(new Exception("Client error")));
         }
