@@ -7,7 +7,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestService {
-    public static String DOMAIN = "http://10.0.2.2:8080/appsrv-1.0/";
+    private static String HOST = "192.168.234.61";
+    //private static String HOST = "10.0.2.2";
+
+    public static String DOMAIN = "http://" + HOST + ":8080/appsrv-1.0/";
+
+
 
     private static Retrofit retrofit;
 
