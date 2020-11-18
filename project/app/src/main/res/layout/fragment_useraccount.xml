@@ -180,7 +180,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5">
 
             <EditText
-                android:id="@+id/resetpass_old"
+                android:id="@+id/createtask_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -191,16 +191,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/resetpass_new"
+                android:id="@+id/createtask_field_maxsers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="your new password"
                 android:inputType="textPassword"
-                app:layout_constraintEnd_toEndOf="@+id/resetpass_old"
-                app:layout_constraintStart_toStartOf="@+id/resetpass_old"
-                app:layout_constraintTop_toBottomOf="@+id/resetpass_old" />
+                app:layout_constraintEnd_toEndOf="@+id/createtask_field_title"
+                app:layout_constraintStart_toStartOf="@+id/createtask_field_title"
+                app:layout_constraintTop_toBottomOf="@+id/createtask_field_title" />
 
             <EditText
                 android:id="@+id/resetpass_verify"
@@ -210,9 +210,9 @@
                 android:ems="10"
                 android:hint="verify password"
                 android:inputType="textPassword"
-                app:layout_constraintEnd_toEndOf="@+id/resetpass_new"
-                app:layout_constraintStart_toStartOf="@+id/resetpass_new"
-                app:layout_constraintTop_toBottomOf="@+id/resetpass_new" />
+                app:layout_constraintEnd_toEndOf="@+id/createtask_field_maxsers"
+                app:layout_constraintStart_toStartOf="@+id/createtask_field_maxsers"
+                app:layout_constraintTop_toBottomOf="@+id/createtask_field_maxsers" />
 
             <Button
                 android:id="@+id/account_resetpw_ok"

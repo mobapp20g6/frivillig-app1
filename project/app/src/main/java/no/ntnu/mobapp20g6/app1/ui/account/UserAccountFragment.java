@@ -15,11 +15,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -78,8 +76,8 @@ public class UserAccountFragment extends Fragment {
         final TextView userGroup = view.findViewById(R.id.account_group_value);
         final TextView userCreated = view.findViewById(R.id.account_created_value);
 
-        final EditText fieldOldPass = view.findViewById(R.id.resetpass_old);
-        final EditText fieldNewPass = view.findViewById(R.id.resetpass_new);
+        final EditText fieldOldPass = view.findViewById(R.id.createtask_field_title);
+        final EditText fieldNewPass = view.findViewById(R.id.createtask_field_maxsers);
         final EditText fieldNewVerifyPass = view.findViewById(R.id.resetpass_verify);
 
         final Button btnResetPass = view.findViewById(R.id.account_resetpw_ok);
