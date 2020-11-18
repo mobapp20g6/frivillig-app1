@@ -7,11 +7,13 @@
     <item name="account_resetpw" type="id" />
     <item name="account_info_sub" type="id" />
     <item name="account_email" type="id" />
-    <item name="textView4" type="id" />
+    <item name="account_info_title" type="id" />
     <item name="account_email_value" type="id" />
-    <item name="textView5" type="id" />
     <item name="createtask_field_title" type="id" />
-    <item name="createtask_field_maxsers" type="id" />
+    <item name="createtask_field_maxusers" type="id" />
+    <item name="account_resetpw_title" type="id" />
+    <item name="resetpass_old" type="id" />
+    <item name="resetpass_new" type="id" />
     <item name="resetpass_verify" type="id" />
     <item name="account_created" type="id" />
     <item name="account_created_value" type="id" />
