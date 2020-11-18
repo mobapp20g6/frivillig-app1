@@ -31,5 +31,8 @@
             android:id="@+id/nav_assigned_tasks"
             android:icon="@android:drawable/ic_menu_view"
             android:title="@string/ic_menu_assigned_tasks" />
+        <item android:id="@+id/nav_account"
+            android:icon="@drawable/ic_menu_login"
+            android:title="@string/ic_nav_account"/>
     </group>
 </menu>

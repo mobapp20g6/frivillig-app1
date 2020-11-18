@@ -2,9 +2,11 @@ package no.ntnu.mobapp20g6.app1.data.repo;
 
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.ds.LoginDataSource;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
+import no.ntnu.mobapp20g6.app1.data.model.User;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -49,6 +51,14 @@ public class LoginRepository {
         return this.user.getTokenWithBearer();
     }
 
+    /**
+     * Return current logged in user as plain user object
+     * @return
+     */
+    public LoggedInUser getCurrentUser() {
+        return this.user;
+    }
+
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
         // If user credentials will be cached in local storage, it is recommended it be encrypted
@@ -64,6 +74,27 @@ public class LoginRepository {
             resultCallback.accept(result);
 
         } );
+    }
+
+    public void renewSession(Consumer<Boolean> renewResultCallback) {
+        if (isLoggedIn()) {
+            checkAndRenewSessionIfNeeded(renewResultCallback);
+        }
+    }
+
+    public void updateLoggedInUser(Consumer<Boolean> isSuccessfulResult) {
+        if (isLoggedIn()) {
+            dataSource.getUserInfo(user, result -> {
+                if (result instanceof Result.Success) {
+                    setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+                    isSuccessfulResult.accept(true);
+                } else {
+                    isSuccessfulResult.accept(false);
+                }
+            });
+        } else {
+            isSuccessfulResult.accept(false);
+        }
     }
 
     /**
@@ -86,11 +117,13 @@ public class LoginRepository {
      * @param resetCallbackResult Result.Success(true=OK|false=bad input) Result.Error = ERR
      */
     public void changePassword(String username, String oldpass, String newpass, Consumer<Result<Boolean>> resetCallbackResult) {
-        dataSource.changepassword(user.getTokenWithBearer(),oldpass,newpass,username, (Result<Boolean> validInputResult)->{
-            if (validInputResult instanceof Result.Success) {
-               logout();
+        dataSource.changepassword(user.getTokenWithBearer(),oldpass,newpass,username, (Result<Boolean> changePasswordResult)->{
+            if (changePasswordResult instanceof Result.Success) {
+                Boolean success = ((Result.Success<Boolean>) changePasswordResult).getData();
+                if (success == true)
+                    logout();
             }
-            resetCallbackResult.accept(validInputResult);
+            resetCallbackResult.accept(changePasswordResult);
         });
     }
 

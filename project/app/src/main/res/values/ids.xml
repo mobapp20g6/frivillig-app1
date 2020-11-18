@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="account_container" type="id" />
+    <item name="fragment_acocunt_title" type="id" />
+    <item name="fragment_account_username" type="id" />
+    <item name="account_info" type="id" />
+    <item name="account_resetpw" type="id" />
+    <item name="account_info_sub" type="id" />
+    <item name="account_email" type="id" />
+    <item name="textView4" type="id" />
+    <item name="account_email_value" type="id" />
+    <item name="textView5" type="id" />
+    <item name="resetpass_old" type="id" />
+    <item name="resetpass_new" type="id" />
+    <item name="resetpass_verify" type="id" />
+    <item name="account_created" type="id" />
+    <item name="account_created_value" type="id" />
+    <item name="account_info_created_box" type="id" />
+    <item name="account_info_email_box" type="id" />
+    <item name="account_group" type="id" />
+    <item name="account_group_value" type="id" />
+    <item name="account_resetpw_sub" type="id" />
+</resources>

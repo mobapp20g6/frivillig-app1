@@ -137,12 +137,12 @@ public class LoginDataSource {
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
                             validResult.accept(new Result.Success<Boolean>(true));
-                        } else if (response.code() == 400) {
-                            // Bad requiest, check input parameters
+                        } else if (response.code() == 403) {
+                            // Forbidden, most likly old password is worng
                             validResult.accept(new Result.Success<Boolean>(false));
                         } else {
                             // Not allowed or not authenticated
-                            validResult.accept(new Result.Error(new Exception("Not allowed")));
+                            validResult.accept(new Result.Error(new Exception("Bad request")));
                         }
                     }
 
@@ -214,6 +214,20 @@ public class LoginDataSource {
         } catch (Exception e) {
             Log.d("FAIL-AUTH","Client error");
             renewedUsrCallback.accept(new Result.Error(new Exception("Client error")));
+        }
+    }
+
+    public void getUserInfo(LoggedInUser currentUser, Consumer<Result<LoggedInUser>> receivedUserResult) {
+        try {
+            String token = currentUser.getTokenWithBearer();
+            if (token == null) {
+                receivedUserResult.accept(new Result.Error(new Exception("Token")));
+                Log.d("FAIL-AUTH","Token cannot be null when trying to get user info");
+            } else {
+                getLoginUserInfo(token,receivedUserResult);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
