@@ -38,6 +38,7 @@ public class TaskListFragment extends Fragment {
         NavController navController = NavHostFragment.findNavController(getParentFragment());
         int lastUsedNav = navController.getCurrentDestination().getId();
         View root = inflater.inflate(R.layout.task_list_fragment, container, false);
+        View view = container.getRootView();
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
         taskListViewAdapter = new TaskListViewAdapter(new ArrayList<>(), taskListViewModel.loadPicasso(getContext()),
                 onClick -> {
@@ -45,8 +46,6 @@ public class TaskListFragment extends Fragment {
             System.out.println("A task was clicked.");
         });
 
-        //Set title of the view.
-        setDisplayName(root, lastUsedNav);
 
         final FloatingActionButton newTaskFab = root.findViewById(R.id.task_list_fab);
         if(taskListViewModel.isLoggedIn()) {
@@ -62,11 +61,24 @@ public class TaskListFragment extends Fragment {
         recyclerView.setAdapter(taskListViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        setRecyclerViewList(root, lastUsedNav);
+        if(taskListViewModel.isLoggedIn()) {
+            //Set title of the view.
+            setDisplayName(root, lastUsedNav);
+            setRecyclerViewList(view, lastUsedNav);
+        } else {
+            if(view != null) {
+                setSnackbarText("You have to be logged in to see tasks!", view).show();
+            }
+        }
 
         return root;
     }
 
+    /**
+     * Sets the display name of fragment.
+     * @param root view root.
+     * @param lastUsedNav id of last navigation button which was pressed.
+     */
     @SuppressLint("NonConstantResourceId")
     private void setDisplayName(View root, int lastUsedNav) {
         TextView title;
@@ -90,33 +102,27 @@ public class TaskListFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the list for the recyclerview depending on the last navigation bar button which was pressed.
+     * @param view view the container is holding on.
+     * @param lastUsedNav id of last navigation button which was pressed.
+     */
     @SuppressLint("NonConstantResourceId")
-    private void setRecyclerViewList(View root, int lastUsedNav) {
+    private void setRecyclerViewList(View view, int lastUsedNav) {
         switch (lastUsedNav) {
             case R.id.nav_public_tasks:
                 taskListViewModel.loadPublicTasks(listResult -> {
-                    //Snackbar is a small text view.
-                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load public tasks.", Snackbar.LENGTH_LONG);
-                    listResultMsg.setTextColor(Color.YELLOW);
-                    if(listResult == null) {
-                        listResultMsg.show();
-                    } else {
-                        listResultMsg.dismiss();
+                    if(listResult == null && view != null) {
+                        setSnackbarText("Unable to load public tasks.", view).show();
                     }
                 });
 
                 taskListViewModel.getPublicTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
                 break;
-
             case R.id.nav_assigned_tasks:
                 taskListViewModel.loadAssignedTasks(listResult -> {
-                    //Snackbar is a small text view.
-                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load assigned tasks.", Snackbar.LENGTH_LONG);
-                    listResultMsg.setTextColor(Color.YELLOW);
-                    if(listResult == null) {
-                        listResultMsg.show();
-                    } else {
-                        listResultMsg.dismiss();
+                    if(listResult == null && view != null) {
+                        setSnackbarText("Unable to load assigned tasks.", view).show();
                     }
                 });
 
@@ -125,13 +131,8 @@ public class TaskListFragment extends Fragment {
 
             case R.id.nav_own_tasks:
                 taskListViewModel.loadOwnTasks(listResult -> {
-                    //Snackbar is a small text view.
-                    Snackbar listResultMsg = Snackbar.make(root, "Unable to load own tasks.", Snackbar.LENGTH_LONG);
-                    listResultMsg.setTextColor(Color.YELLOW);
-                    if(listResult == null) {
-                        listResultMsg.show();
-                    } else {
-                        listResultMsg.dismiss();
+                    if(listResult == null && view != null) {
+                        setSnackbarText("Unable to load own tasks.", view).show();
                     }
                 });
 
@@ -140,5 +141,20 @@ public class TaskListFragment extends Fragment {
 
             default:
         }
+    }
+
+    /**
+     * Makes a small bar with text on the screen.
+     * @param msg text to be shown on the screen.
+     * @param view view the container is holding on.
+     * @return Snackbar with text and yellow color.
+     */
+    private Snackbar setSnackbarText(String msg, View view) {
+        if(view != null) {
+            Snackbar listResultMsg = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
+            listResultMsg.setTextColor(Color.YELLOW);
+            return listResultMsg;
+        }
+        return null;
     }
 }
