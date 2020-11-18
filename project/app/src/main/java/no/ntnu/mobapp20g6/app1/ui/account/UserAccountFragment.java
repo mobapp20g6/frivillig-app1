@@ -76,8 +76,8 @@ public class UserAccountFragment extends Fragment {
         final TextView userGroup = view.findViewById(R.id.account_group_value);
         final TextView userCreated = view.findViewById(R.id.account_created_value);
 
-        final EditText fieldOldPass = view.findViewById(R.id.createtask_field_title);
-        final EditText fieldNewPass = view.findViewById(R.id.createtask_field_maxsers);
+        final EditText fieldOldPass = view.findViewById(R.id.resetpass_old);
+        final EditText fieldNewPass = view.findViewById(R.id.resetpass_new);
         final EditText fieldNewVerifyPass = view.findViewById(R.id.resetpass_verify);
 
         final Button btnResetPass = view.findViewById(R.id.account_resetpw_ok);
