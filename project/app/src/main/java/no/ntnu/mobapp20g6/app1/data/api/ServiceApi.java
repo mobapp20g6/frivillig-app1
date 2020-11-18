@@ -31,7 +31,7 @@ public interface ServiceApi {
      * @return owned tasks if true and assigned tasks if false.
      */
     @FormUrlEncoded
-    @GET(PREFIX + "listmytasks")
+    @POST(PREFIX + "listmytasks")
     Call<List<Task>> getMyTasks(
             @Header("Authorization") String token,
             @Field("ownedtasks") boolean ownedTasks
