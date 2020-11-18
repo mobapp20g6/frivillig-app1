@@ -32,7 +32,9 @@ public class TaskListViewModel extends ViewModel {
      * @param loadResultCallback Return a callback
      */
     public void loadPublicTasks(Consumer<Result<List<Task>>> loadResultCallback) {
-        taskRepo.getPublicTasks(loginRepo.getToken(), loadResultCallback);
+        if(loginRepo.isLoggedIn()) {
+            taskRepo.getPublicTasks(loginRepo.getToken(), loadResultCallback);
+        }
     }
 
     /**
@@ -40,7 +42,9 @@ public class TaskListViewModel extends ViewModel {
      * @param loadResultCallback Return a callback
      */
     public void loadOwnTasks(Consumer<Result<List<Task>>> loadResultCallback) {
-        taskRepo.getOwnedTasks(loginRepo.getToken(), loadResultCallback);
+        if (loginRepo.isLoggedIn()) {
+            taskRepo.getOwnedTasks(loginRepo.getToken(), loadResultCallback);
+        }
     }
 
     /**
@@ -48,7 +52,9 @@ public class TaskListViewModel extends ViewModel {
      * @param loadResultCallback Return a callback
      */
     public void loadAssignedTasks(Consumer<Result<List<Task>>> loadResultCallback) {
-        taskRepo.getAssignedTasks(loginRepo.getToken(), loadResultCallback);
+        if (loginRepo.isLoggedIn()) {
+            taskRepo.getAssignedTasks(loginRepo.getToken(), loadResultCallback);
+        }
     }
 
     /**
