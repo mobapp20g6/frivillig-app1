@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 
 public class Task {
 
@@ -43,6 +44,14 @@ public class Task {
     @SerializedName("picture")
     private Picture picture;
 
+    @Expose
+    @SerializedName("users")
+    private List<User> participants;
+
+    @Expose
+    @SerializedName("associatedGroup")
+    private Group associatedGroup;
+
     public Long getId() {
         return id;
     }
@@ -51,40 +60,20 @@ public class Task {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Long getParticipantCount() {
         return participantCount;
     }
 
-    public void setParticipantCount(Long participantCount) {
-        this.participantCount = participantCount;
-    }
-
     public Long getParticipantLimit() {
         return participantLimit;
     }
 
-    public void setParticipantLimit(Long participantLimit) {
-        this.participantLimit = participantLimit;
-    }
-
     public Date getScheduleDate() {
         return scheduleDate;
-    }
-
-    public void setScheduleDate(Date scheduleDate) {
-        this.scheduleDate = scheduleDate;
     }
 
     public Date getCreated() {
@@ -99,7 +88,11 @@ public class Task {
         return picture;
     }
 
-    public void setPicture(Picture picture) {
-        this.picture = picture;
+    public List<User> getParticipants() {
+        return participants;
+    }
+
+    public Group getAssociatedGroup() {
+        return associatedGroup;
     }
 }

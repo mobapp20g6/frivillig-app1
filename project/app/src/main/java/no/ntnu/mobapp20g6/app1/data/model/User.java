@@ -67,4 +67,8 @@ public class User {
     public Group getUserGroup() {
         return userGroup;
     }
+
+    public String getUserId() {
+        return userId;
+    }
 }
