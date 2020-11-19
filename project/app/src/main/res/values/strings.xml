@@ -33,4 +33,10 @@
     <string name="ic_menu_own_tasks">Own Tasks</string>
     <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
 
+    <string name="task_group_name">Public</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_description">This task has no description.</string>
+    <string name="task_participant_count">Participant: 2/12</string>
+    <string name="task_date">Date: 02.01.2020 15:15</string>
+
 </resources>

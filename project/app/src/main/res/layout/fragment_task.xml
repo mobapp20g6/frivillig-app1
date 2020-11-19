@@ -19,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Help with dog"
+                        android:text="@string/task_title"
                         android:textColor="@color/design_default_color_background"
                         android:textSize="24sp"
                         android:textStyle="bold"
@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:text="Bidens party group"
+                        android:text="@string/task_group_name"
                         android:textColor="@color/design_default_color_background"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,7 +75,7 @@
 
                     <ImageView
                         android:id="@+id/task_image"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
@@ -121,10 +121,10 @@
                         app:layout_constraintTop_toBottomOf="@+id/task_description_title">
 
                         <TextView
-                            android:id="@+id/textView7"
+                            android:id="@+id/task_description"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="I need someone who can take care of my dog sometimes when I work. I have family who mostly take care of my dog when I work, but since they are sometimes away I need someone who can help me with a passport every now and then. So there will be no fixed times, but only a few hours occasionally when needed. He may be alone at home for a few hours, but a long working day becomes too long." />
+                            android:text="@string/task_description" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -143,11 +143,11 @@
                         android:id="@+id/task_participants"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Participants: 5/24"
+                        android:text="@string/task_participant_count"
                         android:textColor="@color/design_default_color_background"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toTopOf="@+id/task_date"
-                        app:layout_constraintEnd_toStartOf="@+id/task_show_participants"
+                        app:layout_constraintEnd_toStartOf="@+id/button_task_show_participants"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -156,28 +156,28 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Date: 02.01.2020 15:15"
+                        android:text="@string/task_date"
                         android:textColor="@color/design_default_color_background"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/task_add_to_cal"
+                        app:layout_constraintEnd_toStartOf="@+id/button_task_add_to_cal"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/task_participants" />
 
                     <Button
-                        android:id="@+id/task_add_to_cal"
+                        android:id="@+id/button_task_add_to_cal"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:backgroundTint="@android:color/holo_purple"
                         android:text="Add"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/task_show_participants"
-                        app:layout_constraintStart_toStartOf="@+id/task_show_participants"
-                        app:layout_constraintTop_toBottomOf="@+id/task_show_participants" />
+                        app:layout_constraintEnd_toEndOf="@+id/button_task_show_participants"
+                        app:layout_constraintStart_toStartOf="@+id/button_task_show_participants"
+                        app:layout_constraintTop_toBottomOf="@+id/button_task_show_participants" />
 
                     <Button
-                        android:id="@+id/task_show_participants"
+                        android:id="@+id/button_task_show_participants"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:layout_marginEnd="8dp"
@@ -202,6 +202,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/task_layout_info">
 
+                    <androidx.constraintlayout.utils.widget.MockView
+                        android:id="@+id/mockView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="125dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -216,7 +225,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/task_layout_map">
 
                     <Button
-                        android:id="@+id/task_button_join"
+                        android:id="@+id/button_task_join"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -251,7 +260,7 @@
                             android:layout_weight="1">
 
                             <Button
-                                android:id="@+id/task_update"
+                                android:id="@+id/button_task_update"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@android:color/holo_blue_dark"
@@ -269,7 +278,7 @@
                             android:layout_weight="1">
 
                             <Button
-                                android:id="@+id/button5"
+                                android:id="@+id/button_task_delete"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/design_default_color_error"
