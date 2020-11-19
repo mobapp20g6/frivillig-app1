@@ -109,6 +109,8 @@ public class TaskFragment extends Fragment {
                     if(success) {
                         buttonJoinTask.setEnabled(false);
                         setSnackbarText("You successfully join the task!", view, true).show();
+                        participantCount.setText("Participants: " + currentActiveTask.getParticipantCount() + "/" + currentActiveTask.getParticipantLimit());
+
                     } else {
                         setSnackbarText("Joining task failed.", view, false);
                     }

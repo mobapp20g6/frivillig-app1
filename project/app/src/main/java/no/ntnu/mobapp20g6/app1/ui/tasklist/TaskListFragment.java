@@ -25,12 +25,13 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModel;
+import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModelFactory;
 
 public class TaskListFragment extends Fragment {
 
     private TaskListViewModel taskListViewModel;
     private TaskListViewAdapter taskListViewAdapter;
-    //TODO add field for TaskViewModel
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -39,11 +40,13 @@ public class TaskListFragment extends Fragment {
         int lastUsedNav = navController.getCurrentDestination().getId();
         View root = inflater.inflate(R.layout.task_list_fragment, container, false);
         View view = container.getRootView();
+        TaskViewModel taskViewModel = new ViewModelProvider(requireActivity(), new TaskViewModelFactory()).get(TaskViewModel.class);
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
         taskListViewAdapter = new TaskListViewAdapter(new ArrayList<>(), taskListViewModel.loadPicasso(getContext()),
                 onClick -> {
-            //TODO Implement functionality when opening a task.
-            System.out.println("A task was clicked.");
+            //When clicking on a task.
+            taskViewModel.setActiveTask(onClick);
+            navController.navigate(R.id.nav_task);
         });
 
 
