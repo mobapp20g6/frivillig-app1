@@ -8,7 +8,6 @@ import no.ntnu.mobapp20g6.app1.data.ds.LoginDataSource;
 import no.ntnu.mobapp20g6.app1.data.ds.TaskDataSource;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 import no.ntnu.mobapp20g6.app1.data.repo.TaskRepository;
-import no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListViewModel;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
@@ -20,7 +19,7 @@ public class TaskViewModelFactory implements ViewModelProvider.Factory {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(TaskListViewModel.class)) {
+        if (modelClass.isAssignableFrom(TaskViewModel.class)) {
             return (T) new TaskViewModel(
                     TaskRepository.getInstance(new TaskDataSource()),
                     LoginRepository.getInstance(new LoginDataSource())
