@@ -32,5 +32,6 @@
     <string name="ic_menu_public_tasks">Public Tasks</string>
     <string name="ic_menu_own_tasks">Own Tasks</string>
     <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
+    <string name="ic_nav_createtask">Create task</string>
 
 </resources>

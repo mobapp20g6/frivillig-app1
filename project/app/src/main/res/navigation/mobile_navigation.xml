@@ -58,4 +58,13 @@
         android:name="no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListFragment"
         android:label="Assigned Tasks"
         tools:layout="@layout/task_list_fragment" />
+    <fragment
+        android:id="@+id/nav_createtask"
+        android:name="no.ntnu.mobapp20g6.app1.ui.createtask.NewTaskFragment"
+        android:label="fragment_createtask"
+        tools:layout="@layout/fragment_createtask" >
+        <action
+            android:id="@+id/action_nav_createtask_to_nav_login"
+            app:destination="@id/nav_login" />
+    </fragment>
 </navigation>
