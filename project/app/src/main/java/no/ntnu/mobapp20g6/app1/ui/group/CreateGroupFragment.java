@@ -36,11 +36,23 @@ public class CreateGroupFragment extends Fragment {
 
         final Button createButton = view.findViewById(R.id.create_group_create_button);
         final EditText nameEdit = view.findViewById(R.id.create_group_name_input);
+        final EditText descriptionEdit = view.findViewById(R.id.create_group_description_input);
+
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean nameGiven = true;
+                boolean descGiven = true;
                 if (nameEdit.getText().length() == 0) {
                     nameEdit.setError("Name of group is required.");
+                    nameGiven = false;
+                }
+                if (descriptionEdit.getText().length() == 0) {
+                    descriptionEdit.setError("Description of group is required.");
+                    descGiven = false;
+                }
+                if (nameGiven && descGiven) {
+                    mViewModel.createGroup(nameEdit.getText().toString(), descriptionEdit.getText().toString(), null);
                 }
             }
         });
