@@ -23,9 +23,9 @@ public class SharedNonCacheRepository {
         this.locationDataSource = locationDataSource;
     }
 
-    public static SharedNonCacheRepository getInstance(GroupDataSource groupDataSource, LocationDataSource locationDataSource) {
+    public static SharedNonCacheRepository getInstance() {
         if (instance == null) {
-            instance = new SharedNonCacheRepository(groupDataSource, locationDataSource);
+            instance = new SharedNonCacheRepository(new GroupDataSource(), new LocationDataSource());
         }
         return instance;
     }
