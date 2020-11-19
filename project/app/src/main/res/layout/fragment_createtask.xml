@@ -242,7 +242,7 @@
 
 
                     <ImageView
-                        android:id="@+id/imageView2"
+                        android:id="@+id/createtask_visibility_nogroup_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@android:drawable/stat_sys_warning"
@@ -262,7 +262,7 @@
                         android:text="You are not member of any group, therefore you can only create public tasks"
                         android:textAlignment="viewStart"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView2"
+                        app:layout_constraintStart_toEndOf="@+id/createtask_visibility_nogroup_icon"
                         app:layout_constraintTop_toBottomOf="@+id/createtask_rg_visibility" />
 
                     <RadioGroup

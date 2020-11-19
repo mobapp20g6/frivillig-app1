@@ -3,6 +3,7 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -24,14 +25,20 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.data.model.Location;
+import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
 
@@ -53,7 +60,7 @@ public class NewTaskFragment extends Fragment {
         this.newTaskViewModel = new ViewModelProvider(this, new NewTaskViewModelFactory())
                 .get(NewTaskViewModel.class);
 
-        userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
+        this.userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
                 .get(UserAccountViewModel.class);
         this.navController = NavHostFragment.findNavController(getParentFragment());
 
@@ -98,6 +105,21 @@ public class NewTaskFragment extends Fragment {
         final Button btnCancel = view.findViewById(R.id.createtask_cancel);
         final Button btnOk = view.findViewById(R.id.createtask_ok);
 
+        userAccountViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), new Observer<LoggedInUser>() {
+
+            @Override
+            public void onChanged(LoggedInUser loggedInUser) {
+                if (loggedInUser.getUserGroup() == null) {
+                    radioButtonGroup.setVisibility(View.GONE);
+                    radioButtonPublic.toggle();
+                } else {
+                    messageVisibilityNoGroup.setVisibility(View.GONE);
+                    radioButtonPublic.toggle();
+                }
+            }
+        });
+
+
 
         btnSetTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +159,14 @@ public class NewTaskFragment extends Fragment {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
+            NewTaskViewModel ntViewModel = new ViewModelProvider(this, new NewTaskViewModelFactory())
+                    .get(NewTaskViewModel.class);
             // Do something with the date chosen by the user
+            Date currentDate = ntViewModel.currentDateLiveData.getValue();
+            if (currentDate != null) {
+                currentDate.set;
+            }
+            ntViewModel.currentDateLiveData.postValue(new GregorianCalendar(year,month - 1, day).getTime());
         }
     }
 
