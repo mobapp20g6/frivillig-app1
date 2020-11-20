@@ -19,8 +19,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public class TaskViewModel extends ViewModel {
-    private TaskRepository taskRepository;
-    private LoginRepository loginRepository;
+    private final TaskRepository taskRepository;
+    private final LoginRepository loginRepository;
     private MutableLiveData<Task> activeTaskLiveData;
 
     public TaskViewModel(TaskRepository taskRepository, LoginRepository loginRepository) {

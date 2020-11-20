@@ -3,6 +3,7 @@ package no.ntnu.mobapp20g6.app1.ui.task;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -22,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.RestService;
@@ -101,7 +103,13 @@ public class TaskFragment extends Fragment {
             //TODO add functionality to show all participants of task.
         });
         buttonAddToCal.setOnClickListener(button ->{
-            //TODO add functionality to add date to phone calendar.
+            //Adds the task schedule date to the phones calendar.
+            Intent intent = new Intent(Intent.ACTION_EDIT);
+            intent.setType("vnd.android.cursor.item/event");
+            intent.putExtra("beginTime", taskViewModel.getActiveTaskLiveData().getValue().getScheduleDate().getTime());
+            intent.putExtra("allDay", false);
+            intent.putExtra("title", taskViewModel.getActiveTaskLiveData().getValue().getTitle());
+            startActivity(intent);
         });
         buttonJoinTask.setOnClickListener(button ->{
             if(!taskViewModel.isUserMemberOfTask()) {
