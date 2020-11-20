@@ -1,5 +1,6 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import no.ntnu.mobapp20g6.app1.R;
 
@@ -55,6 +57,7 @@ public class CreateGroupFragment extends Fragment {
                 }
                 if (nameGiven && descGiven) {
                     cgViewModel.createGroup(nameEdit.getText().toString(), descriptionEdit.getText().toString(), null);
+                    Toast.makeText(getContext().getApplicationContext(), "Group Created", Toast.LENGTH_LONG);
                 }
             }
         });

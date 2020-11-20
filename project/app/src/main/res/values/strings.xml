@@ -44,4 +44,5 @@
     <string name="create_group_cancel_button_text">Cancel</string>
     <string name="create_group_create_button_text">Create</string>
     <string name="create_group_brreg_button_text">BRREG</string>
+    <string name="invalid_OrgID_Length">Invalid OrgID Length</string>
 </resources>
