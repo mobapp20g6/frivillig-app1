@@ -15,10 +15,9 @@ public class CreateGroupViewModel extends ViewModel {
     private SharedNonCacheRepository sharedRepo;
     private LoginRepository loginRepository;
 
-    public CreateGroupViewModel() {
-        super();
-        sharedRepo = SharedNonCacheRepository.getInstance();
-        loginRepository = LoginRepository.getInstance(new LoginDataSource());
+    public CreateGroupViewModel(SharedNonCacheRepository sharedRepo, LoginRepository loginRepository) {
+        this.sharedRepo = sharedRepo;
+        this.loginRepository = loginRepository;
     }
 
     public void createGroup(String name, String desc, Long orgID) {
@@ -29,5 +28,4 @@ public class CreateGroupViewModel extends ViewModel {
             }
         }) );
     }
-    // TODO: Implement the ViewModel
 }

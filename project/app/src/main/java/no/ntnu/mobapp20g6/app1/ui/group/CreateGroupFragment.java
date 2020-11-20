@@ -18,7 +18,7 @@ import no.ntnu.mobapp20g6.app1.R;
 
 public class CreateGroupFragment extends Fragment {
 
-    private CreateGroupViewModel mViewModel;
+    private CreateGroupViewModel cgViewModel;
 
     public static CreateGroupFragment newInstance() {
         return new CreateGroupFragment();
@@ -33,6 +33,8 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        cgViewModel = new ViewModelProvider(this, new CreateGroupViewModelFactory())
+                .get(CreateGroupViewModel.class);
 
         final Button createButton = view.findViewById(R.id.create_group_create_button);
         final EditText nameEdit = view.findViewById(R.id.create_group_name_input);
@@ -52,7 +54,7 @@ public class CreateGroupFragment extends Fragment {
                     descGiven = false;
                 }
                 if (nameGiven && descGiven) {
-                    mViewModel.createGroup(nameEdit.getText().toString(), descriptionEdit.getText().toString(), null);
+                    cgViewModel.createGroup(nameEdit.getText().toString(), descriptionEdit.getText().toString(), null);
                 }
             }
         });
@@ -61,7 +63,7 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CreateGroupViewModel.class);
+
         // TODO: Use the ViewModel
 
     }
