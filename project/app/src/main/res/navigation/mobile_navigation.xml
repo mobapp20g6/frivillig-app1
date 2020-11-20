@@ -74,5 +74,9 @@
         android:id="@+id/nav_task"
         android:name="no.ntnu.mobapp20g6.app1.ui.task.TaskFragment"
         android:label="Tasks"
-        tools:layout="@layout/fragment_task" />
+        tools:layout="@layout/fragment_task" >
+        <action
+            android:id="@+id/action_nav_task_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>
