@@ -36,9 +36,9 @@ public class SharedNonCacheRepository {
         return instance;
     }
 
-    public void createGroup(String token, String title, Long orgId,
+    public void createGroup(String token, String title, String description, Long orgId,
                             Consumer<Result<Group>> createGroupCallBack) {
-        groupDataSource.createGroup(token, title, orgId, (createGroupResult) -> {
+        groupDataSource.createGroup(token, title, description, orgId, (createGroupResult) -> {
             createGroupCallBack.accept(createGroupResult);
         });
     }
