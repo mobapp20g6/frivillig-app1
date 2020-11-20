@@ -1,7 +1,9 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.data.ds;
 
 import android.util.Log;
 
+import no.ntnu.mobapp20g6.app1.data.RestService;
+import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.api.AuthApi;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.User;
@@ -135,12 +137,12 @@ public class LoginDataSource {
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
                             validResult.accept(new Result.Success<Boolean>(true));
-                        } else if (response.code() == 400) {
-                            // Bad requiest, check input parameters
+                        } else if (response.code() == 403) {
+                            // Forbidden, most likly old password is worng
                             validResult.accept(new Result.Success<Boolean>(false));
                         } else {
                             // Not allowed or not authenticated
-                            validResult.accept(new Result.Error(new Exception("Not allowed")));
+                            validResult.accept(new Result.Error(new Exception("Bad request")));
                         }
                     }
 
@@ -176,7 +178,7 @@ public class LoginDataSource {
      */
     public void renew(LoggedInUser currentUser, Consumer<Result<LoggedInUser>> renewedUsrCallback) {
         try {
-            String token = currentUser.getUserToken();
+            String token = currentUser.getTokenWithBearer();
             if (token == null) {
                 renewedUsrCallback.accept(new Result.Error(new Exception("Token")));
                 Log.d("FAIL-AUTH","Token cannot be null when trying renew session");
@@ -215,6 +217,20 @@ public class LoginDataSource {
         }
     }
 
+    public void getUserInfo(LoggedInUser currentUser, Consumer<Result<LoggedInUser>> receivedUserResult) {
+        try {
+            String token = currentUser.getTokenWithBearer();
+            if (token == null) {
+                receivedUserResult.accept(new Result.Error(new Exception("Token")));
+                Log.d("FAIL-AUTH","Token cannot be null when trying to get user info");
+            } else {
+                getLoginUserInfo(token,receivedUserResult);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * This helper is used in login , and takes the input of an authenticated token
      * and username. It retrieves a User object from the server, and writes the information into
@@ -234,6 +250,7 @@ public class LoginDataSource {
             ) {
                 if(response.isSuccessful()) {
                     LoggedInUser user = response.body();
+                    user.setUserToken(token);
                     Log.d("OK-AUTH","Retrieved user info for:" + user.getUserEmail());
                     result.accept(new Result.Success<>(response.body()));
                 } else {

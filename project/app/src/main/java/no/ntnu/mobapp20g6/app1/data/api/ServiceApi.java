@@ -17,7 +17,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ServiceApi {
-    String PREFIX = "/resources/service/";
+    String PREFIX = "resources/service/";
 
     @GET(PREFIX + "listtasks")
     Call<List<Task>> getAllTasks(
@@ -31,7 +31,7 @@ public interface ServiceApi {
      * @return owned tasks if true and assigned tasks if false.
      */
     @FormUrlEncoded
-    @GET(PREFIX + "listmytasks")
+    @POST(PREFIX + "listmytasks")
     Call<List<Task>> getMyTasks(
             @Header("Authorization") String token,
             @Field("ownedtasks") boolean ownedTasks
