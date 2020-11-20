@@ -3,6 +3,8 @@ package no.ntnu.mobapp20g6.app1.ui.task;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +83,11 @@ public class TaskFragment extends Fragment {
             buttonAddToCal.setEnabled(false);
         }
 
+        //Disable join task button if task is full.
+        if(taskViewModel.isTaskFull()) {
+            buttonJoinTask.setEnabled(false);
+        }
+
         //Load the task image.
         if(currentActiveTask.getPicture() != null) {
             picasso.load(RestService.DOMAIN + PictureApi.PREFIX + "getimage?name=" + currentActiveTask.getPicture().getId() + "&width=" + "480").into(taskImage);
@@ -112,13 +121,12 @@ public class TaskFragment extends Fragment {
             startActivity(intent);
         });
         buttonJoinTask.setOnClickListener(button ->{
+            //Add the user as a participant of the task.
             if(!taskViewModel.isUserMemberOfTask()) {
                 taskViewModel.joinActiveTask(success-> {
                     if(success) {
                         buttonJoinTask.setEnabled(false);
                         setSnackbarText("You successfully join the task!", view, true).show();
-                        participantCount.setText("Participants: " + currentActiveTask.getParticipantCount() + "/" + currentActiveTask.getParticipantLimit());
-
                     } else {
                         setSnackbarText("Joining task failed.", view, false);
                     }
@@ -131,8 +139,31 @@ public class TaskFragment extends Fragment {
             //TODO add functionality to update a task.
         });
         buttonDeleteTask.setOnClickListener(button ->{
-            //TODO add functionality to delete a task.
+            //Delete the current active task after conformation.
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setCancelable(true);
+            builder.setTitle("Conformation");
+            builder.setMessage("Are you sure you want to delete \"" + currentActiveTask.getTitle() + "\"?");
+            builder.setPositiveButton(R.string.alert_confirm, (dialog, which) -> {
+                taskViewModel.deleteActiveTask(success ->{
+                });
+            });
+            builder.setNegativeButton(R.string.alert_cancel, (dialog, which) -> {
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
+
+        //Observe the task and if there are any changes.
+        taskViewModel.getActiveTaskLiveData().observe(getViewLifecycleOwner(), observer->{
+            if(taskViewModel.getActiveTaskLiveData().getValue() == null) {
+                NavHostFragment.findNavController(getParentFragment()).navigate(R.id.nav_home);
+            } else {
+                participantCount.setText("Participants: " + taskViewModel.getActiveTaskLiveData().getValue().getParticipantCount() + "/" + taskViewModel.getActiveTaskLiveData().getValue().getParticipantLimit());
+            }
+        });
+
         return root;
     }
 

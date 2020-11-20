@@ -97,11 +97,11 @@ public class TaskViewModel extends ViewModel {
 
     /**
      * Add a user to the current active task if task is not full.
-     * @param joinTaskCallbackResult
+     * @param joinTaskCallbackResult callback return true if user successfully joined the task.
      */
     public void joinActiveTask(Consumer<Boolean> joinTaskCallbackResult) {
         Task task = activeTaskLiveData.getValue();
-        if(task != null) {
+        if(task != null && !isTaskFull()) {
             taskRepository.joinTask(loginRepository.getToken(), task.getId(), taskToJoin -> {
                 loadActiveTask(task.getId());
                 if(activeTaskLiveData.getValue() != null && !isTaskFull()) {
@@ -113,6 +113,21 @@ public class TaskViewModel extends ViewModel {
             });
         } else {
             joinTaskCallbackResult.accept(false);
+        }
+    }
+
+    /**
+     * Delete the current active task from the database.
+     * @param deleteTaskCallbackResult callback return true if task was successfully removed.
+     */
+    public void deleteActiveTask(Consumer<Boolean> deleteTaskCallbackResult) {
+        if(activeTaskLiveData != null && isUserOwnerOfTask()) {
+            taskRepository.deleteTask(loginRepository.getToken(), activeTaskLiveData.getValue().getId(), wasTaskRemoved -> {
+                loadActiveTask(activeTaskLiveData.getValue().getId());
+                deleteTaskCallbackResult.accept(activeTaskLiveData == null);
+            });
+        } else {
+            deleteTaskCallbackResult.accept(false);
         }
     }
 
