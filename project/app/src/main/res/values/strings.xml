@@ -6,6 +6,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="alert_confirm">Confirm</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
@@ -32,5 +34,11 @@
     <string name="ic_menu_public_tasks">Public Tasks</string>
     <string name="ic_menu_own_tasks">Own Tasks</string>
     <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
+
+    <string name="task_group_name">Public</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_description">This task has no description.</string>
+    <string name="task_participant_count">Participant: 2/12</string>
+    <string name="task_date">Date: 02.01.2020 15:15</string>
 
 </resources>
