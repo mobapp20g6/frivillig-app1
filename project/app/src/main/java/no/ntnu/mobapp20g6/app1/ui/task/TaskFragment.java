@@ -62,27 +62,8 @@ public class TaskFragment extends Fragment {
         Task currentActiveTask = taskViewModel.getActiveTaskLiveData().getValue();
         View view = container.getRootView();
 
-        //Adding osmdroid (open street map) to layout if Task got a GPS location.
-        if(currentActiveTask.getLocation() != null && !currentActiveTask.getLocation().getGpsLat().isEmpty()) {
-            Context ctx = getContext();
-            assert ctx != null;
-            Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-            MapView map = (MapView) root.findViewById(R.id.mapView);
-            map.setTileSource(TileSourceFactory.MAPNIK);
-            map.setMultiTouchControls(true);
-            IMapController mapController = map.getController();
-            mapController.setZoom(13.5);
-            GeoPoint startPoint = new GeoPoint(Double.parseDouble(currentActiveTask.getLocation().getGpsLat()), Double.parseDouble(currentActiveTask.getLocation().getGpsLong()));
-            mapController.setCenter(startPoint);
-
-            //Making marker
-            Marker startMarker = new Marker(map);
-            startMarker.setPosition(startPoint);
-            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            map.getOverlays().add(startMarker);
-        } else {
-            //Closing the map if task does not have GPS location.
-            root.findViewById(R.id.mapView).setVisibility(View.GONE);
+        if(currentActiveTask != null) {
+            makeMap(root, currentActiveTask);
         }
 
         //Buttons
@@ -215,7 +196,34 @@ public class TaskFragment extends Fragment {
         return null;
     }
 
-    private void makeMap(View root) {
+    /**
+     * Makes a map in fragment if current active task got a GPS location.
+     * If there are not a GPS location this will hide the map from the layout fragment.
+     * @param root root view.
+     * @param currentActiveTask current active task.
+     */
+    private void makeMap(View root, Task currentActiveTask) {
+        //Adding osmdroid (open street map) to layout if Task got a GPS location.
+        if(currentActiveTask.getLocation() != null && !currentActiveTask.getLocation().getGpsLat().isEmpty()) {
+            Context ctx = getContext();
+            assert ctx != null;
+            Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+            MapView map = (MapView) root.findViewById(R.id.mapView);
+            map.setTileSource(TileSourceFactory.MAPNIK);
+            map.setMultiTouchControls(true);
+            IMapController mapController = map.getController();
+            mapController.setZoom(13.5);
+            GeoPoint startPoint = new GeoPoint(Double.parseDouble(currentActiveTask.getLocation().getGpsLat()), Double.parseDouble(currentActiveTask.getLocation().getGpsLong()));
+            mapController.setCenter(startPoint);
 
+            //Making marker
+            Marker startMarker = new Marker(map);
+            startMarker.setPosition(startPoint);
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            map.getOverlays().add(startMarker);
+        } else {
+            //Closing the map if task does not have GPS location.
+            root.findViewById(R.id.mapView).setVisibility(View.GONE);
+        }
     }
 }
