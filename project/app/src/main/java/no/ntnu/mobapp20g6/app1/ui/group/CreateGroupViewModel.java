@@ -30,18 +30,34 @@ public class CreateGroupViewModel extends ViewModel {
         return createGroupResult;
     }
 
-    public void createGroup(String name, String desc, Long orgID) {
-        sharedRepo.createGroup(loginRepository.getToken(), name, desc, orgID, (groupResult -> {
+    public void createGroup(String name, String desc, String orgID) {
+        Long orgIDnum = Long.parseLong(orgID);
+        sharedRepo.createGroup(loginRepository.getToken(), name, desc, orgIDnum, (groupResult -> {
             if (groupResult instanceof Result.Success) {
                 Group createdGroup = (Group) ((Result.Success) groupResult).getData();
-                System.out.println(createdGroup.getGroupName());
+                createGroupResult.setValue(new CreateGroupResult(createdGroup));
+            } else {
+                createGroupResult.setValue(new CreateGroupResult(R.string.create_group_failed_creation));
             }
         }) );
     }
 
-    public void createGroupInputChange(String name, String desc, Long orgID) {
-        if (orgID.toString().length() != 9) {
-            createGroupFormState.setValue(new CreateGroupFormState(null, null, R.string.invalid_OrgID_Length));
+    public void createGroupInputChange(String name, String desc, String orgID) {
+        if (name.equals("")) {
+            createGroupFormState.setValue(new CreateGroupFormState(
+                    R.string.create_group_group_name_missing,
+                    null,
+                    null));
+        } else if (desc.equals("")) {
+            createGroupFormState.setValue(new CreateGroupFormState(
+                    null,
+                    R.string.create_group_group_desc_missing,
+                    null));
+        } else {
+            createGroupFormState.setValue(new CreateGroupFormState(true));
         }
+        /*if (orgID.toString().length() != 9) {
+            createGroupFormState.setValue(new CreateGroupFormState(null, null, R.string.invalid_OrgID_Length));
+        }*/
     }
 }

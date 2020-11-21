@@ -65,7 +65,7 @@
             app:layout_constraintTop_toTopOf="@+id/create_group_data_hori_guide" />
 
         <EditText
-            android:id="@+id/create_group_data_org_number_text"
+            android:id="@+id/create_group_org_id_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -84,7 +84,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/create_group_data_vert_guide"
-            app:layout_constraintTop_toBottomOf="@+id/create_group_data_org_number_text" />
+            app:layout_constraintTop_toBottomOf="@+id/create_group_org_id_input" />
 
         <EditText
             android:id="@+id/create_group_name_input"
@@ -149,8 +149,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:text="@string/create_group_brreg_button_text"
-            app:layout_constraintStart_toEndOf="@+id/create_group_data_org_number_text"
-            app:layout_constraintTop_toTopOf="@+id/create_group_data_org_number_text" />
+            app:layout_constraintStart_toEndOf="@+id/create_group_org_id_input"
+            app:layout_constraintTop_toTopOf="@+id/create_group_org_id_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
