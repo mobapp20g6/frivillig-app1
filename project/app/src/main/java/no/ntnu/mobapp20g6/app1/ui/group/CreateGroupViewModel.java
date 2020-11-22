@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.function.Consumer;
+
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
@@ -30,12 +32,13 @@ public class CreateGroupViewModel extends ViewModel {
         return createGroupResult;
     }
 
-    public void createGroup(String name, String desc, String orgID) {
+    public void createGroup(String name, String desc, String orgID, Consumer<Group> createGroupCallBack) {
         Long orgIDnum = Long.parseLong(orgID);
         sharedRepo.createGroup(loginRepository.getToken(), name, desc, orgIDnum, (groupResult -> {
             if (groupResult instanceof Result.Success) {
                 Group createdGroup = (Group) ((Result.Success) groupResult).getData();
                 createGroupResult.setValue(new CreateGroupResult(createdGroup));
+                createGroupCallBack.accept(createdGroup);
             } else {
                 createGroupResult.setValue(new CreateGroupResult(R.string.create_group_failed_creation));
             }

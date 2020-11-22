@@ -1,7 +1,6 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
 import androidx.annotation.StringRes;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -74,7 +73,7 @@ public class CreateGroupFragment extends Fragment {
                     return;
                 }
                 if (createGroupResult.getError() != null) {
-                    showGroupCreationFailed(createGroupResult.getError());
+                    showGroupCreationStatus(createGroupResult.getError());
                 } else {
                     System.out.println("FÅR RESULT TILBAKE FRÅ STUFF");
                     showGroupCreationSuccess(createGroupResult.getSuccess());
@@ -111,7 +110,12 @@ public class CreateGroupFragment extends Fragment {
                     cgViewModel.createGroup(
                             groupNameText.getText().toString(),
                             groupDescText.getText().toString(),
-                            groupOrgId.getText().toString());
+                            groupOrgId.getText().toString(),
+                            createGroupCallBack -> {
+                                if (createGroupCallBack == null) {
+                                    showGroupCreationStatus(R.string.create_group_failed_creation);
+                                }
+                            });
                 }
                 return false;
             }
@@ -123,7 +127,14 @@ public class CreateGroupFragment extends Fragment {
                 cgViewModel.createGroup(
                         groupNameText.getText().toString(),
                         groupDescText.getText().toString(),
-                        groupOrgId.getText().toString());
+                        groupOrgId.getText().toString(),
+                        createGroupCallBack -> {
+                            if (createGroupCallBack == null) {
+                                showGroupCreationStatus(R.string.create_group_failed_creation);
+                            } else {
+                                showGroupCreationStatus(R.string.create_group_success_creation);
+                            }
+                        });
             }
         });
 /*        createButton.setOnClickListener(new View.OnClickListener() {
@@ -156,11 +167,11 @@ public class CreateGroupFragment extends Fragment {
         }
     }
 
-    private void showGroupCreationFailed(@StringRes Integer error) {
+    private void showGroupCreationStatus(@StringRes Integer string) {
         if(getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(
                     getContext().getApplicationContext(),
-                    error,
+                    string,
                     Toast.LENGTH_LONG).show();
         }
     }

@@ -48,5 +48,6 @@
     <string name="create_group_group_desc_missing">Group description must be provided</string>
     <string name="create_group_invalid_OrgID_Length">Invalid OrgID Length</string>
     <string name="create_group_failed_creation">Failed to create group</string>
+    <string name="create_group_success_creation">Group Successfully created</string>
 
 </resources>
