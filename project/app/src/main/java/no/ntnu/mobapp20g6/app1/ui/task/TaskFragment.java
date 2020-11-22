@@ -172,6 +172,9 @@ public class TaskFragment extends Fragment {
             if(taskViewModel.getActiveTaskLiveData().getValue() == null) {
                 NavHostFragment.findNavController(getParentFragment()).navigate(R.id.nav_home);
             } else {
+                if(taskViewModel.isUserMemberOfTask()) {
+                    buttonAddToCal.setEnabled(true);
+                }
                 participantCount.setText("Participants: " + taskViewModel.getActiveTaskLiveData().getValue().getParticipantCount() + "/" + taskViewModel.getActiveTaskLiveData().getValue().getParticipantLimit());
             }
         });
