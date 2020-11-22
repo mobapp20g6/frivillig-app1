@@ -52,6 +52,10 @@ public class Task {
     @SerializedName("associatedGroup")
     private Group associatedGroup;
 
+    @Expose
+    @SerializedName("location")
+    private Location location;
+
     public Long getId() {
         return id;
     }
@@ -94,5 +98,9 @@ public class Task {
 
     public Group getAssociatedGroup() {
         return associatedGroup;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

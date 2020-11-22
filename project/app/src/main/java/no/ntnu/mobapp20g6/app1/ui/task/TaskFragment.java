@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +25,14 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.RestService;
@@ -56,6 +61,10 @@ public class TaskFragment extends Fragment {
         Picasso picasso = taskViewModel.loadPicasso(getContext());
         Task currentActiveTask = taskViewModel.getActiveTaskLiveData().getValue();
         View view = container.getRootView();
+
+        if(currentActiveTask != null) {
+            makeMap(root, currentActiveTask);
+        }
 
         //Buttons
         final Button buttonShowParticipants = root.findViewById(R.id.button_task_show_participants);
@@ -185,5 +194,36 @@ public class TaskFragment extends Fragment {
             return listResultMsg;
         }
         return null;
+    }
+
+    /**
+     * Makes a map in fragment if current active task got a GPS location.
+     * If there are not a GPS location this will hide the map from the layout fragment.
+     * @param root root view.
+     * @param currentActiveTask current active task.
+     */
+    private void makeMap(View root, Task currentActiveTask) {
+        //Adding osmdroid (open street map) to layout if Task got a GPS location.
+        if(currentActiveTask.getLocation() != null && !currentActiveTask.getLocation().getGpsLat().isEmpty()) {
+            Context ctx = getContext();
+            assert ctx != null;
+            Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+            MapView map = (MapView) root.findViewById(R.id.mapView);
+            map.setTileSource(TileSourceFactory.MAPNIK);
+            map.setMultiTouchControls(true);
+            IMapController mapController = map.getController();
+            mapController.setZoom(13.5);
+            GeoPoint startPoint = new GeoPoint(Double.parseDouble(currentActiveTask.getLocation().getGpsLat()), Double.parseDouble(currentActiveTask.getLocation().getGpsLong()));
+            mapController.setCenter(startPoint);
+
+            //Making marker
+            Marker startMarker = new Marker(map);
+            startMarker.setPosition(startPoint);
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            map.getOverlays().add(startMarker);
+        } else {
+            //Closing the map if task does not have GPS location.
+            root.findViewById(R.id.mapView).setVisibility(View.GONE);
+        }
     }
 }
