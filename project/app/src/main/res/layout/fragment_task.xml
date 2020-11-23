@@ -144,6 +144,7 @@
                         android:id="@+id/task_participants"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="@string/task_participant_count"
                         android:textColor="@color/design_default_color_background"
                         android:textSize="14sp"
@@ -160,7 +161,6 @@
                         android:text="@string/task_date"
                         android:textColor="@color/design_default_color_background"
                         android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/button_task_add_to_cal"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/task_participants" />
@@ -172,7 +172,6 @@
                         android:backgroundTint="@android:color/holo_purple"
                         android:text="Add"
                         android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/button_task_show_participants"
                         app:layout_constraintStart_toStartOf="@+id/button_task_show_participants"
                         app:layout_constraintTop_toBottomOf="@+id/button_task_show_participants" />
@@ -190,6 +189,19 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/task_participants"
                         app:layout_constraintTop_toTopOf="@+id/task_participants" />
+
+                    <Button
+                        android:id="@+id/button_task_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="24dp"
+                        android:backgroundTint="@android:color/holo_purple"
+                        android:text="Full Screen Map"
+                        android:textSize="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/task_date" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
