@@ -15,10 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import androidx.preference.PreferenceManager;
+
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -137,11 +140,11 @@ public class TaskFragment extends Fragment {
                         buttonJoinTask.setEnabled(false);
                         setSnackbarText("You successfully join the task!", view, true).show();
                     } else {
-                        setSnackbarText("Joining task failed.", view, false);
+                        setSnackbarText("Joining task failed.", view, false).show();
                     }
                 });
             } else {
-                setSnackbarText("Joining task failed. You are already member of the task.", view, false);
+                setSnackbarText("Joining task failed. You are already member of the task.", view, false).show();
             }
         });
         buttonUpdateTask.setOnClickListener(button ->{
@@ -169,6 +172,9 @@ public class TaskFragment extends Fragment {
             if(taskViewModel.getActiveTaskLiveData().getValue() == null) {
                 NavHostFragment.findNavController(getParentFragment()).navigate(R.id.nav_home);
             } else {
+                if(taskViewModel.isUserMemberOfTask()) {
+                    buttonAddToCal.setEnabled(true);
+                }
                 participantCount.setText("Participants: " + taskViewModel.getActiveTaskLiveData().getValue().getParticipantCount() + "/" + taskViewModel.getActiveTaskLiveData().getValue().getParticipantLimit());
             }
         });
