@@ -10,7 +10,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.function.Consumer;
 
-import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.model.User;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
