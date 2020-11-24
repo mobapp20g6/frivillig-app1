@@ -132,7 +132,7 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //To stop locationListener to listen from location updates.
+        //To stop locationListener to listen for location updates.
         locationManager.removeUpdates(this);
     }
 
