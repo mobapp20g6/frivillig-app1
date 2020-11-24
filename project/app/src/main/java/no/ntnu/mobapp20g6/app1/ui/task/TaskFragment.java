@@ -16,12 +16,10 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import androidx.preference.PreferenceManager;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,16 +63,13 @@ public class TaskFragment extends Fragment {
         Task currentActiveTask = taskViewModel.getActiveTaskLiveData().getValue();
         View view = container.getRootView();
 
-        if(currentActiveTask != null) {
-            makeMap(root, currentActiveTask);
-        }
-
         //Buttons
         final Button buttonShowParticipants = root.findViewById(R.id.button_task_show_participants);
         final Button buttonAddToCal = root.findViewById(R.id.button_task_add_to_cal);
         final Button buttonJoinTask = root.findViewById(R.id.button_task_join);
         final Button buttonUpdateTask = root.findViewById(R.id.button_task_update);
         final Button buttonDeleteTask = root.findViewById(R.id.button_task_delete);
+        final Button buttonMap = root.findViewById(R.id.button_task_map);
 
         final ImageView taskImage = root.findViewById(R.id.task_image);
         final TextView title = root.findViewById(R.id.task_title);
@@ -82,6 +77,11 @@ public class TaskFragment extends Fragment {
         final TextView taskDate = root.findViewById(R.id.task_date);
         final TextView participantCount = root.findViewById(R.id.task_participants);
         final TextView taskGroup = root.findViewById(R.id.task_group);
+
+        //Setup the map.
+        if(currentActiveTask != null) {
+            makeMap(root, currentActiveTask, buttonMap);
+        }
 
         //Disable update and delete button if user is not owner of task.
         if(!taskViewModel.isUserOwnerOfTask()) {
@@ -166,6 +166,10 @@ public class TaskFragment extends Fragment {
             AlertDialog dialog = builder.create();
             dialog.show();
         });
+        buttonMap.setOnClickListener(button ->{
+            //Navigate to full screen version of map.
+            NavHostFragment.findNavController(getParentFragment()).navigate(R.id.nav_full_screen_map);
+        });
 
         //Observe the task and if there are any changes.
         taskViewModel.getActiveTaskLiveData().observe(getViewLifecycleOwner(), observer->{
@@ -208,7 +212,7 @@ public class TaskFragment extends Fragment {
      * @param root root view.
      * @param currentActiveTask current active task.
      */
-    private void makeMap(View root, Task currentActiveTask) {
+    private void makeMap(View root, Task currentActiveTask, Button button) {
         //Adding osmdroid (open street map) to layout if Task got a GPS location.
         if(currentActiveTask.getLocation() != null && !currentActiveTask.getLocation().getGpsLat().isEmpty()) {
             Context ctx = getContext();
@@ -230,6 +234,7 @@ public class TaskFragment extends Fragment {
         } else {
             //Closing the map if task does not have GPS location.
             root.findViewById(R.id.mapView).setVisibility(View.GONE);
+            button.setVisibility(View.GONE);
         }
     }
 }
