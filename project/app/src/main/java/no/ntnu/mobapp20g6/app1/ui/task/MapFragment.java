@@ -10,10 +10,12 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,11 @@ import no.ntnu.mobapp20g6.app1.data.model.Task;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+/**
+ * Display a full screen map with the location of the current task and user GPS location.
+ * User GPS location will only show if permission is granted and GPS is turned on.
+ * @author TrymV
+ */
 public class MapFragment extends Fragment implements LocationListener {
 
     private TaskViewModel taskViewModel;
@@ -37,6 +44,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private Context context;
     protected LocationManager locationManager;
     private Marker myLocationMarker;
+    private boolean countDownFinished = true;
 
     private static final long MIN_DISTANCE_FOR_GPS_UPDATE = 10;
     private static final long MIN_TIME_FOR_GPS_UPDATE = 1000L * 10; //10 sec
@@ -75,6 +83,8 @@ public class MapFragment extends Fragment implements LocationListener {
             GeoPoint myLocation = new GeoPoint(latitude, longitude);
             myLocationMarker.setPosition(myLocation);
             myLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            myLocationMarker.setTitle("My position");
+            myLocationMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_my_location_24, null));
             map.getOverlays().add(myLocationMarker);
         }
 
@@ -101,15 +111,16 @@ public class MapFragment extends Fragment implements LocationListener {
             Marker startMarker = new Marker(map);
             startMarker.setPosition(startPoint);
             startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            startMarker.setTitle(currentActiveTask.getTitle());
             map.getOverlays().add(startMarker);
         }
     }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        //TODO This keep running even after user is out of fragment. Fix this.
-        System.out.println("Location was changed!");
-        if(getCurrentLocation()) {
+        //Sets the user location on the map.
+        if(countDownFinished && getCurrentLocation()) {
+            startCountDownTimer();
             GeoPoint myLocation = new GeoPoint(latitude, longitude);
             myLocationMarker.setPosition(myLocation);
             myLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -119,13 +130,18 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     @Override
-    public void onProviderEnabled(@NonNull String provider) {
+    public void onDestroy() {
+        super.onDestroy();
+        //To stop locationListener to listen from location updates.
+        locationManager.removeUpdates(this);
+    }
 
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
     }
 
     @Override
     public void onProviderDisabled(@NonNull String provider) {
-
     }
 
     @Override
@@ -133,10 +149,13 @@ public class MapFragment extends Fragment implements LocationListener {
         //Required so an exception is not thrown.
     }
 
+    /**
+     * Gets the current GPS location of the user if permission is granted and GPS is enabled.
+     * @return true if GPS location was successfully received.
+     */
     public boolean getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //TODO Handle permission denied.
             System.out.println("Location permission denied.");
             return false;
         } else {
@@ -150,23 +169,25 @@ public class MapFragment extends Fragment implements LocationListener {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                 }
-                //Checks for network status.
-            } else if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_GPS_UPDATE, MIN_DISTANCE_FOR_GPS_UPDATE, this);
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                System.out.println("Getting Network location");
-                if (location != null) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                }
             }
             return true;
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        System.out.println("There was a change in permission.");
+    /**
+     * Starts a 3 seconds countdown and sets countDownFinished to false.
+     * After 3 seconds countDownFinished will be set to true.
+     */
+    private void startCountDownTimer() {
+        new CountDownTimer(3000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                countDownFinished = false;
+            }
+
+            public void onFinish() {
+                countDownFinished = true;
+            }
+        }.start();
     }
 }
