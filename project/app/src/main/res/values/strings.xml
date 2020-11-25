@@ -56,9 +56,9 @@
     <string name="create_group_confirmation_input_btn_create">Create group</string>
 
     <!-- Create Group Fragment User Feedback -->
-    <string name="create_group_group_name_missing">Group name must be provided</string>
-    <string name="create_group_group_desc_missing">Group description must be provided</string>
-    <string name="create_group_invalid_OrgID_Length">Invalid OrgID Length</string>
+    <string name="create_group_group_name_invalid">Group name must be provided and under 255 characters</string>
+    <string name="create_group_group_desc_invalid">Group description must be provided and under 255 characters</string>
+    <string name="create_group_group_orgID_invalid">Group Org ID must be 9 numbers</string>
     <string name="create_group_failed_creation">Failed to create group</string>
     <string name="create_group_success_creation">Group Successfully created</string>
 

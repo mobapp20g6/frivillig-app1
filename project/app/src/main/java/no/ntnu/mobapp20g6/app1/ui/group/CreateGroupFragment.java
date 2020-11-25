@@ -38,49 +38,61 @@ public class CreateGroupFragment extends Fragment {
         cgViewModel = new ViewModelProvider(this, new CreateGroupViewModelFactory())
                 .get(CreateGroupViewModel.class);
 
-/*        final Button createButton = view.findViewById(R.id.create_group_create_button);
-        final EditText groupNameText = view.findViewById(R.id.create_group_name_input);
-        final EditText groupDescText = view.findViewById(R.id.create_group_description_input);
-        final EditText groupOrgId = view.findViewById(R.id.create_group_org_id_input);
+        final EditText groupNameText = view.findViewById(R.id.create_group_details_name_input);
+        final EditText groupDescText = view.findViewById(R.id.create_group_details_desc_input);
+        final EditText groupOrgIdText = view.findViewById(R.id.create_group_details_input_orgid);
+        final Button createBtn = view.findViewById(R.id.create_group_confirmation_input_btn_create);
 
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cgViewModel.createGroup(
-                        groupNameText.getText().toString(),
-                        groupDescText.getText().toString(),
-                        groupOrgId.getText().toString(),
-                        createGroupCallBack -> {
-                            if (createGroupCallBack == null) {
-                                showGroupCreationStatus(R.string.create_group_failed_creation);
-                            } else {
-                                showGroupCreationStatus(R.string.create_group_success_creation);
-                            }
-                        });
+        createBtn.setOnClickListener(v -> {
+            String groupName = groupNameText.getText().toString();
+            String groupDesc = groupDescText.getText().toString();
+            String groupOrgID = groupOrgIdText.getText().toString();
+
+            boolean validName = validateTextInput(groupName);
+            boolean validDesc = validateTextInput(groupDesc);
+            boolean validOrgID = validateOrgId(groupOrgID);
+
+            if (!validName) {
+                groupNameText.setError(getString(R.string.create_group_group_name_invalid));
             }
-        });*/
-/*        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean nameGiven = true;
-                boolean descGiven = true;
-                if (nameEdit.getText().length() == 0) {
-                    nameEdit.setError("Name of group is required.");
-                    nameGiven = false;
-                }
-                if (descriptionEdit.getText().length() == 0) {
-                    descriptionEdit.setError("Description of group is required.");
-                    descGiven = false;
-                }
-                if (nameGiven && descGiven) {
-                    cgViewModel.createGroup(nameEdit.getText().toString(), descriptionEdit.getText().toString(), null);
-                    Toast.makeText(getContext().getApplicationContext(), "Group Created", Toast.LENGTH_LONG);
-                }
+
+            if (!validDesc) {
+                groupDescText.setError(getString(R.string.create_group_group_desc_invalid));
             }
-        });*/
+
+            if (!validOrgID) {
+                groupOrgIdText.setError(getString(R.string.create_group_group_orgID_invalid));
+            }
+
+            if (validName && validDesc && validOrgID) {
+                createGroup(groupName, groupDesc, groupOrgID);
+            }
+        });
     }
 
-    private void showGroupCreationStatus(@StringRes Integer string) {
+    private void createGroup(String groupName, String groupDesc, String groupOrgID) {
+        cgViewModel.createGroup(
+                groupName,
+                groupDesc,
+               groupOrgID,
+                createGroupCallBack -> {
+                    if (createGroupCallBack == null) {
+                        showUserFeedback(R.string.create_group_failed_creation);
+                    } else {
+                        showUserFeedback(R.string.create_group_success_creation);
+                    }
+                });
+    }
+
+    private boolean validateTextInput(String string) {
+        return !(string.equals("") || string.length() > 255);
+    }
+
+    private boolean validateOrgId(String groupOrgID) {
+        return groupOrgID.length() == 9;
+    }
+
+    private void showUserFeedback(@StringRes Integer string) {
         if(getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(
                     getContext().getApplicationContext(),

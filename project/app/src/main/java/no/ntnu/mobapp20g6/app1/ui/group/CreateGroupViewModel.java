@@ -23,7 +23,10 @@ public class CreateGroupViewModel extends ViewModel {
     }
 
     public void createGroup(String name, String desc, String orgID, Consumer<Group> createGroupCallBack) {
-        Long orgIDnum = Long.parseLong(orgID);
+        Long orgIDnum = null;
+        if (!orgID.equals("")) {
+            orgIDnum = Long.parseLong(orgID);
+        }
         sharedRepo.createGroup(loginRepository.getToken(), name, desc, orgIDnum, (groupResult -> {
             if (groupResult instanceof Result.Success) {
                 Group createdGroup = (Group) ((Result.Success) groupResult).getData();
