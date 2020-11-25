@@ -62,5 +62,5 @@
         android:id="@+id/nav_group"
         android:label="Create Group"
         android:name="no.ntnu.mobapp20g6.app1.ui.group.CreateGroupFragment"
-        tools:layout="@layout/create_group_fragment" />
+        tools:layout="@layout/fragment_create_group" />
 </navigation>

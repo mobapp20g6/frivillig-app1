@@ -1,7 +1,6 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
 import androidx.annotation.StringRes;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -10,20 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import no.ntnu.mobapp20g6.app1.R;
-import no.ntnu.mobapp20g6.app1.data.model.Group;
 
 public class CreateGroupFragment extends Fragment {
 
@@ -36,7 +29,7 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.create_group_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_create_group, container, false);
     }
 
     @Override
@@ -45,7 +38,7 @@ public class CreateGroupFragment extends Fragment {
         cgViewModel = new ViewModelProvider(this, new CreateGroupViewModelFactory())
                 .get(CreateGroupViewModel.class);
 
-        final Button createButton = view.findViewById(R.id.create_group_create_button);
+/*        final Button createButton = view.findViewById(R.id.create_group_create_button);
         final EditText groupNameText = view.findViewById(R.id.create_group_name_input);
         final EditText groupDescText = view.findViewById(R.id.create_group_description_input);
         final EditText groupOrgId = view.findViewById(R.id.create_group_org_id_input);
@@ -65,7 +58,7 @@ public class CreateGroupFragment extends Fragment {
                             }
                         });
             }
-        });
+        });*/
 /*        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

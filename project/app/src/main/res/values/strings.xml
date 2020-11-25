@@ -26,6 +26,7 @@
     <string name="menu_account">My account</string>
     <string name="ic_nav_account">User account</string>
     <string name="mismatch_password">passwords must match</string>
+    <string name="cancel_button_text">Cancel</string>
 
     <string name="task_item_title">"Task title"</string>
     <string name="task_item_participant_count">"2 / 5"</string>
@@ -34,16 +35,27 @@
     <string name="ic_menu_own_tasks">Own Tasks</string>
     <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
 
-    <string name="create_group_text">Create Group</string>
-    <string name="create_group_name_text">Name: </string>
-    <string name="create_group_Name_input_hint">Name of group…</string>
-    <string name="create_group_description_text">Description: </string>
-    <string name="create_group_description_input_hint">Write a short description</string>
-    <string name="create_group_orgid_text">Organization Number</string>
-    <string name="create_group_orgid_input_hint">Organization number…</string>
-    <string name="create_group_cancel_button_text">Cancel</string>
-    <string name="create_group_create_button_text">Create</string>
-    <string name="create_group_brreg_button_text">BRREG</string>
+    <!-- Create Group Fragment Creation Text -->
+    <string name="create_group_details_step_1">1</string>
+    <string name="create_group_details_text">Enter details</string>
+    <string name="create_group_details_orgid_input_hint">Organization number…</string>
+    <string name="create_group_details_btn_brreg_text">BRREG</string>
+    <string name="create_group_details_name_input_hint">Name of group…</string>
+    <string name="create_group_details_desc_input_hint">Write a short description…</string>
+
+    <string name="create_group_extras_step_2">2</string>
+    <string name="create_group_extras_text">Add location or picture</string>
+    <string name="create_group_extras_input_btn_location">Add location</string>
+    <string name="create_group_extras_input_btn_remove_location">Remove location</string>
+    <string name="create_group_extras_input_btn_picture">Add picture</string>
+    <string name="create_group_extras_input_picture_desc">User-added picture</string>
+    <string name="create_group_extras_input_btn_remove_picture">Remove picture</string>
+
+    <string name="create_group_confirmation_step_3">3</string>
+    <string name="create_group_confirmation_text">Create group</string>
+    <string name="create_group_confirmation_input_btn_create">Create group</string>
+
+    <!-- Create Group Fragment User Feedback -->
     <string name="create_group_group_name_missing">Group name must be provided</string>
     <string name="create_group_group_desc_missing">Group description must be provided</string>
     <string name="create_group_invalid_OrgID_Length">Invalid OrgID Length</string>
