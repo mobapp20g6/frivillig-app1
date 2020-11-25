@@ -50,77 +50,6 @@ public class CreateGroupFragment extends Fragment {
         final EditText groupDescText = view.findViewById(R.id.create_group_description_input);
         final EditText groupOrgId = view.findViewById(R.id.create_group_org_id_input);
 
-        cgViewModel.getCreateGroupFormState().observe(getViewLifecycleOwner(), new Observer<CreateGroupFormState>() {
-            @Override
-            public void onChanged(CreateGroupFormState createGroupFormState) {
-                if (createGroupFormState == null) {
-                    return;
-                }
-                createButton.setEnabled(createGroupFormState.isDataValid());
-                if (createGroupFormState.getGroupNameError() != null) {
-                    groupNameText.setError(getString(createGroupFormState.getGroupNameError()));
-                }
-                if (createGroupFormState.getGroupDescError() != null) {
-                    groupDescText.setError(getString(createGroupFormState.getGroupDescError()));
-                }
-            }
-        });
-
-        cgViewModel.getCreateGroupResult().observe(getViewLifecycleOwner(), new Observer<CreateGroupResult>() {
-            @Override
-            public void onChanged(CreateGroupResult createGroupResult) {
-                if (createGroupResult != null) {
-                    return;
-                }
-                if (createGroupResult.getError() != null) {
-                    showGroupCreationStatus(createGroupResult.getError());
-                } else {
-                    System.out.println("FÅR RESULT TILBAKE FRÅ STUFF");
-                    showGroupCreationSuccess(createGroupResult.getSuccess());
-                }
-            }
-        });
-
-        TextWatcher afterTextChangedListener = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                cgViewModel.createGroupInputChange(
-                        groupNameText.getText().toString(),
-                        groupDescText.getText().toString(),
-                        groupOrgId.getText().toString());
-            }
-        };
-        groupNameText.addTextChangedListener(afterTextChangedListener);
-        groupDescText.addTextChangedListener(afterTextChangedListener);
-        groupDescText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    cgViewModel.createGroup(
-                            groupNameText.getText().toString(),
-                            groupDescText.getText().toString(),
-                            groupOrgId.getText().toString(),
-                            createGroupCallBack -> {
-                                if (createGroupCallBack == null) {
-                                    showGroupCreationStatus(R.string.create_group_failed_creation);
-                                }
-                            });
-                }
-                return false;
-            }
-        });
-
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,15 +85,6 @@ public class CreateGroupFragment extends Fragment {
                 }
             }
         });*/
-    }
-
-    private void showGroupCreationSuccess(Group success) {
-        if(getContext() != null && getContext().getApplicationContext() != null) {
-            Toast.makeText(
-                    getContext().getApplicationContext(),
-                    success.toString(),
-                    Toast.LENGTH_LONG).show();
-        }
     }
 
     private void showGroupCreationStatus(@StringRes Integer string) {
