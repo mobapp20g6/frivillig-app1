@@ -1,12 +1,13 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
-import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
@@ -35,5 +36,14 @@ public class CreateGroupViewModel extends ViewModel {
 
             }
         }) );
+    }
+
+    public void getBrregOrg(String groupOrgId, Consumer<JsonObject> brregCallBack) {
+        sharedRepo.getVoluntaryBrregOrg(groupOrgId, brregResult -> {
+            if (brregResult instanceof Result.Success) {
+                JsonObject voluntaryOrg = (JsonObject) ((Result.Success) brregResult).getData();
+                brregCallBack.accept(voluntaryOrg);
+            }
+        });
     }
 }

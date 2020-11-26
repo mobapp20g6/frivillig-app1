@@ -1,5 +1,7 @@
 package no.ntnu.mobapp20g6.app1.data.repo;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -101,5 +103,11 @@ public class SharedNonCacheRepository {
 
     public void setGroupLogo(String token, Long groupId, String picturePath, Consumer<Result<Group>>setGroupLogoCallback) {
         pictureDataSource.setGroupLogo(token, groupId, picturePath, setGroupLogoCallback);
+    }
+
+    public void getVoluntaryBrregOrg(String orgid, Consumer<Result<JsonObject>> getVoluntaryBrreggOrgCallBack) {
+        groupDataSource.getBrregOrg(orgid, brreggResult -> {
+            getVoluntaryBrreggOrgCallBack.accept(brreggResult);
+        });
     }
 }

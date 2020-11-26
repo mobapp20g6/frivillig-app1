@@ -16,6 +16,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.bind.util.ISO8601Utils;
+
+import org.w3c.dom.ls.LSOutput;
+
+import java.util.ArrayList;
+
 import no.ntnu.mobapp20g6.app1.R;
 
 public class CreateGroupFragment extends Fragment {
@@ -41,8 +51,28 @@ public class CreateGroupFragment extends Fragment {
         final EditText groupNameText = view.findViewById(R.id.create_group_details_name_input);
         final EditText groupDescText = view.findViewById(R.id.create_group_details_desc_input);
         final EditText groupOrgIdText = view.findViewById(R.id.create_group_details_input_orgid);
+        final Button brregBtn = view.findViewById(R.id.create_group_details_input_btn_brreg);
         final Button createBtn = view.findViewById(R.id.create_group_confirmation_input_btn_create);
 
+        brregBtn.setOnClickListener(v -> {
+            String groupOrgId = groupOrgIdText.getText().toString();
+            if (validateOrgId(groupOrgId)){
+                cgViewModel.getBrregOrg(groupOrgId, brregCallBack -> {
+                    if (brregCallBack != null) {
+                        JsonObject embedded = brregCallBack.getAsJsonObject("_embedded");
+                        JsonArray entities = (JsonArray) embedded.get("enheter");
+                        JsonObject entitylist = (JsonObject) entities.get(0);
+                        JsonPrimitive name = (JsonPrimitive) entitylist.get("navn");
+                        JsonObject desclist = (JsonObject) entitylist.get("organisasjonsform");
+                        JsonPrimitive desc = (JsonPrimitive) desclist.get("beskrivelse");
+                        groupNameText.setText(name.toString().replace("\"", ""));
+                        groupDescText.setText(desc.toString().replace("\"", ""));
+                    }
+                });
+            }
+        });
+
+        //TODO: Make it so that only name and description is sent if no succesfull callback from brreg.
         createBtn.setOnClickListener(v -> {
             String groupName = groupNameText.getText().toString();
             String groupDesc = groupDescText.getText().toString();
