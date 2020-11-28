@@ -59,7 +59,10 @@
     <string name="create_group_group_name_invalid">Group name must be provided and under 255 characters</string>
     <string name="create_group_group_desc_invalid">Group description must be provided and under 255 characters</string>
     <string name="create_group_group_orgID_invalid">Group Org ID must be 9 numbers</string>
+    <string name="create_group_brreg_search_failed">Did not find any voluntary organizations.</string>
+    <string name="create_group_no_voluntary_org_feedback">Not sending OrgId, can not validate</string>
     <string name="create_group_failed_creation">Failed to create group</string>
     <string name="create_group_success_creation">Group Successfully created</string>
+    <string name="create_group_cancel_action">Canceled group creation.</string>
 
 </resources>

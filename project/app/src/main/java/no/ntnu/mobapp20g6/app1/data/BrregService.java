@@ -1,8 +1,5 @@
 package no.ntnu.mobapp20g6.app1.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
