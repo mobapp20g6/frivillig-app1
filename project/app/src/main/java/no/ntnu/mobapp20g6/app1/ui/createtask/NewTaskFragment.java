@@ -33,6 +33,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -41,6 +43,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Location;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
@@ -112,6 +115,7 @@ public class NewTaskFragment extends Fragment {
 
         final Button btnCancel = view.findViewById(R.id.createtask_cancel);
         final Button btnOk = view.findViewById(R.id.createtask_ok);
+        final Snackbar snackbar = Snackbar.make(view,null,Snackbar.LENGTH_LONG);
 
         userAccountViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), new Observer<LoggedInUser>() {
 
@@ -132,7 +136,7 @@ public class NewTaskFragment extends Fragment {
             public void onChanged(Date date) {
                 System.out.println("Data updated in date view modell");
                 messageSelectedDateTime.setText("UPDADADADAD");
-                SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 String selectedDateTxt = "Scheduled:";
                 messageSelectedDateTime.setText(selectedDateTxt + " " + shortDate.format(date));
             }
@@ -158,7 +162,13 @@ public class NewTaskFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                newTaskViewModel.createTask(result -> {
+                    if (result instanceof Result.Success) {
+                        System.out.println("Success");
+                    } else {
+                        System.out.println("Failure");
+                    }
+                });
             }
         });
     }

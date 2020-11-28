@@ -32,14 +32,14 @@ public class NewTaskViewModel extends ViewModel {
     }
 
 
-    public void createTask(Consumer<Result> resultCallback) {
+    public void createTask(Consumer<Result<Task>> resultCallback) {
         if (loginRepository.isLoggedIn() == false) {
            resultCallback.accept(new Result.Error(new Exception("Not loggedIn")));
            return;
         }
 
-        String title;
-        String description;
+        String title = "Test ";
+        String description = "Test1234";
         Long noUsers;
         noUsers = new Long(10);
         Date date = currentDateLiveData.getValue();
