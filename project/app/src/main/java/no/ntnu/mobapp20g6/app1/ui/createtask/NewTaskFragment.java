@@ -161,6 +161,8 @@ public class NewTaskFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnCancel.setEnabled(false);
+                btnOk.setEnabled(false);
                 newTaskViewModel.createTask("test1234","sdfsdf",new Long(10),false,(result) -> {
                     if (result instanceof Result.Success) {
                         System.out.println("Success");
@@ -169,11 +171,12 @@ public class NewTaskFragment extends Fragment {
                         //navController.navigate(R.id.action_nav_account_to_nav_login);
                     } else {
                         System.out.println("Failure");
-                        snackbar.setTextColor(Color.RED);
-                        snackbar.setText("Unable to create task").setTextColor(Color.GREEN);
+                        snackbar.setText("Unable to create task").setTextColor(Color.RED);
                         snackbar.show();
                     }
                 });
+                btnCancel.setEnabled(true);
+                btnOk.setEnabled(true);
             }
         });
     }
