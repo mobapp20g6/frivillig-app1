@@ -132,7 +132,9 @@ public class NewTaskFragment extends Fragment {
             public void onChanged(Date date) {
                 System.out.println("Data updated in date view modell");
                 messageSelectedDateTime.setText("UPDADADADAD");
-                messageSelectedDateTime.setText("Date" + date.toString());
+                SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                String selectedDateTxt = "Scheduled:";
+                messageSelectedDateTime.setText(selectedDateTxt + " " + shortDate.format(date));
             }
         });
 
@@ -152,21 +154,19 @@ public class NewTaskFragment extends Fragment {
                     newFragment.show(fm, "datePicker");
                 }
         });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("Received date" + newTaskViewModel.currentDateLiveData.getValue());
 
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        System.out.println("Paused");
-    }
-
+    /**
+     * The date picker fragment
+     */
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
@@ -184,7 +184,7 @@ public class NewTaskFragment extends Fragment {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
+            // Get viewmodel for data storage
             NewTaskViewModel newTaskViewModel = new ViewModelProvider(requireActivity(), new NewTaskViewModelFactory())
                     .get(NewTaskViewModel.class);
 
@@ -202,6 +202,9 @@ public class NewTaskFragment extends Fragment {
         }
     }
 
+    /**
+     *  The time picker fragment class
+     */
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
@@ -217,12 +220,13 @@ public class NewTaskFragment extends Fragment {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+            // Get viewmodel for data storage
             NewTaskViewModel newTaskViewModel = new ViewModelProvider(requireActivity(), new NewTaskViewModelFactory())
                     .get(NewTaskViewModel.class);
 
             Date currentDate = newTaskViewModel.currentDateLiveData.getValue();
             Calendar cal = Calendar.getInstance();
+            // Get the current date before writing time, if exsistent
             if (currentDate != null) {
                 cal.setTime(currentDate);
             }
@@ -233,6 +237,8 @@ public class NewTaskFragment extends Fragment {
             newTaskViewModel.currentDateLiveData.setValue(currentDate);
         }
     }
+
+
 
 
 }
