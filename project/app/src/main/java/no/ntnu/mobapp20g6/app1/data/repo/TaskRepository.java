@@ -155,12 +155,14 @@ public class TaskRepository {
      * @return date as a String in the format the server except to get.
      */
     //TODO Test if String return correctly.
+    //FIXME: Is +1d 1m wrong when paring
     private String parseDateToString(Date date) {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Oslo"));
         cal.setTime(date);
         int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH) +1; //Return first day of month as 0.
+        int month = cal.get(Calendar.MONTH) ;
+        month++; //FIXME: scary stuff
+        int day = cal.get(Calendar.DAY_OF_MONTH); //Return first day of month as 0.
         int hour = cal.get(Calendar.HOUR);
         int minutes = cal.get(Calendar.MINUTE);
         System.out.println("Parsed date is: " + day + "/" + month + "/" + year + " " + hour + ":" + minutes + ":00");

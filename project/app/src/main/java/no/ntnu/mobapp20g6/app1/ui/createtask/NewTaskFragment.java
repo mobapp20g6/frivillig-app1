@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -117,6 +118,8 @@ public class NewTaskFragment extends Fragment {
         final Button btnOk = view.findViewById(R.id.createtask_ok);
         final Snackbar snackbar = Snackbar.make(view,null,Snackbar.LENGTH_LONG);
 
+        displayDateInUi(newTaskViewModel.currentDateLiveData.getValue(),messageSelectedDateTime);
+
         userAccountViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), new Observer<LoggedInUser>() {
 
             @Override
@@ -135,10 +138,7 @@ public class NewTaskFragment extends Fragment {
             @Override
             public void onChanged(Date date) {
                 System.out.println("Data updated in date view modell");
-                messageSelectedDateTime.setText("UPDADADADAD");
-                SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                String selectedDateTxt = "Scheduled:";
-                messageSelectedDateTime.setText(selectedDateTxt + " " + shortDate.format(date));
+                displayDateInUi(date,messageSelectedDateTime);
             }
         });
 
@@ -162,7 +162,7 @@ public class NewTaskFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.createTask(result -> {
+                newTaskViewModel.createTask("test1234","sdfsdf",new Long(10),false,(result) -> {
                     if (result instanceof Result.Success) {
                         System.out.println("Success");
                     } else {
@@ -171,6 +171,23 @@ public class NewTaskFragment extends Fragment {
                 });
             }
         });
+    }
+
+    /**
+     *  Prettify a date object and display it in a selected displayElement
+     * @param date the date object to format and display
+     * @param displayElement The displayElement to display the date in
+     */
+    private void displayDateInUi(Date date, TextView displayElement) {
+        String selectedDateTxt = "Scheduled:";
+
+        if (date== null) {
+            displayElement.setText("No date scheduled");
+            displayElement.setTextColor(Color.GRAY);
+        } else {
+            SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            displayElement.setText(selectedDateTxt + " " + shortDate.format(date));
+        }
     }
 
 
@@ -247,8 +264,4 @@ public class NewTaskFragment extends Fragment {
             newTaskViewModel.currentDateLiveData.setValue(currentDate);
         }
     }
-
-
-
-
 }

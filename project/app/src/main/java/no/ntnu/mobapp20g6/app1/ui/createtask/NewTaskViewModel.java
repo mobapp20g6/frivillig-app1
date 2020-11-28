@@ -32,26 +32,29 @@ public class NewTaskViewModel extends ViewModel {
     }
 
 
-    public void createTask(Consumer<Result<Task>> resultCallback) {
-        if (loginRepository.isLoggedIn() == false) {
+    /**
+     * Create a new task, returns a Result.Success<Task> if successful trough a callback
+     * @param title title of the task
+     * @param description description of the task
+     * @param participantCount number of participants
+     * @param isGroup true  = limit the visibility to the user's group, false = public task
+     * @param resultCallback the result of the operation; either Result.Success or Result.Error
+     */
+    public void createTask(String title, String description, Long participantCount, boolean isGroup, Consumer<Result<Task>> resultCallback) {
+        if (!loginRepository.isLoggedIn()) {
            resultCallback.accept(new Result.Error(new Exception("Not loggedIn")));
-           return;
-        }
-
-        String title = "Test ";
-        String description = "Test1234";
-        Long noUsers;
-        noUsers = new Long(10);
-        Date date = currentDateLiveData.getValue();
-        Long groupId;
-        if (loginRepository.getCurrentUser().getUserGroup() != null) {
-            groupId = loginRepository.getCurrentUser().getUserGroup().getGroupId();
         } else {
-            groupId = null;
+            Date date = currentDateLiveData.getValue();
+            Long groupId;
+            if (loginRepository.getCurrentUser().getUserGroup() != null && isGroup) {
+                groupId = loginRepository.getCurrentUser().getUserGroup().getGroupId();
+            } else {
+                groupId = null;
+            }
+            taskRepository.createTask(loginRepository.getToken(), title, description, participantCount, date, groupId, (createTaskResult) -> {
+                resultCallback.accept(createTaskResult);
+            });
         }
 
-        taskRepository.createTask(loginRepository.getToken(), title, description, noUsers, date, groupId, (createTaskResult) -> {
-            resultCallback.accept(createTaskResult);
-        });
     }
 }
