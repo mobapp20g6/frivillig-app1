@@ -33,10 +33,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.model.Location;
@@ -62,7 +64,7 @@ public class NewTaskFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.newTaskViewModel = new ViewModelProvider(this, new NewTaskViewModelFactory())
+        this.newTaskViewModel = new ViewModelProvider(requireActivity(), new NewTaskViewModelFactory())
                 .get(NewTaskViewModel.class);
 
         this.userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
@@ -83,19 +85,7 @@ public class NewTaskFragment extends Fragment {
         }
         return root;
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // check for the results
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // get date from string
-            String selectedDate = data.getStringExtra("selectedDate");
-            // set the value of the editText
-            Task newTask = newTaskViewModel.currentNewTaskLiveData.getValue();
-            if (newTask == null) {
 
-            }
-        }
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -137,7 +127,14 @@ public class NewTaskFragment extends Fragment {
             }
         });
 
-
+        newTaskViewModel.currentDateLiveData.observe(getViewLifecycleOwner(), new Observer<Date>() {
+            @Override
+            public void onChanged(Date date) {
+                System.out.println("Data updated in date view modell");
+                messageSelectedDateTime.setText("UPDADADADAD");
+                messageSelectedDateTime.setText("Date" + date.toString());
+            }
+        });
 
         btnSetTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,15 +152,24 @@ public class NewTaskFragment extends Fragment {
                     newFragment.show(fm, "datePicker");
                 }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("Received date" + newTaskViewModel.currentDateLiveData.getValue());
 
     }
 
-
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("Paused");
+    }
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
+
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -179,16 +185,20 @@ public class NewTaskFragment extends Fragment {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
-            String selectedDate = new GregorianCalendar(year,month,day).getTime().toString();
-            System.out.println(selectedDate);
+            NewTaskViewModel newTaskViewModel = new ViewModelProvider(requireActivity(), new NewTaskViewModelFactory())
+                    .get(NewTaskViewModel.class);
 
-
-            // send date back to the target fragment
-            getTargetFragment().onActivityResult(
-                    getTargetRequestCode(),
-                    Activity.RESULT_OK,
-                    new Intent().putExtra("selectedDate", selectedDate)
-            );
+            Date currentDate = newTaskViewModel.currentDateLiveData.getValue();
+            if (currentDate == null) {
+                currentDate = new GregorianCalendar(year,month,day).getTime();
+            } else {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                cal.set(year,month,day);
+                currentDate = cal.getTime();
+            }
+            System.out.println("Date was set: " + currentDate.toString());
+            newTaskViewModel.currentDateLiveData.setValue(currentDate);
         }
     }
 
@@ -203,12 +213,24 @@ public class NewTaskFragment extends Fragment {
             int minute = c.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
+            return new TimePickerDialog(getActivity(), this, hour, minute,true);
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // Do something with the time chosen by the user
+            NewTaskViewModel newTaskViewModel = new ViewModelProvider(requireActivity(), new NewTaskViewModelFactory())
+                    .get(NewTaskViewModel.class);
+
+            Date currentDate = newTaskViewModel.currentDateLiveData.getValue();
+            Calendar cal = Calendar.getInstance();
+            if (currentDate != null) {
+                cal.setTime(currentDate);
+            }
+            cal.set(Calendar.HOUR_OF_DAY,hourOfDay);
+            cal.set(Calendar.MINUTE,minute);
+            currentDate = cal.getTime();
+            System.out.println("Time was set: " + currentDate.toString());
+            newTaskViewModel.currentDateLiveData.setValue(currentDate);
         }
     }
 

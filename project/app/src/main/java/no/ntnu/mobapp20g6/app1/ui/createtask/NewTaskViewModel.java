@@ -29,16 +29,4 @@ public class NewTaskViewModel extends ViewModel {
         this.taskRepository = taskRepository;
     }
 
-
-    public LiveData<Task> getNewTaskLiveData() {
-        if (this.currentNewTaskLiveData.getValue() == null) {
-            this.currentNewTaskLiveData.setValue(new Task());
-        }
-        return this.currentNewTaskLiveData;
-    }
-
-    public void clearNewTaskData() {
-        this.currentNewTaskLiveData.setValue(null);
-    }
-
 }
