@@ -1,8 +1,10 @@
 package no.ntnu.mobapp20g6.app1.ui.createtask;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -39,10 +41,13 @@ import java.util.GregorianCalendar;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.model.Location;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
+import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
 
 public class NewTaskFragment extends Fragment {
+
+    private static final int REQUEST_CODE = 747400;
 
     public static NewTaskFragment newInstance() {
         return new NewTaskFragment();
@@ -77,6 +82,19 @@ public class NewTaskFragment extends Fragment {
             navController.navigate(R.id.action_nav_createtask_to_nav_login);
         }
         return root;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // check for the results
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // get date from string
+            String selectedDate = data.getStringExtra("selectedDate");
+            // set the value of the editText
+            Task newTask = newTaskViewModel.currentNewTaskLiveData.getValue();
+            if (newTask == null) {
+
+            }
+        }
     }
 
     @Override
@@ -138,6 +156,7 @@ public class NewTaskFragment extends Fragment {
                 }
         });
 
+
     }
 
 
@@ -159,14 +178,17 @@ public class NewTaskFragment extends Fragment {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            NewTaskViewModel ntViewModel = new ViewModelProvider(this, new NewTaskViewModelFactory())
-                    .get(NewTaskViewModel.class);
             // Do something with the date chosen by the user
-            Date currentDate = ntViewModel.currentDateLiveData.getValue();
-            if (currentDate != null) {
-                currentDate.set;
-            }
-            ntViewModel.currentDateLiveData.postValue(new GregorianCalendar(year,month - 1, day).getTime());
+            String selectedDate = new GregorianCalendar(year,month,day).getTime().toString();
+            System.out.println(selectedDate);
+
+
+            // send date back to the target fragment
+            getTargetFragment().onActivityResult(
+                    getTargetRequestCode(),
+                    Activity.RESULT_OK,
+                    new Intent().putExtra("selectedDate", selectedDate)
+            );
         }
     }
 
