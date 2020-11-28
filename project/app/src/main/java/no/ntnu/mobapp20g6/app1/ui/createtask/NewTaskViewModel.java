@@ -2,10 +2,8 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 
 import android.graphics.Bitmap;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.navigation.NavController;
 
 import java.util.Date;
 import java.util.function.Consumer;
@@ -41,7 +39,7 @@ public class NewTaskViewModel extends ViewModel {
      * @param resultCallback the result of the operation; either Result.Success or Result.Error
      */
     public void createTask(String title, String description, Long participantCount, boolean isGroup, Consumer<Result<Task>> resultCallback) {
-        if (!loginRepository.isLoggedIn()) {
+        if (!loginRepository.isLoggedIn() || isDateSet() == false) {
            resultCallback.accept(new Result.Error(new Exception("Not loggedIn")));
         } else {
             Date date = currentDateLiveData.getValue();
@@ -55,6 +53,9 @@ public class NewTaskViewModel extends ViewModel {
                 resultCallback.accept(createTaskResult);
             });
         }
+    }
 
+    private boolean isDateSet() {
+        return currentDateLiveData.getValue() != null ? true : false;
     }
 }

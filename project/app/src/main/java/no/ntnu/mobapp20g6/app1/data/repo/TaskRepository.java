@@ -154,8 +154,6 @@ public class TaskRepository {
      * @param date date to parse to String.
      * @return date as a String in the format the server except to get.
      */
-    //TODO Test if String return correctly.
-    //FIXME: Is +1d 1m wrong when paring
     private String parseDateToString(Date date) {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Oslo"));
         cal.setTime(date);

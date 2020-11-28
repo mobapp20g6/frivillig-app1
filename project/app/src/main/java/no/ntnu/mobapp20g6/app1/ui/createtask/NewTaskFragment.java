@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Location;
@@ -52,8 +53,6 @@ import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
 
 public class NewTaskFragment extends Fragment {
-
-    private static final int REQUEST_CODE = 747400;
 
     public static NewTaskFragment newInstance() {
         return new NewTaskFragment();
@@ -165,8 +164,14 @@ public class NewTaskFragment extends Fragment {
                 newTaskViewModel.createTask("test1234","sdfsdf",new Long(10),false,(result) -> {
                     if (result instanceof Result.Success) {
                         System.out.println("Success");
+                        snackbar.setText("Task created").setTextColor(Color.GREEN);
+                        snackbar.show();
+                        //navController.navigate(R.id.action_nav_account_to_nav_login);
                     } else {
                         System.out.println("Failure");
+                        snackbar.setTextColor(Color.RED);
+                        snackbar.setText("Unable to create task").setTextColor(Color.GREEN);
+                        snackbar.show();
                     }
                 });
             }
