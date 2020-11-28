@@ -91,6 +91,10 @@ public class TaskRepository {
         });
     }
 
+    public void getTask(String token, Long taskId, Consumer<Task> taskCallback) {
+        taskDataSource.getTask(token, taskId, taskCallback);
+    }
+
     /**
      * Creates a new task.
      * @param token Auth Bearer token.

@@ -7,13 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestService {
-    //private static String HOST = "192.168.234.61";
-    private static String HOST = "mobapp.haugen.ch";
-
-    //public static String DOMAIN = "http://" + HOST + ":8080/appsrv-1.0/";
-    public static String DOMAIN = "https://" + HOST + "/";
-
-
+    public static String DOMAIN = "https://mobapp.haugen.ch/";
 
     private static Retrofit retrofit;
 

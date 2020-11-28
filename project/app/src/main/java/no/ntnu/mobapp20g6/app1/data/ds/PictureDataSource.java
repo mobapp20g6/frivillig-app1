@@ -26,6 +26,7 @@ public class PictureDataSource {
     private static final int OK = 200;
     private static final int BAD_REQUEST = 400;
     private static final int UNAUTHORISED = 401;
+    private static final int FORBIDDEN = 403;
     private static final int NOT_FOUND = 404;
 
     public PictureDataSource() {
@@ -54,6 +55,11 @@ public class PictureDataSource {
 
                             case UNAUTHORISED:
                                 Log.d("FAIL-SET_TASK_IMAGE", "User not logged in");
+                                setTaskImageCallback.accept(new Result.Success<>(null));
+                                break;
+
+                            case FORBIDDEN:
+                                Log.d("FAIL-SET_TASK_IMAGE", "User not owner of Task");
                                 setTaskImageCallback.accept(new Result.Success<>(null));
                                 break;
 
@@ -105,6 +111,11 @@ public class PictureDataSource {
 
                             case UNAUTHORISED:
                                 Log.d("FAIL-SET_GROUP_LOGO", "User not logged in");
+                                setGroupLogoCallback.accept(new Result.Success<>(null));
+                                break;
+
+                            case FORBIDDEN:
+                                Log.d("FAIL-SET_GROUP_LOGO", "User not owner of Group");
                                 setGroupLogoCallback.accept(new Result.Success<>(null));
                                 break;
 
