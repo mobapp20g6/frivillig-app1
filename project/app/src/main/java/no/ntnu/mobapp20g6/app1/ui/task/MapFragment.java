@@ -58,7 +58,11 @@ public class MapFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_map, container, false);
         Task currentActiveTask = taskViewModel.getActiveTaskLiveData().getValue();
         map = (MapView) root.findViewById(R.id.mapView);
+
+        //GPS marker
         Marker myLocationMarker = new Marker(map);
+        myLocationMarker.setTitle("My position");
+        myLocationMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_my_location_24, null));
         gps.askForPermissionGPS(getActivity());
 
         //Making the map
@@ -71,8 +75,6 @@ public class MapFragment extends Fragment {
             GeoPoint myLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
             myLocationMarker.setPosition(myLocation);
             myLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            myLocationMarker.setTitle("My position");
-            myLocationMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_my_location_24, null));
             map.getOverlays().add(myLocationMarker);
         }
 
