@@ -48,7 +48,7 @@ public class LoginRepository {
      * @return if logged in a token, else null
      */
     public String getToken() {
-        return this.user.getTokenWithBearer();
+        return user!= null ? this.user.getTokenWithBearer() : null;
     }
 
     /**

@@ -1,8 +1,10 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,11 +27,13 @@ import com.google.gson.JsonPrimitive;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.data.GPS;
 
 public class CreateGroupFragment extends Fragment {
 
     private CreateGroupViewModel cgViewModel;
     private NavController navController;
+    private GPS gps;
 
     public static CreateGroupFragment newInstance() {
         return new CreateGroupFragment();
@@ -41,6 +45,7 @@ public class CreateGroupFragment extends Fragment {
         this.navController = NavHostFragment.findNavController(getParentFragment());
         this.cgViewModel = new ViewModelProvider(this, new CreateGroupViewModelFactory())
                 .get(CreateGroupViewModel.class);
+        this.gps = new GPS(getContext());
 
     }
 
@@ -58,6 +63,7 @@ public class CreateGroupFragment extends Fragment {
         final EditText groupDescText = view.findViewById(R.id.create_group_details_desc_input);
         final EditText groupOrgIdText = view.findViewById(R.id.create_group_details_input_orgid);
         final Button brregBtn = view.findViewById(R.id.create_group_details_input_btn_brreg);
+        final Button addLocBtn = view.findViewById(R.id.create_group_extras_input_btn_location);
         final Button createBtn = view.findViewById(R.id.create_group_confirmation_input_btn_create);
         final Button cancelBtn = view.findViewById(R.id.create_group_confirmation_input_btn_cancel);
 
@@ -89,6 +95,19 @@ public class CreateGroupFragment extends Fragment {
                         showUserFeedback(R.string.create_group_brreg_search_failed);
                     }
                 });
+            }
+        });
+
+        final Location[] loc = {null};
+
+        addLocBtn.setOnClickListener(v -> {
+            gps.askForPermissionGPS(getActivity());
+            loc[0] = gps.getCurrentLocation();
+            if (loc[0] == null) {
+                showUserFeedback(R.string.location_not_found);
+            } else {
+                showUserFeedback(R.string.location_found);
+                System.out.println(loc[0].getLongitude());
             }
         });
 
@@ -126,6 +145,12 @@ public class CreateGroupFragment extends Fragment {
             showUserFeedback(R.string.create_group_cancel_action);
             navController.navigate(R.id.action_nav_group_to_nav_home);
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        gps.stopLocationUpdates();
     }
 
     private void createGroup(String groupName, String groupDesc, String groupOrgID) {

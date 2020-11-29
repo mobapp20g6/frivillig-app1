@@ -90,9 +90,8 @@
     <fragment
         android:id="@+id/nav_group"
         android:label="Create Group"
-        android:name="no.ntnu.mobapp20g6.app1.ui.group.CreateGroupFragment"
+        android:name="no.ntnu.mobapp20g6.app1.ui.group.CreateGroupFragment">
         <action
-        tools:layout="@layout/fragment_create_group" >
             android:id="@+id/action_nav_group_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
