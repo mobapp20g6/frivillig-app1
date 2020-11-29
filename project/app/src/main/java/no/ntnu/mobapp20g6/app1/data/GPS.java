@@ -68,8 +68,8 @@ public class GPS implements LocationListener {
     public void onLocationChanged(@NonNull Location location) {
         if(countdownFinished) {
             Location currentLocation = getCurrentLocation();
+            startCountDownTimer();
             if(currentLocation != null) {
-                startCountDownTimer();
                 currentGPSLocationLiveData.setValue(location);
             }
         }
