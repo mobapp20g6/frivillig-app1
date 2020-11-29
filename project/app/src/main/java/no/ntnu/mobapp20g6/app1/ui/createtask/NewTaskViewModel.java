@@ -12,6 +12,7 @@ import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Location;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
+import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import no.ntnu.mobapp20g6.app1.data.repo.TaskRepository;
 
 public class NewTaskViewModel extends ViewModel {
@@ -23,10 +24,12 @@ public class NewTaskViewModel extends ViewModel {
 
     LoginRepository loginRepository;
     TaskRepository taskRepository;
+    SharedNonCacheRepository sharedNonCacheRepository;
 
-    public NewTaskViewModel(LoginRepository loginRepository, TaskRepository taskRepository) {
+    public NewTaskViewModel(LoginRepository loginRepository, TaskRepository taskRepository, SharedNonCacheRepository sharedNonCacheRepository) {
         this.loginRepository = loginRepository;
         this.taskRepository = taskRepository;
+        this.sharedNonCacheRepository = sharedNonCacheRepository;
     }
 
 
@@ -49,9 +52,16 @@ public class NewTaskViewModel extends ViewModel {
             } else {
                 groupId = null;
             }
-            taskRepository.createTask(loginRepository.getToken(), title, description, participantCount, date, groupId, (createTaskResult) -> {
-                resultCallback.accept(createTaskResult);
-            });
+            taskRepository.createTask(loginRepository.getToken(), title, description, participantCount, date, groupId, resultCallback::accept);
+        }
+    }
+
+    public void attachLocationToTask(Location location, Task task, Consumer<Result<Task>> attachResultCallback) {
+        if (task != null && location != null && loginRepository.isLoggedIn()) {
+            sharedNonCacheRepository.addLocationToTask(
+                    loginRepository.getToken(),task.getId(),location.getGpsLat(),location.getGpsLong(),
+                    null,null,null,null,
+                    attachResultCallback::accept);
         }
     }
 
