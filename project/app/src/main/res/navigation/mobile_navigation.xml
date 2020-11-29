@@ -69,7 +69,7 @@
     <fragment
         android:id="@+id/nav_createtask"
         android:name="no.ntnu.mobapp20g6.app1.ui.createtask.NewTaskFragment"
-        android:label="fragment_createtask"
+        android:label="@string/menu_createtask"
         tools:layout="@layout/fragment_createtask" >
         <action
             android:id="@+id/action_nav_createtask_to_nav_login"

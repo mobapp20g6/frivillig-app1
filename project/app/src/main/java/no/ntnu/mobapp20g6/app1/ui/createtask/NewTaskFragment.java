@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
@@ -103,6 +104,7 @@ public class NewTaskFragment extends Fragment {
 
         final EditText fieldTaskTitle = view.findViewById(R.id.createtask_field_title);
         final EditText fieldTaskDescr = view.findViewById(R.id.createtask_field_description);
+        final EditText fieldTaskParticipants = view.findViewById(R.id.createtask_field_participants);
 
         final Button btnSetLocation = view.findViewById(R.id.createtask_extras_btn_location);
         final Button btnUnsetLocation = view.findViewById(R.id.createtask_extras_btn_remove_location);
@@ -210,29 +212,43 @@ public class NewTaskFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AtomicInteger successCount = new AtomicInteger();
+                Long participants;
                 btnCancel.setEnabled(false);
                 btnOk.setEnabled(false);
+                snackbar.setText("Please wait...");
+                snackbar.show();
                 if (radioButtonGroup.isChecked()) {
                     System.out.println("GROUYP TASK");
                 }
-                newTaskViewModel.createTask("test1234","sdfsdf",new Long(10),radioButtonGroup.isChecked(),(result) -> {
+                try {
+                    participants = new Long(fieldTaskParticipants.getText().toString());
+                } catch (NumberFormatException e) {
+                    participants = null;
+                }
+                newTaskViewModel.createTask(fieldTaskTitle.getText().toString(),fieldTaskDescr.getText().toString(),participants,radioButtonGroup.isChecked(),(result) -> {
                     if (result instanceof Result.Success) {
                         Task createdTask = (Task) ((Result.Success) result).getData();
-                        System.out.println("Success");
-                        snackbar.setText(" 1/2 Task created").setTextColor(Color.GREEN);
-                        snackbar.show();
+                        successCount.getAndIncrement();
                         if (newTaskViewModel.currentLocationLiveData.getValue() != null) {
                             newTaskViewModel.attachLocationToTask(createdTask, (addTaskResult) -> {
                                 if (result instanceof Result.Success) {
-                                    snackbar.setText("2/2 Location added").setTextColor(Color.GREEN);
-                                    snackbar.show();
+                                    successCount.getAndIncrement();
                                 }
                             });
-                        } else {
-                            snackbar.setText("2/2 No location").setTextColor(Color.YELLOW);
-                            snackbar.show();
                         }
                         //navController.navigate(R.id.action_nav_account_to_nav_login);
+                        int resultCode = successCount.get();
+                        switch (resultCode) {
+                            case 1:
+                                snackbar.setText("Task created").setTextColor(Color.GREEN);
+                                break;
+                            case 2:
+                                snackbar.setText("Task created with GPS").setTextColor(Color.GREEN);
+                                break;
+                            default:
+                                break;
+                        }
                     } else {
                         System.out.println("Failure");
                         snackbar.setText("Unable to create task").setTextColor(Color.RED);
@@ -241,6 +257,19 @@ public class NewTaskFragment extends Fragment {
                 });
                 btnCancel.setEnabled(true);
                 btnOk.setEnabled(true);
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fieldTaskParticipants.setText("");
+                fieldTaskDescr.setText("");
+                fieldTaskTitle.setText("");
+                fieldTaskTitle.requestFocus();
+                newTaskViewModel.currentLocationLiveData.setValue(null);
+                newTaskViewModel.currentDateLiveData.setValue(null);
+                newTaskViewModel.currentImageBitmapLiveData.setValue(null);
             }
         });
     }

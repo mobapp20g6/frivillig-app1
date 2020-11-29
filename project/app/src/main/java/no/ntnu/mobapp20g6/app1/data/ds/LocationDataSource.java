@@ -89,6 +89,7 @@ public class LocationDataSource {
                 }
             } catch (Exception e) {
                 Log.d("FAIL_ADD_LOCATION_TO_TASK", "Client error");
+                //System.err.println("Stacktrace + " + e);
                 addLocationToTaskCallBack.accept(new Result.Error(new Exception("Client error")));
             }
         }
