@@ -47,23 +47,52 @@
         android:id="@+id/nav_public_tasks"
         android:name="no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListFragment"
         android:label="Public Tasks"
-        tools:layout="@layout/task_list_fragment" />
+        tools:layout="@layout/task_list_fragment" >
+        <action
+            android:id="@+id/action_nav_public_tasks_to_nav_task"
+            app:destination="@id/nav_task" />
+    </fragment>
     <fragment
         android:id="@+id/nav_own_tasks"
         android:name="no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListFragment"
         android:label="Own Tasks"
-        tools:layout="@layout/task_list_fragment" />
+        tools:layout="@layout/task_list_fragment" >
+        <action
+            android:id="@+id/action_nav_own_tasks_to_nav_task"
+            app:destination="@id/nav_task" />
+    </fragment>
     <fragment
         android:id="@+id/nav_assigned_tasks"
         android:name="no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListFragment"
         android:label="Assigned Tasks"
-        tools:layout="@layout/task_list_fragment" />
+        tools:layout="@layout/task_list_fragment" >
+        <action
+            android:id="@+id/action_nav_assigned_tasks_to_nav_task"
+            app:destination="@id/nav_task" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_task"
+        android:name="no.ntnu.mobapp20g6.app1.ui.task.TaskFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_task" >
+        <action
+            android:id="@+id/action_nav_task_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_task_to_nav_full_screen_map"
+            app:destination="@id/nav_full_screen_map" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_full_screen_map"
+        android:name="no.ntnu.mobapp20g6.app1.ui.task.MapFragment"
+        android:label="@string/full_screen_map"
+        tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/nav_group"
         android:label="Create Group"
         android:name="no.ntnu.mobapp20g6.app1.ui.group.CreateGroupFragment"
-        tools:layout="@layout/fragment_create_group" >
         <action
+        tools:layout="@layout/fragment_create_group" >
             android:id="@+id/action_nav_group_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>

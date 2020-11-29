@@ -151,7 +151,7 @@ public class TaskDataSource {
     public void getTask(
             String token,
             Long taskId,
-            Consumer<Result<Task>> getTaskCallback) {
+            Consumer<Task> getTaskCallback) {
         try {
             if (token != null) {
                 Call<Task> getTaskCall = serviceApi.getTask(token, taskId);
@@ -161,43 +161,43 @@ public class TaskDataSource {
                         switch (response.code()) {
                             case OK:
                                 Log.d("OK-GET_TASK", "Returning task");
-                                getTaskCallback.accept(new Result.Success<>(response.body()));
+                                getTaskCallback.accept(response.body());
                                 break;
 
                             case BAD_REQUEST:
                                 Log.d("FAIL-GET_TASK", "Invalid input");
-                                getTaskCallback.accept(new Result.Success<>(null));
+                                getTaskCallback.accept(null);
                                 break;
 
                             case UNAUTHORISED:
                                 Log.d("FAIL-GET_TASK", "User not logged in");
-                                getTaskCallback.accept(new Result.Success<>(null));
+                                getTaskCallback.accept(null);
                                 break;
 
                             case NOT_FOUND:
                                 Log.d("FAIL-GET_TASK", "Task not found");
-                                getTaskCallback.accept(new Result.Success<>(null));
+                                getTaskCallback.accept(null);
                                 break;
 
                             default:
                                 Log.d("FAIL-GET_TASK", "Server error");
-                                getTaskCallback.accept(new Result.Error(new Exception("Server")));
+                                getTaskCallback.accept(null);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Task> call, Throwable t) {
                         Log.d("FAIL-GET_TASK", "No connection");
-                        getTaskCallback.accept(new Result.Error(new IOException("Connection fail " + t.getCause())));
+                        getTaskCallback.accept(null);
                     }
                 });
             } else {
-                getTaskCallback.accept(new Result.Error(new Exception("Token")));
+                getTaskCallback.accept(null);
                 Log.d("FAIL-GET_TASK", "Token cannot be null when trying to get task");
             }
         } catch (Exception e) {
             Log.d("FAIL-GET_TASK", "Client error");
-            getTaskCallback.accept(new Result.Error(new Exception("Client error")));
+            getTaskCallback.accept(null);
         }
     }
 
