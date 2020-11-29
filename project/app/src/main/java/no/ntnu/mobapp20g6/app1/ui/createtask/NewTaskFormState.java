@@ -2,6 +2,9 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 
 import androidx.annotation.Nullable;
 
+/**
+ * A validation form which receives errors to validate state for different fields.
+ */
 public class NewTaskFormState {
     @Nullable
     private Integer titleError;

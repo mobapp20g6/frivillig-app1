@@ -34,6 +34,10 @@ import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 
+/**
+ *  Displays a fragment regarding the user account of the logged in user. The user has
+ *  the possibility to reset their password on this fragment. Author: NilsJ
+ */
 public class UserAccountFragment extends Fragment {
 
     public static UserAccountFragment newInstance() {

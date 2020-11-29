@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_nav_public_tasks_to_nav_task"
             app:destination="@id/nav_task" />
+        <action
+            android:id="@+id/action_nav_public_tasks_to_nav_createtask"
+            app:destination="@id/nav_createtask" />
     </fragment>
     <fragment
         android:id="@+id/nav_own_tasks"
@@ -60,12 +63,19 @@
         <action
             android:id="@+id/action_nav_own_tasks_to_nav_task"
             app:destination="@id/nav_task" />
+        <action
+            android:id="@+id/action_nav_own_tasks_to_nav_createtask"
+            app:destination="@id/nav_createtask" />
     </fragment>
     <fragment
         android:id="@+id/nav_assigned_tasks"
         android:name="no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListFragment"
         android:label="Assigned Tasks"
-        tools:layout="@layout/task_list_fragment" />
+        tools:layout="@layout/task_list_fragment" >
+        <action
+            android:id="@+id/action_nav_assigned_tasks_to_nav_createtask"
+            app:destination="@id/nav_createtask" />
+    </fragment>
     <fragment
         android:id="@+id/nav_createtask"
         android:name="no.ntnu.mobapp20g6.app1.ui.createtask.NewTaskFragment"
@@ -74,6 +84,9 @@
         <action
             android:id="@+id/action_nav_createtask_to_nav_login"
             app:destination="@id/nav_login" />
+        <action
+            android:id="@+id/action_nav_createtask_to_nav_task"
+            app:destination="@id/nav_task" />
     </fragment>
         tools:layout="@layout/task_list_fragment" >
         <action
