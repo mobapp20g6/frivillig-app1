@@ -3,11 +3,14 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +50,11 @@ import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
 
+import static android.app.Activity.RESULT_OK;
+
 public class NewTaskFragment extends Fragment {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 777;
 
     public static NewTaskFragment newInstance() {
         return new NewTaskFragment();
@@ -59,6 +66,7 @@ public class NewTaskFragment extends Fragment {
     private NavController navController;
     private Context context;
     private GPS gps;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +98,15 @@ public class NewTaskFragment extends Fragment {
         }
         return root;
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            newTaskViewModel.currentImageBitmapLiveData.setValue(imageBitmap);
+        }
+    }
+
 
     @Override
     public void onDestroy() {
@@ -146,6 +163,7 @@ public class NewTaskFragment extends Fragment {
             }
         });
 
+
         newTaskViewModel.currentImageBitmapLiveData.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
             @Override
             public void onChanged(Bitmap bitmap) {
@@ -173,6 +191,7 @@ public class NewTaskFragment extends Fragment {
         /**
          *  BUTTONS
          */
+
         btnSetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,6 +205,20 @@ public class NewTaskFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 newTaskViewModel.currentLocationLiveData.setValue(null);
+            }
+        });
+
+        btnSetPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+            }
+        });
+
+        btnUnsetPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newTaskViewModel.currentImageBitmapLiveData.setValue(null);
             }
         });
 
@@ -212,6 +245,7 @@ public class NewTaskFragment extends Fragment {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Implement input validation as of account/user page
                 AtomicInteger successCount = new AtomicInteger();
                 Long participants;
                 btnCancel.setEnabled(false);
@@ -230,12 +264,17 @@ public class NewTaskFragment extends Fragment {
                     if (result instanceof Result.Success) {
                         Task createdTask = (Task) ((Result.Success) result).getData();
                         successCount.getAndIncrement();
-                        if (newTaskViewModel.currentLocationLiveData.getValue() != null) {
+                        if (newTaskViewModel.isLocationSet()) {
                             newTaskViewModel.attachLocationToTask(createdTask, (addTaskResult) -> {
                                 if (result instanceof Result.Success) {
                                     successCount.getAndIncrement();
                                 }
                             });
+                        }
+
+                        if (newTaskViewModel.isImageSet()) {
+                            //TODO: Implement in viewmodel
+                            newTaskViewModel.attachImageToTask(createdTask);
                         }
                         //navController.navigate(R.id.action_nav_account_to_nav_login);
                         int resultCode = successCount.get();
@@ -322,6 +361,15 @@ public class NewTaskFragment extends Fragment {
         }
     }
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
+        }
+    }
+
 
     /**
      * The date picker fragment
@@ -397,3 +445,4 @@ public class NewTaskFragment extends Fragment {
         }
     }
 }
+

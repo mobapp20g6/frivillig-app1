@@ -68,15 +68,23 @@ public class NewTaskViewModel extends ViewModel {
         }
     }
 
-    private boolean isDateSet() {
+    public void attachImageToTask(Task task){
+        if (task != null && isImageSet()) {
+            //TODO: 1. Implement storage of picture in file path
+            //TODO: 2. Implement upload of stored picture (bitmap locally OK)
+
+        }
+    }
+
+    public boolean isDateSet() {
         return currentDateLiveData.getValue() != null ? true : false;
     }
 
-    private boolean isLocationSet() {
+    public boolean isLocationSet() {
         return currentLocationLiveData.getValue() != null ? true : false;
     }
 
-    private boolean isImageSet() {
+    public boolean isImageSet() {
         return currentImageBitmapLiveData.getValue() != null ? true : false;
     }
 
