@@ -16,6 +16,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+/**
+ * The purpose of this class is to get the current location of the user.
+ * The current location will be set to a live data object so it can be observed and handled
+ * when the location changes.
+ * Its important to stop LocationListener to listen for location updates when this class is not used anymore.
+ * For this use function "stopLocationUpdates" in "onDestroy" in the fragment this class is used in.
+ * @author TrymV
+ */
 public class GPS implements LocationListener {
     private boolean countdownFinished = true;
     private final MutableLiveData<Location> currentGPSLocationLiveData;
