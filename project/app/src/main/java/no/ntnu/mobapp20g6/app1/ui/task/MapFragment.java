@@ -25,8 +25,6 @@ import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 
-import static android.content.Context.LOCATION_SERVICE;
-
 /**
  * Display a full screen map with the location of the current task and user GPS location.
  * User GPS location will only show if permission is granted and GPS is turned on.
