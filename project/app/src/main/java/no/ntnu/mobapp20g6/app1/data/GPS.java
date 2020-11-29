@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -40,7 +41,7 @@ public class GPS implements LocationListener {
      * Return the current GPS location as live data object.
      * @return current GPS location as live data object.
      */
-    public MutableLiveData<Location> getCurrentGPSLocationLiveData() {
+    public LiveData<Location> getCurrentGPSLocationLiveData() {
         return currentGPSLocationLiveData;
     }
 
