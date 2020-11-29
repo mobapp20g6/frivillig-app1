@@ -51,7 +51,7 @@ public interface ServiceApi {
             @Nullable@Field("description") String description,
             @Field("maxusers") Long maxUsers,
             @Field("scheduledate") String scheduleDate,
-            @Nullable@Field("group") Long groupId
+            @Nullable@Field("groupid") Long groupId
     );
 
     @DELETE(PREFIX + "removetask")

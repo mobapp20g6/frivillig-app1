@@ -1,15 +1,17 @@
 package no.ntnu.mobapp20g6.app1.ui.createtask;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.Date;
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
-import no.ntnu.mobapp20g6.app1.data.model.Location;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
@@ -20,7 +22,6 @@ public class NewTaskViewModel extends ViewModel {
     public MutableLiveData<Location> currentLocationLiveData = new MutableLiveData<>();
     public MutableLiveData<Bitmap> currentImageBitmapLiveData = new MutableLiveData<>();
     public MutableLiveData<Date> currentDateLiveData = new MutableLiveData<>();
-    public MutableLiveData<Task> currentNewTaskLiveData = new MutableLiveData<>();
 
     LoginRepository loginRepository;
     TaskRepository taskRepository;
@@ -49,6 +50,7 @@ public class NewTaskViewModel extends ViewModel {
             Long groupId;
             if (loginRepository.getCurrentUser().getUserGroup() != null && isGroup) {
                 groupId = loginRepository.getCurrentUser().getUserGroup().getGroupId();
+                System.out.println("FOUND GROUPP FOR TASK " + groupId.toString());
             } else {
                 groupId = null;
             }
@@ -56,10 +58,11 @@ public class NewTaskViewModel extends ViewModel {
         }
     }
 
-    public void attachLocationToTask(Location location, Task task, Consumer<Result<Task>> attachResultCallback) {
-        if (task != null && location != null && loginRepository.isLoggedIn()) {
+    public void attachLocationToTask(Task task, Consumer<Result<Task>> attachResultCallback) {
+        if (task != null && isLocationSet() && loginRepository.isLoggedIn()) {
+            Location location = currentLocationLiveData.getValue();
             sharedNonCacheRepository.addLocationToTask(
-                    loginRepository.getToken(),task.getId(),location.getGpsLat(),location.getGpsLong(),
+                    loginRepository.getToken(),task.getId(),location.getLatitude(),location.getLongitude(),
                     null,null,null,null,
                     attachResultCallback::accept);
         }
@@ -67,5 +70,26 @@ public class NewTaskViewModel extends ViewModel {
 
     private boolean isDateSet() {
         return currentDateLiveData.getValue() != null ? true : false;
+    }
+
+    private boolean isLocationSet() {
+        return currentLocationLiveData.getValue() != null ? true : false;
+    }
+
+    private boolean isImageSet() {
+        return currentImageBitmapLiveData.getValue() != null ? true : false;
+    }
+
+
+    public LiveData<Location> getCurrentLocationLiveData() {
+        return currentLocationLiveData;
+    }
+
+    public LiveData<Bitmap> getCurrentImageBitmapLiveData() {
+        return currentImageBitmapLiveData;
+    }
+
+    public LiveData<Date> getCurrentDateLiveData() {
+        return currentDateLiveData;
     }
 }

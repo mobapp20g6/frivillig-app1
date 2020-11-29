@@ -27,6 +27,7 @@ import static android.content.Context.LOCATION_SERVICE;
  */
 public class GPS implements LocationListener {
     private boolean countdownFinished = true;
+    private boolean disabling = false;
     private final MutableLiveData<Location> currentGPSLocationLiveData;
     private final Context currentContext;
     protected LocationManager locationManager;
@@ -65,6 +66,14 @@ public class GPS implements LocationListener {
         locationManager.removeUpdates(this);
     }
 
+    public void stopLocationUpdatesAfterDelay() {
+        disabling = true;
+
+    }
+    private void forceStopLocationManager() {
+        locationManager.removeUpdates(this);
+    }
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if(countdownFinished) {
@@ -90,6 +99,26 @@ public class GPS implements LocationListener {
     }
 
     /**
+     * An off-delay to stop the listener slightly after the last location was
+     * retrieved, as the normal stop doesn't always work with buttons
+     */
+    private void startOffDelayTimer() {
+        new CountDownTimer(100, 10) {
+
+            @Override
+            public void onTick(long l) {
+            }
+
+            @Override
+            public void onFinish() {
+                disabling = false;
+                System.out.println("Off-delay reached, killed LocationManager listener");
+                forceStopLocationManager();
+            }
+        }.start();
+    }
+
+    /**
      * Starts a 3 seconds countdown and sets countDownFinished to false.
      * After 3 seconds countDownFinished will be set to true.
      */
@@ -111,6 +140,10 @@ public class GPS implements LocationListener {
      * @return true if GPS location was successfully received else this will return null.
      */
     public Location getCurrentLocation() {
+        if (disabling) {
+            startOffDelayTimer();
+            System.out.println("Stopping due to user request");
+        }
         if (ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("Location permission denied.");

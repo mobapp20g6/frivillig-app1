@@ -1,14 +1,13 @@
 package no.ntnu.mobapp20g6.app1.ui.createtask;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -37,16 +34,13 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
-import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
-import no.ntnu.mobapp20g6.app1.data.model.Location;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
@@ -62,6 +56,8 @@ public class NewTaskFragment extends Fragment {
     private NewTaskViewModel newTaskViewModel;
     private UserAccountViewModel userAccountViewModel;
     private NavController navController;
+    private Context context;
+    private GPS gps;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +69,11 @@ public class NewTaskFragment extends Fragment {
         this.userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
                 .get(UserAccountViewModel.class);
         this.navController = NavHostFragment.findNavController(getParentFragment());
+
+        context = getContext();
+        if(context != null) {
+            gps = new GPS(context);
+        }
 
     }
 
@@ -89,6 +90,11 @@ public class NewTaskFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        gps.stopLocationUpdates();
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -117,27 +123,67 @@ public class NewTaskFragment extends Fragment {
         final Button btnOk = view.findViewById(R.id.createtask_ok);
         final Snackbar snackbar = Snackbar.make(view,null,Snackbar.LENGTH_LONG);
 
-        displayDateInUi(newTaskViewModel.currentDateLiveData.getValue(),messageSelectedDateTime);
+        // Init the state for the UI
+        displayDateInUi(newTaskViewModel.getCurrentDateLiveData().getValue());
+        displayLocationBtnUi(newTaskViewModel.getCurrentLocationLiveData().getValue());
+        displayPictureInUi(newTaskViewModel.getCurrentImageBitmapLiveData().getValue());
 
+
+        /**
+         *  STATEFUL UI ELEMENTS
+         */
         userAccountViewModel.getCurrentUserLiveData().observe(getViewLifecycleOwner(), new Observer<LoggedInUser>() {
-
             @Override
             public void onChanged(LoggedInUser loggedInUser) {
                 if (loggedInUser.getUserGroup() == null) {
                     radioButtonGroup.setVisibility(View.GONE);
-                    radioButtonPublic.toggle();
                 } else {
                     messageVisibilityNoGroup.setVisibility(View.GONE);
-                    radioButtonPublic.toggle();
                 }
+                radioButtonPublic.toggle();
             }
         });
 
-        newTaskViewModel.currentDateLiveData.observe(getViewLifecycleOwner(), new Observer<Date>() {
+        newTaskViewModel.currentImageBitmapLiveData.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
+            @Override
+            public void onChanged(Bitmap bitmap) {
+                displayPictureInUi(bitmap);
+            }
+        });
+
+        newTaskViewModel.currentLocationLiveData.observe(getViewLifecycleOwner(), new Observer<Location>() {
+            @Override
+            public void onChanged(Location location) {
+                displayLocationBtnUi(location);
+                gps.stopLocationUpdatesAfterDelay();
+            }
+        });
+
+
+        newTaskViewModel.getCurrentDateLiveData().observe(getViewLifecycleOwner(), new Observer<Date>() {
             @Override
             public void onChanged(Date date) {
                 System.out.println("Data updated in date view modell");
-                displayDateInUi(date,messageSelectedDateTime);
+                displayDateInUi(date);
+            }
+        });
+
+        /**
+         *  BUTTONS
+         */
+        btnSetLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gps.askForPermissionGPS(getActivity());
+                android.location.Location androidStoleOurClass = gps.getCurrentLocation();
+                newTaskViewModel.currentLocationLiveData.setValue(androidStoleOurClass);
+            }
+        });
+
+        btnUnsetLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newTaskViewModel.currentLocationLiveData.setValue(null);
             }
         });
 
@@ -158,16 +204,34 @@ public class NewTaskFragment extends Fragment {
                 }
         });
 
+        /**
+         *  Create a new task
+         */
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 btnCancel.setEnabled(false);
                 btnOk.setEnabled(false);
-                newTaskViewModel.createTask("test1234","sdfsdf",new Long(10),false,(result) -> {
+                if (radioButtonGroup.isChecked()) {
+                    System.out.println("GROUYP TASK");
+                }
+                newTaskViewModel.createTask("test1234","sdfsdf",new Long(10),radioButtonGroup.isChecked(),(result) -> {
                     if (result instanceof Result.Success) {
+                        Task createdTask = (Task) ((Result.Success) result).getData();
                         System.out.println("Success");
-                        snackbar.setText("Task created").setTextColor(Color.GREEN);
+                        snackbar.setText(" 1/2 Task created").setTextColor(Color.GREEN);
                         snackbar.show();
+                        if (newTaskViewModel.currentLocationLiveData.getValue() != null) {
+                            newTaskViewModel.attachLocationToTask(createdTask, (addTaskResult) -> {
+                                if (result instanceof Result.Success) {
+                                    snackbar.setText("2/2 Location added").setTextColor(Color.GREEN);
+                                    snackbar.show();
+                                }
+                            });
+                        } else {
+                            snackbar.setText("2/2 No location").setTextColor(Color.YELLOW);
+                            snackbar.show();
+                        }
                         //navController.navigate(R.id.action_nav_account_to_nav_login);
                     } else {
                         System.out.println("Failure");
@@ -181,12 +245,13 @@ public class NewTaskFragment extends Fragment {
         });
     }
 
+
     /**
      *  Prettify a date object and display it in a selected displayElement
      * @param date the date object to format and display
-     * @param displayElement The displayElement to display the date in
      */
-    private void displayDateInUi(Date date, TextView displayElement) {
+    private void displayDateInUi(Date date) {
+        TextView displayElement = getView().findViewById(R.id.createtask_display_datetime);
         String selectedDateTxt = "Scheduled:";
 
         if (date== null) {
@@ -195,6 +260,36 @@ public class NewTaskFragment extends Fragment {
         } else {
             SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             displayElement.setText(selectedDateTxt + " " + shortDate.format(date));
+        }
+    }
+
+    private void displayLocationBtnUi(Location location) {
+        Button btnSetLocation = getView().findViewById(R.id.createtask_extras_btn_location);
+        Button btnUnsetLocation = getView().findViewById(R.id.createtask_extras_btn_remove_location);
+        if (location == null) {
+            btnUnsetLocation.setVisibility(View.GONE);
+            btnSetLocation.setVisibility(View.VISIBLE);
+        } else {
+            btnUnsetLocation.setVisibility(View.VISIBLE);
+            btnSetLocation.setVisibility(View.GONE);
+        }
+    }
+
+    private void displayPictureInUi(Bitmap image) {
+        Button btnSetPic = getView().findViewById(R.id.createtask_extras_btn_picture);
+        ImageView picHolder = getView().findViewById(R.id.createtask_extras_preview_picture);
+        Button btnRemovePic = getView().findViewById(R.id.createtask_extras_btn_remove_picture);
+        if (image != null) {
+            btnSetPic.setVisibility(View.GONE);
+            btnRemovePic.setVisibility(View.VISIBLE);
+            picHolder.setImageBitmap(image);
+            picHolder.setVisibility(View.VISIBLE);
+        } else {
+            btnSetPic.setVisibility(View.VISIBLE);
+            btnRemovePic.setVisibility(View.GONE);
+            picHolder.setVisibility(View.GONE);
+            picHolder.setImageBitmap(null);
+
         }
     }
 
@@ -219,11 +314,11 @@ public class NewTaskFragment extends Fragment {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Get viewmodel for data storage
+            // Get viewmodel for retreiveing the stored date
             NewTaskViewModel newTaskViewModel = new ViewModelProvider(requireActivity(), new NewTaskViewModelFactory())
                     .get(NewTaskViewModel.class);
 
-            Date currentDate = newTaskViewModel.currentDateLiveData.getValue();
+            Date currentDate = newTaskViewModel.getCurrentDateLiveData().getValue();
             if (currentDate == null) {
                 currentDate = new GregorianCalendar(year,month,day).getTime();
             } else {
