@@ -51,7 +51,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/ic_launcher_background"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@mipmap/ic_launcher_foreground" />
+                    app:srcCompat="@drawable/frivillig_app_icon" />
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
