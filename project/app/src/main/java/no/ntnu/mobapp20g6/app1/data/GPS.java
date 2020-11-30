@@ -70,12 +70,13 @@ public class GPS implements LocationListener {
         disabling = true;
 
     }
-    private void forceStopLocationManager() {
-        locationManager.removeUpdates(this);
-    }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        if (disabling) {
+            startOffDelayTimer();
+            System.out.println("Stopping due to user request");
+        }
         if(countdownFinished) {
             Location currentLocation = getCurrentLocation();
             startCountDownTimer();
@@ -103,7 +104,7 @@ public class GPS implements LocationListener {
      * retrieved, as the normal stop doesn't always work with buttons
      */
     private void startOffDelayTimer() {
-        new CountDownTimer(100, 10) {
+        new CountDownTimer(1000, 10) {
 
             @Override
             public void onTick(long l) {
@@ -113,7 +114,7 @@ public class GPS implements LocationListener {
             public void onFinish() {
                 disabling = false;
                 System.out.println("Off-delay reached, killed LocationManager listener");
-                forceStopLocationManager();
+                stopLocationUpdates();
             }
         }.start();
     }
@@ -140,10 +141,6 @@ public class GPS implements LocationListener {
      * @return true if GPS location was successfully received else this will return null.
      */
     public Location getCurrentLocation() {
-        if (disabling) {
-            startOffDelayTimer();
-            System.out.println("Stopping due to user request");
-        }
         if (ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("Location permission denied.");
