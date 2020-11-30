@@ -74,6 +74,8 @@
     <string name="create_group_no_voluntary_org_feedback">Not sending OrgId, can not validate</string>
     <string name="create_group_failed_creation">Failed to create group</string>
     <string name="create_group_success_creation">Group Successfully created</string>
+    <string name="create_group_failed_loc_add">Failed to add location to group</string>
+    <string name="create_group_success_loc_add">Loc successfully added to group</string>
     <string name="create_group_cancel_action">Canceled group creation.</string>
 
     <!-- General usage strings -->

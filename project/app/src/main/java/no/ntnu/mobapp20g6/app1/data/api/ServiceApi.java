@@ -133,7 +133,7 @@ public interface ServiceApi {
     );
 
     @FormUrlEncoded
-    @GET(PREFIX + "addlocation")
+    @POST(PREFIX + "addlocation")
     Call<Group> addLocationToGroup(
             @Header("Authorization") String token,
             @Field("groupid") Long groupId,

@@ -23,6 +23,30 @@ public class CreateGroupViewModel extends ViewModel {
         this.loginRepository = loginRepository;
     }
 
+    public void getBrregOrg(String groupOrgId, Consumer<JsonObject> brregCallBack) {
+        sharedRepo.getVoluntaryBrregOrg(groupOrgId, brregResult -> {
+            if (brregResult instanceof Result.Success) {
+                JsonObject voluntaryOrg = (JsonObject) ((Result.Success) brregResult).getData();
+                brregCallBack.accept(voluntaryOrg);
+            }
+        });
+    }
+
+    public void addLocToGroup(Long groupID,
+                              String latitude, String longitude,
+                              String streetAddr, String city, Long postal, String country,
+                              Consumer<Group> addLocationToGroupCallBack) {
+        sharedRepo.addLocationToGroup(loginRepository.getToken(), groupID,
+                                      latitude, longitude,
+                                      streetAddr, city, postal, country,
+                                      addLocToGroupResult -> {
+            if (addLocToGroupResult instanceof Result.Success) {
+                Group updatedGroup = (Group) ((Result.Success) addLocToGroupResult).getData();
+                addLocationToGroupCallBack.accept(updatedGroup);
+            }
+        });
+    }
+
     public void createGroup(String name, String desc, String orgID, Consumer<Group> createGroupCallBack) {
         Long orgIDnum = null;
         if (!orgID.equals("")) {
@@ -36,14 +60,5 @@ public class CreateGroupViewModel extends ViewModel {
 
             }
         }) );
-    }
-
-    public void getBrregOrg(String groupOrgId, Consumer<JsonObject> brregCallBack) {
-        sharedRepo.getVoluntaryBrregOrg(groupOrgId, brregResult -> {
-            if (brregResult instanceof Result.Success) {
-                JsonObject voluntaryOrg = (JsonObject) ((Result.Success) brregResult).getData();
-                brregCallBack.accept(voluntaryOrg);
-            }
-        });
     }
 }

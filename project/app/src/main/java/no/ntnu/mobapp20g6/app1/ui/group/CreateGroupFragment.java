@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
+import no.ntnu.mobapp20g6.app1.data.model.Group;
 
 public class CreateGroupFragment extends Fragment {
 
@@ -64,8 +65,13 @@ public class CreateGroupFragment extends Fragment {
         final EditText groupOrgIdText = view.findViewById(R.id.create_group_details_input_orgid);
         final Button brregBtn = view.findViewById(R.id.create_group_details_input_btn_brreg);
         final Button addLocBtn = view.findViewById(R.id.create_group_extras_input_btn_location);
+        final Button removeLocBtn = view.findViewById(R.id.create_group_extras_btn_remove_location);
+        final Button removePicBtn = view.findViewById(R.id.create_group_extras_btn_remove_picture);
         final Button createBtn = view.findViewById(R.id.create_group_confirmation_input_btn_create);
         final Button cancelBtn = view.findViewById(R.id.create_group_confirmation_input_btn_cancel);
+
+        removeLocBtn.setVisibility(View.GONE);
+        removePicBtn.setVisibility(View.GONE);
 
         AtomicBoolean voluntaryOrgFound = new AtomicBoolean(false);
 
@@ -103,12 +109,17 @@ public class CreateGroupFragment extends Fragment {
         addLocBtn.setOnClickListener(v -> {
             gps.askForPermissionGPS(getActivity());
             loc[0] = gps.getCurrentLocation();
-            if (loc[0] == null) {
-                showUserFeedback(R.string.location_not_found);
-            } else {
+            if (loc[0] != null) {
                 showUserFeedback(R.string.location_found);
-                System.out.println(loc[0].getLongitude());
+                removeLocBtn.setVisibility(View.VISIBLE);
+                addLocBtn.setVisibility(View.GONE);
             }
+        });
+
+        removeLocBtn.setOnClickListener(v -> {
+            loc[0] = null;
+            addLocBtn.setVisibility(View.VISIBLE);
+            removeLocBtn.setVisibility(View.GONE);
         });
 
         createBtn.setOnClickListener(v -> {
@@ -136,7 +147,7 @@ public class CreateGroupFragment extends Fragment {
             }
 
             if (validName && validDesc) {
-                createGroup(groupName, groupDesc, groupOrgID);
+                createGroup(groupName, groupDesc, groupOrgID, loc);
                 //TODO: Navigate to GroupFragment.
             }
         });
@@ -153,7 +164,15 @@ public class CreateGroupFragment extends Fragment {
         gps.stopLocationUpdates();
     }
 
-    private void createGroup(String groupName, String groupDesc, String groupOrgID) {
+    private void createGroup(String groupName, String groupDesc, String groupOrgID, Location[] loc) {
+        String latitude = null;
+        String longitude = null;
+        if (loc[0] != null) {
+            latitude = String.valueOf(loc[0].getLatitude());
+            longitude= String.valueOf(loc[0].getLongitude());
+        }
+        String finalLatitude = latitude;
+        String finalLongitude = longitude;
         cgViewModel.createGroup(
                 groupName,
                 groupDesc,
@@ -163,6 +182,28 @@ public class CreateGroupFragment extends Fragment {
                         showUserFeedback(R.string.create_group_failed_creation);
                     } else {
                         showUserFeedback(R.string.create_group_success_creation);
+                        if (finalLatitude != null && finalLongitude !=null) {
+                            addLocToGroup(createGroupCallBack.getGroupId(),
+                                    finalLatitude, finalLongitude,
+                                    null, null, null, null);
+
+                        }
+                    }
+                });
+    }
+
+    private void addLocToGroup(
+            Long groupID,
+            String latitude, String longitude,
+            String streetAddr, String city, Long postal, String country) {
+        cgViewModel.addLocToGroup(groupID,
+                latitude, longitude,
+                streetAddr, city, postal, country,
+                addLocToGroupCallBack -> {
+                    if (addLocToGroupCallBack == null) {
+                        showUserFeedback(R.string.create_group_failed_loc_add);
+                    } else {
+                        showUserFeedback(R.string.create_group_success_loc_add);
                     }
                 });
     }
