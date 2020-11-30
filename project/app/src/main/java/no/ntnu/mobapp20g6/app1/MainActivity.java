@@ -2,10 +2,12 @@ package no.ntnu.mobapp20g6.app1;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,7 +16,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
+import no.ntnu.mobapp20g6.app1.ui.login.LoginViewModel;
+import no.ntnu.mobapp20g6.app1.ui.login.LoginViewModelFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,14 +38,10 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home,
-                R.id.nav_gallery, 
-                R.id.nav_slideshow, 
-                R.id.nav_login, 
-                R.id.nav_public_tasks, 
+                R.id.nav_public_tasks,
                 R.id.nav_own_tasks, 
                 R.id.nav_assigned_tasks, 
-                R.id.nav_account,
-                R.id.nav_createtask)
+                R.id.nav_account)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -59,8 +58,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        setNavText();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void setNavText() {
+        //Setting Navigation bar text
+        LoginViewModel loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory()).get(LoginViewModel.class);
+        TextView navMail = this.findViewById(R.id.nav_user_mail);
+        TextView navUserName = this.findViewById(R.id.nav_user_name);
+        navMail.setText(loginViewModel.getUserMail());
+        navUserName.setText(loginViewModel.getUserName());
     }
 }

@@ -38,7 +38,7 @@ public class PictureDataSource {
     Consumer<Result<Task>>setTaskImageCallback) {
         try {
             if (token != null) {
-                Call<Task> setTaskImageCall = pictureApi.setTaskPicture(token, taskId, preparePicture(picturePath, "task_image"));
+                Call<Task> setTaskImageCall = pictureApi.setTaskPicture(token, taskId, preparePicture(picturePath));
                 setTaskImageCall.enqueue(new Callback<Task>() {
                     @Override
                     public void onResponse(Call<Task> call, Response<Task> response) {
@@ -86,6 +86,7 @@ public class PictureDataSource {
             }
         } catch (Exception e) {
             Log.d("FAIL-SET_TASK_IMAGE", "Client error");
+            System.out.println("Client error stacktrace: " + e);
             setTaskImageCallback.accept(new Result.Error(new Exception("Client error")));
         }
     }
@@ -94,7 +95,7 @@ public class PictureDataSource {
                              Consumer<Result<Group>>setGroupLogoCallback) {
         try {
             if (token != null) {
-                Call<Group> setGroupLogoCall = pictureApi.setGroupPicture(token, groupId, preparePicture(picturePath, "group_logo"));
+                Call<Group> setGroupLogoCall = pictureApi.setGroupPicture(token, groupId, preparePicture(picturePath));
                 setGroupLogoCall.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
@@ -149,15 +150,15 @@ public class PictureDataSource {
     /**
      * Pack a picture into a MultipartBody.Part.
      * @param picturePath path to the picture.
-     * @param imageName name of picture.
      * @return picture as MultipartBody.part.
      */
-    private MultipartBody.Part preparePicture(String picturePath, String imageName) {
+    private MultipartBody.Part preparePicture(String picturePath) {
         MultipartBody.Part picture = null;
         if(picturePath != null) {
             File file = new File(picturePath);
+            String multiPartHeaderName = "image";
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            picture = MultipartBody.Part.createFormData(imageName, file.getName(), requestFile);
+            picture = MultipartBody.Part.createFormData(multiPartHeaderName, file.getName(), requestFile);
         }
         return picture;
     }
