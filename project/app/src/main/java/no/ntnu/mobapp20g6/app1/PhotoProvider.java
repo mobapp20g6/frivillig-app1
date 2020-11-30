@@ -68,7 +68,7 @@ public class PhotoProvider {
                             photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                    currentPhotoUriLiveData.setValue(storageDir + photoURI.getPath());
+                    currentPhotoUriLiveData.setValue(currentPhotoPath);
                     System.out.println("foto uri er: " + photoURI.getPath());
                     System.out.println("Sent image to fragment " + fragment.toString());
                     fragment.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
