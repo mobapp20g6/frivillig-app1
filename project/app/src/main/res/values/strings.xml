@@ -51,6 +51,7 @@
     <string name="display_group_map_button_text">Fullscreen Map</string>
     <string name="display_group_btn_update_text">Update</string>
     <string name="display_group_btn_delete_text">Delete</string>
+    <string name="display_group_btn_show_tasks_text">Show Tasks</string>
     <string name="display_group_image_description">Group Image</string>
 
     <!-- General Use Strings -->
