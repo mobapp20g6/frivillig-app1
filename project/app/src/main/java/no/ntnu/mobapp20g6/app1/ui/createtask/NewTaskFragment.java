@@ -3,7 +3,6 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,7 +11,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +68,7 @@ public class NewTaskFragment extends Fragment {
     private NavController navController;
     private Context context;
     private GPS gps;
+    PhotoProvider pp;
 
 
     @Override
@@ -86,6 +85,7 @@ public class NewTaskFragment extends Fragment {
         context = getContext();
         if(context != null) {
             gps = new GPS(context);
+            pp = new PhotoProvider(context);
         }
 
     }
@@ -107,10 +107,12 @@ public class NewTaskFragment extends Fragment {
         System.out.println("Got intent in new task fragment");
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Uri photoUri = (Uri) extras.get("data");
-            Bitmap imageBitmap = BitmapFactory.decodeFile(photoUri.getPath());
-            newTaskViewModel.currentImageBitmapLiveData.setValue(imageBitmap);
-            System.out.println("got picture");
+            newTaskViewModel.currentImageBitmapUriLiveData.setValue(pp.currentPhotoUriLiveData.getValue());
+            if (newTaskViewModel.currentDateLiveData.getValue() != null) {
+                System.out.println("got picture");
+            } else {
+                System.out.println("picture is null");
+            }
         } else {
             Toast.makeText(getActivity(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
         }
@@ -154,7 +156,7 @@ public class NewTaskFragment extends Fragment {
         // Init the state for the UI
         displayDateInUi(newTaskViewModel.getCurrentDateLiveData().getValue());
         displayLocationBtnUi(newTaskViewModel.getCurrentLocationLiveData().getValue());
-        displayPictureInUi(newTaskViewModel.getCurrentImageBitmapLiveData().getValue());
+        displayPictureInUi(newTaskViewModel.getCurrentImageBitmapUriLiveData().getValue());
 
 
         /**
@@ -173,10 +175,10 @@ public class NewTaskFragment extends Fragment {
         });
 
 
-        newTaskViewModel.currentImageBitmapLiveData.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
+        newTaskViewModel.currentImageBitmapUriLiveData.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onChanged(Bitmap bitmap) {
-                displayPictureInUi(bitmap);
+            public void onChanged(String bitmapPath) {
+                displayPictureInUi(bitmapPath);
             }
         });
 
@@ -200,7 +202,7 @@ public class NewTaskFragment extends Fragment {
         /**
          *  BUTTONS
          */
-
+        // BUTTONS LOCATION SET
         btnSetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,7 +211,7 @@ public class NewTaskFragment extends Fragment {
                 newTaskViewModel.currentLocationLiveData.setValue(androidStoleOurClass);
             }
         });
-
+        // BUTTONS LOCATION REMOVE
         btnUnsetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -217,22 +219,23 @@ public class NewTaskFragment extends Fragment {
             }
         });
 
+        // BUTTONS PIC SET
         btnSetPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PhotoProvider pp = new PhotoProvider(getContext());
-                pp.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE,getParentFragment());
-                //dispatchTakePictureIntent();
+                dispatchTakePictureIntent();
             }
         });
 
+        // BUTTONS PIC REMOVE
         btnUnsetPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.currentImageBitmapLiveData.setValue(null);
+                newTaskViewModel.currentImageBitmapUriLiveData.setValue(null);
             }
         });
 
+        // BUTTONS DATE/TIME PICKERS
         btnSetTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,7 +243,6 @@ public class NewTaskFragment extends Fragment {
                     newFragment.show(fm, "timePicker");
                 }
         });
-
         btnSetDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -319,7 +321,7 @@ public class NewTaskFragment extends Fragment {
                 fieldTaskTitle.requestFocus();
                 newTaskViewModel.currentLocationLiveData.setValue(null);
                 newTaskViewModel.currentDateLiveData.setValue(null);
-                newTaskViewModel.currentImageBitmapLiveData.setValue(null);
+                newTaskViewModel.currentImageBitmapUriLiveData.setValue(null);
             }
         });
     }
@@ -354,13 +356,14 @@ public class NewTaskFragment extends Fragment {
         }
     }
 
-    private void displayPictureInUi(Bitmap image) {
+    private void displayPictureInUi(String pictureFilePath) {
         Button btnSetPic = getView().findViewById(R.id.createtask_extras_btn_picture);
         ImageView picHolder = getView().findViewById(R.id.createtask_extras_preview_picture);
         Button btnRemovePic = getView().findViewById(R.id.createtask_extras_btn_remove_picture);
-        if (image != null) {
+        if (pictureFilePath!= null) {
             btnSetPic.setVisibility(View.GONE);
             btnRemovePic.setVisibility(View.VISIBLE);
+            Bitmap image = BitmapFactory.decodeFile(pictureFilePath);
             picHolder.setImageBitmap(image);
             picHolder.setVisibility(View.VISIBLE);
         } else {
@@ -373,12 +376,13 @@ public class NewTaskFragment extends Fragment {
     }
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
-        }
+        pp.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE,this);
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //try {
+        //    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        //} catch (ActivityNotFoundException e) {
+        //    // display error state to the user
+        //}
     }
 
 

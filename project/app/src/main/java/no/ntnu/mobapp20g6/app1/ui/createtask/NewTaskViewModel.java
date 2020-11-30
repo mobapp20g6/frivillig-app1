@@ -2,6 +2,7 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,7 +11,6 @@ import androidx.lifecycle.ViewModel;
 import java.util.Date;
 import java.util.function.Consumer;
 
-import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
@@ -20,7 +20,7 @@ import no.ntnu.mobapp20g6.app1.data.repo.TaskRepository;
 public class NewTaskViewModel extends ViewModel {
 
     public MutableLiveData<Location> currentLocationLiveData = new MutableLiveData<>();
-    public MutableLiveData<Bitmap> currentImageBitmapLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> currentImageBitmapUriLiveData = new MutableLiveData<>();
     public MutableLiveData<Date> currentDateLiveData = new MutableLiveData<>();
 
     LoginRepository loginRepository;
@@ -85,7 +85,7 @@ public class NewTaskViewModel extends ViewModel {
     }
 
     public boolean isImageSet() {
-        return currentImageBitmapLiveData.getValue() != null ? true : false;
+        return currentImageBitmapUriLiveData.getValue() != null ? true : false;
     }
 
 
@@ -93,8 +93,8 @@ public class NewTaskViewModel extends ViewModel {
         return currentLocationLiveData;
     }
 
-    public LiveData<Bitmap> getCurrentImageBitmapLiveData() {
-        return currentImageBitmapLiveData;
+    public LiveData<String> getCurrentImageBitmapUriLiveData() {
+        return currentImageBitmapUriLiveData;
     }
 
     public LiveData<Date> getCurrentDateLiveData() {
