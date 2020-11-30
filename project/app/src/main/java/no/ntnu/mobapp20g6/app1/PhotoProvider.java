@@ -59,7 +59,7 @@ public class PhotoProvider {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(context,
-                        "com.example.android.fileprovider",
+                        "no.ntnu.mobapp20g6.app1.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 fragment.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);

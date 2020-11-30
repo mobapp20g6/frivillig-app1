@@ -54,8 +54,8 @@ public class TaskListFragment extends Fragment {
         if(taskListViewModel.isLoggedIn()) {
             newTaskFab.setVisibility(View.VISIBLE);
             newTaskFab.setOnClickListener(onClick -> {
-                //TODO Implement functionality when creating a task. Use navController to go to new fragment.
                 System.out.println("New task fab was clicked.");
+                navController.navigate(R.id.nav_createtask);
             });
         }
 

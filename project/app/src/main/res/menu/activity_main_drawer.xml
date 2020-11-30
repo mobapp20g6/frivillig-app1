@@ -35,6 +35,9 @@
         <item android:id="@+id/nav_account"
             android:icon="@drawable/ic_menu_login"
             android:title="@string/ic_nav_account"/>
+        <item android:id="@+id/nav_createtask"
+            android:icon="@drawable/ic_menu_login"
+            android:title="@string/ic_nav_createtask"/>
         <item
             android:id="@+id/nav_group"
             android:icon="@drawable/ic_menu_slideshow"

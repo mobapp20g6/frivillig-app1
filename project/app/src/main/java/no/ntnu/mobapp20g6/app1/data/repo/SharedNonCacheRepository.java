@@ -74,7 +74,7 @@ public class SharedNonCacheRepository {
     }
 
     public void addLocationToTask(String token, Long taskId,
-                                  String latitude, String longitude,
+                                  Double latitude, Double longitude,
                                   String streetAddr, String city, Long postal, String country,
                                   Consumer<Result<Task>> addLocationToTaskCallBack) {
         locationDataSource.addLocationToTask(token, taskId,

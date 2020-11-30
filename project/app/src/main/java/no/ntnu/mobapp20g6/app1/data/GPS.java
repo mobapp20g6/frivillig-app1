@@ -27,6 +27,7 @@ import static android.content.Context.LOCATION_SERVICE;
  */
 public class GPS implements LocationListener {
     private boolean countdownFinished = true;
+    private boolean disabling = false;
     private final MutableLiveData<Location> currentGPSLocationLiveData;
     private final Context currentContext;
     protected LocationManager locationManager;
@@ -65,8 +66,17 @@ public class GPS implements LocationListener {
         locationManager.removeUpdates(this);
     }
 
+    public void stopLocationUpdatesAfterDelay() {
+        disabling = true;
+
+    }
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        if (disabling) {
+            startOffDelayTimer();
+            System.out.println("Stopping due to user request");
+        }
         if(countdownFinished) {
             Location currentLocation = getCurrentLocation();
             startCountDownTimer();
@@ -87,6 +97,26 @@ public class GPS implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         //Required so an exception is not thrown.
+    }
+
+    /**
+     * An off-delay to stop the listener slightly after the last location was
+     * retrieved, as the normal stop doesn't always work with buttons
+     */
+    private void startOffDelayTimer() {
+        new CountDownTimer(1000, 10) {
+
+            @Override
+            public void onTick(long l) {
+            }
+
+            @Override
+            public void onFinish() {
+                disabling = false;
+                System.out.println("Off-delay reached, killed LocationManager listener");
+                stopLocationUpdates();
+            }
+        }.start();
     }
 
     /**
