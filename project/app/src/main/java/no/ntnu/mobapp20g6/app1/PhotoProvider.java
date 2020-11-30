@@ -18,9 +18,12 @@ import java.util.Date;
 
 public class PhotoProvider {
     String currentPhotoPath;
-
     Context context;
-    private File createImageFile(Context context) throws IOException {
+
+    public PhotoProvider(Context ctx) {
+        this.context = ctx;
+    }
+    public File createImageFile() throws IOException {
         if (context == null) {
             return null;
         }
@@ -40,11 +43,12 @@ public class PhotoProvider {
     }
 
 
-    private void dispatchTakePictureIntent(Integer requestCode, Fragment fragment) {
+    public void dispatchTakePictureIntent(Integer requestCode, Fragment fragment) {
+        if (requestCode != null && context != null && fragment != null);
         Integer REQUEST_IMAGE_CAPTURE = requestCode;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -54,7 +58,7 @@ public class PhotoProvider {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
+                Uri photoURI = FileProvider.getUriForFile(context,
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -63,7 +67,5 @@ public class PhotoProvider {
         }
     }
 
-    private PackageManager getPackageManager() {
-    }
 
 }
