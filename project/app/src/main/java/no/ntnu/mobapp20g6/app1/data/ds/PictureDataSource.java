@@ -95,7 +95,7 @@ public class PictureDataSource {
                              Consumer<Result<Group>>setGroupLogoCallback) {
         try {
             if (token != null) {
-                Call<Group> setGroupLogoCall = pictureApi.setGroupPicture(token, groupId, preparePicture(picturePath, "group_logo"));
+                Call<Group> setGroupLogoCall = pictureApi.setGroupPicture(token, groupId, preparePicture(picturePath));
                 setGroupLogoCall.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
@@ -150,7 +150,6 @@ public class PictureDataSource {
     /**
      * Pack a picture into a MultipartBody.Part.
      * @param picturePath path to the picture.
-     * @param imageName name of picture.
      * @return picture as MultipartBody.part.
      */
     private MultipartBody.Part preparePicture(String picturePath) {
