@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import no.ntnu.mobapp20g6.app1.PhotoProvider;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
@@ -211,7 +212,9 @@ public class NewTaskFragment extends Fragment {
         btnSetPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakePictureIntent();
+                PhotoProvider pp = new PhotoProvider(getContext());
+                pp.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE,getParentFragment());
+                //dispatchTakePictureIntent();
             }
         });
 
