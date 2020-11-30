@@ -45,4 +45,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
 
+    <!-- Display Group -->
+    <string name="display_group_name_text">Group Name Placeholder</string>
+    <string name="display_group_description_no_data">This group has no description</string>
+    <string name="display_group_map_button_text">Fullscreen Map</string>
+    <string name="display_group_btn_update_text">Update</string>
+    <string name="display_group_btn_delete_text">Delete</string>
+    <string name="display_group_image_description">Group Image</string>
+
+    <!-- General Use Strings -->
+    <string name="entity_description">Description</string>
+
 </resources>
