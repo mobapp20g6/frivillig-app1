@@ -18,9 +18,12 @@ import java.util.Date;
 
 public class PhotoProvider {
     String currentPhotoPath;
-
     Context context;
-    public File createImageFile(Context context) throws IOException {
+
+    public PhotoProvider(Context ctx) {
+        this.context = ctx;
+    }
+    public File createImageFile() throws IOException {
         if (context == null) {
             return null;
         }
@@ -40,7 +43,7 @@ public class PhotoProvider {
     }
 
 
-    public void dispatchTakePictureIntent(Integer requestCode, Context context, Fragment fragment) {
+    public void dispatchTakePictureIntent(Integer requestCode, Fragment fragment) {
         if (requestCode != null && context != null && fragment != null);
         Integer REQUEST_IMAGE_CAPTURE = requestCode;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
