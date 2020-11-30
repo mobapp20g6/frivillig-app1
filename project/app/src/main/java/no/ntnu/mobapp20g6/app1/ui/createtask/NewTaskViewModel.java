@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.io.File;
 import java.util.Date;
 import java.util.function.Consumer;
 
@@ -68,11 +69,11 @@ public class NewTaskViewModel extends ViewModel {
         }
     }
 
-    public void attachImageToTask(Task task){
-        if (task != null && isImageSet()) {
+    public void attachImageToTask(Task task, String currentPhotoPath, Consumer<Result<Task>> attachImageResultCallback){
+        if (task != null && isImageSet() && !(currentPhotoPath.isEmpty())) {
             //TODO: 1. Implement storage of picture in file path
             //TODO: 2. Implement upload of stored picture (bitmap locally OK)
-
+           sharedNonCacheRepository.setTaskImage(loginRepository.getToken(),task.getId(),currentPhotoPath,attachImageResultCallback::accept);
         }
     }
 

@@ -285,9 +285,16 @@ public class NewTaskFragment extends Fragment {
                             });
                         }
 
-                        if (newTaskViewModel.isImageSet()) {
+                        if (newTaskViewModel.currentImageBitmapUriLiveData.getValue() != null) {
                             //TODO: Implement in viewmodel
-                            newTaskViewModel.attachImageToTask(createdTask);
+                            newTaskViewModel.attachImageToTask(createdTask, newTaskViewModel.currentImageBitmapUriLiveData.getValue(), (addResult) -> {
+                                if (result instanceof Result.Success) {
+                                    successCount.getAndIncrement();
+                                    System.out.println("Image added OK");
+                                }
+                            });
+                        } else {
+                            System.out.println("Image not set");
                         }
                         //navController.navigate(R.id.action_nav_account_to_nav_login);
                         int resultCode = successCount.get();
