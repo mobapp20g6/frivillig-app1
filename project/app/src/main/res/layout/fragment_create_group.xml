@@ -212,7 +212,6 @@
                         android:id="@+id/create_group_extras_preview_picture"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/create_group_extras_input_picture_desc"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -222,9 +221,8 @@
 
                     <Button
                         android:id="@+id/create_group_extras_btn_remove_picture"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:backgroundTint="@color/design_default_color_error"
                         android:text="@string/create_group_extras_input_btn_remove_picture"
                         app:layout_constraintEnd_toEndOf="@+id/create_group_extras_preview_picture"

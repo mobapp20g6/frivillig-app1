@@ -1,19 +1,28 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
+import android.graphics.Bitmap;
+
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 
+import java.sql.Struct;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import java.util.function.Consumer;
 
 import no.ntnu.mobapp20g6.app1.data.Result;
+import no.ntnu.mobapp20g6.app1.data.model.Location;
 import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 
 public class CreateGroupViewModel extends ViewModel {
+
+    private MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Bitmap> pictureMutableLiveData = new MutableLiveData<>();
 
     private SharedNonCacheRepository sharedRepo;
     private LoginRepository loginRepository;
@@ -60,5 +69,21 @@ public class CreateGroupViewModel extends ViewModel {
 
             }
         }) );
+    }
+
+    public boolean isLocationSet() {
+        return locationMutableLiveData.getValue() != null;
+    }
+
+    public boolean isPictureSet() {
+        return pictureMutableLiveData.getValue() != null;
+    }
+
+    public MutableLiveData<Location> getLocationMutableLiveData() {
+        return locationMutableLiveData;
+    }
+
+    public MutableLiveData<Bitmap> getPictureMutableLiveData() {
+        return pictureMutableLiveData;
     }
 }

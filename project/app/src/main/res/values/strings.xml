@@ -82,6 +82,7 @@
 
     <!-- General usage strings -->
     <string name="location_found">Location added.</string>
+    <string name="location_removed">Location removed.</string>
     <string name="location_not_found">Couldn\'t add location.</string>
 
 </resources>

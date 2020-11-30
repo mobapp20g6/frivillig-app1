@@ -4,6 +4,9 @@ import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -18,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -26,15 +31,22 @@ import com.google.gson.JsonPrimitive;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import no.ntnu.mobapp20g6.app1.PhotoProvider;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 
+import static android.app.Activity.RESULT_OK;
+
 public class CreateGroupFragment extends Fragment {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private CreateGroupViewModel cgViewModel;
     private NavController navController;
+    private Context context;
     private GPS gps;
+    private PhotoProvider photoProvider;
 
     public static CreateGroupFragment newInstance() {
         return new CreateGroupFragment();
@@ -43,10 +55,12 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.context = getContext();
         this.navController = NavHostFragment.findNavController(getParentFragment());
         this.cgViewModel = new ViewModelProvider(this, new CreateGroupViewModelFactory())
                 .get(CreateGroupViewModel.class);
-        this.gps = new GPS(getContext());
+        this.gps = new GPS(context);
+        this.photoProvider = new PhotoProvider(context);
 
     }
 
@@ -64,14 +78,20 @@ public class CreateGroupFragment extends Fragment {
         final EditText groupDescText = view.findViewById(R.id.create_group_details_desc_input);
         final EditText groupOrgIdText = view.findViewById(R.id.create_group_details_input_orgid);
         final Button brregBtn = view.findViewById(R.id.create_group_details_input_btn_brreg);
+
         final Button addLocBtn = view.findViewById(R.id.create_group_extras_input_btn_location);
         final Button removeLocBtn = view.findViewById(R.id.create_group_extras_btn_remove_location);
+        final ImageView picture = view.findViewById(R.id.create_group_extras_preview_picture);
+        final Button addPicBtn = view.findViewById(R.id.create_group_extras_btn_picture);
         final Button removePicBtn = view.findViewById(R.id.create_group_extras_btn_remove_picture);
+
         final Button createBtn = view.findViewById(R.id.create_group_confirmation_input_btn_create);
         final Button cancelBtn = view.findViewById(R.id.create_group_confirmation_input_btn_cancel);
 
         removeLocBtn.setVisibility(View.GONE);
         removePicBtn.setVisibility(View.GONE);
+
+        displayPictureInUi(cgViewModel.getPictureMutableLiveData().getValue());
 
         AtomicBoolean voluntaryOrgFound = new AtomicBoolean(false);
 
@@ -120,6 +140,20 @@ public class CreateGroupFragment extends Fragment {
             loc[0] = null;
             addLocBtn.setVisibility(View.VISIBLE);
             removeLocBtn.setVisibility(View.GONE);
+            showUserFeedback(R.string.location_removed);
+        });
+
+        addPicBtn.setOnClickListener(v -> {
+            removePicBtn.setVisibility(View.VISIBLE);
+            picture.setVisibility(View.VISIBLE);
+            dispatchIntent();
+            addPicBtn.setVisibility(View.GONE);
+        });
+
+        removePicBtn.setOnClickListener(v -> {
+            addPicBtn.setVisibility(View.VISIBLE);
+            picture.setVisibility(View.GONE);
+            removePicBtn.setVisibility(View.GONE);
         });
 
         createBtn.setOnClickListener(v -> {
@@ -162,6 +196,32 @@ public class CreateGroupFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         gps.stopLocationUpdates();
+    }
+
+    private void dispatchIntent(){
+        photoProvider.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE, getParentFragment());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("imageBitmap");
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            cgViewModel.getPictureMutableLiveData().setValue(imageBitmap);
+            displayPictureInUi(imageBitmap);
+        }
+    }
+
+    private void displayPictureInUi(Bitmap image) {
+        ImageView picture = getView().findViewById(R.id.create_group_extras_preview_picture);
+        if (image != null) {
+            picture.setImageBitmap(image);
+            picture.setVisibility(View.VISIBLE);
+        } else {
+            picture.setVisibility(View.GONE);
+            picture.setImageBitmap(null);
+        }
     }
 
     private void createGroup(String groupName, String groupDesc, String groupOrgID, Location[] loc) {
