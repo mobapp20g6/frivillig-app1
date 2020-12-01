@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayGroupFragment"
+    tools:context=".ui.group.display.DisplayGroupFragment"
     android:background="@color/cardview_dark_background">
 
     <ScrollView
@@ -116,7 +116,9 @@
                             android:id="@+id/display_group_description_data"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:padding="8sp"
                             android:text="@string/display_group_description_no_data"
+                            android:textSize="22sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

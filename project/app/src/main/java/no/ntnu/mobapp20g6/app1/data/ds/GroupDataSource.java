@@ -304,6 +304,7 @@ public class GroupDataSource {
             }
         } catch (Exception e) {
             Log.d("FAIL_IS_OWNER_OF_GROUP", "Client error");
+            Log.d("FAIL_IS_OWNER_OF_GROUP", e.getMessage());
             isOwnerOfGroupCallBack.accept(new Result.Error(new Exception("Client error")));
         }
     }

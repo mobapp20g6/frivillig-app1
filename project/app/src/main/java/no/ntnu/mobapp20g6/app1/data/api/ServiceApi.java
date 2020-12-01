@@ -111,7 +111,6 @@ public interface ServiceApi {
             @Query("groupid") Long groupId
     );
 
-    @FormUrlEncoded
     @GET(PREFIX + "isownerofgroup")
     Call<Void> isOwnerOfGroup(
             @Header("Authorization") String token,

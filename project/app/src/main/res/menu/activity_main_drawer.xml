@@ -24,5 +24,9 @@
             android:id="@+id/nav_assigned_tasks"
             android:icon="@android:drawable/ic_menu_view"
             android:title="@string/ic_menu_assigned_tasks" />
+        <item
+            android:id="@+id/nav_display_group"
+            android:icon="@android:drawable/btn_star_big_on"
+            android:title="@string/nav_display_group" />
     </group>
 </menu>

@@ -56,5 +56,6 @@
 
     <!-- General Use Strings -->
     <string name="entity_description">Description</string>
+    <string name="nav_display_group">Group</string>
 
 </resources>
