@@ -41,7 +41,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
@@ -82,7 +81,7 @@ public class NewTaskFragment extends Fragment {
 
         context = getContext();
         if(context != null) {
-            gps = new GPS(context);
+            gps = new GPS(context,getActivity());
         }
 
     }
@@ -186,7 +185,7 @@ public class NewTaskFragment extends Fragment {
             @Override
             public void onChanged(Location location) {
                 displayLocationBtnUi(location);
-                gps.stopLocationUpdatesAfterDelay();
+                gps.stopLocationUpdates();
             }
         });
 
@@ -206,16 +205,14 @@ public class NewTaskFragment extends Fragment {
         btnSetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gps.askForPermissionGPS(getActivity());
-                android.location.Location androidStoleOurClass = gps.getCurrentLocation();
-                newTaskViewModel.currentLocationLiveData.setValue(androidStoleOurClass);
+                newTaskViewModel.initGpsAndAttachLiveData();
             }
         });
         // BUTTONS LOCATION REMOVE
         btnUnsetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.currentLocationLiveData.setValue(null);
+                newTaskViewModel.removeGpsAndLiveData();
             }
         });
 
@@ -331,7 +328,6 @@ public class NewTaskFragment extends Fragment {
                 fieldTaskDescr.setText("");
                 fieldTaskTitle.setText("");
                 fieldTaskTitle.requestFocus();
-                newTaskViewModel.currentLocationLiveData.setValue(null);
                 newTaskViewModel.currentDateLiveData.setValue(null);
                 newTaskViewModel.deleteImageFileAfterCapture();
                 newTaskViewModel.currentImageBitmapUriLiveData.setValue(null);

@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.function.Consumer;
 
 import no.ntnu.mobapp20g6.app1.PhotoProvider;
+import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
@@ -26,10 +27,11 @@ import no.ntnu.mobapp20g6.app1.data.repo.TaskRepository;
 
 public class NewTaskViewModel extends ViewModel {
 
-    public MutableLiveData<Location> currentLocationLiveData = new MutableLiveData<>();
+    public LiveData<Location> currentLocationLiveData;
     public MutableLiveData<String> currentImageBitmapUriLiveData = new MutableLiveData<>();
     public MutableLiveData<Date> currentDateLiveData = new MutableLiveData<>();
     private PhotoProvider pp;
+    private GPS gps;
 
     LoginRepository loginRepository;
     TaskRepository taskRepository;
@@ -114,6 +116,24 @@ public class NewTaskViewModel extends ViewModel {
        } else {
            return false;
        }
+    }
+
+    public void initGps(Context context, Activity activity) {
+        this.gps = new GPS(context,activity);
+        this.gps.askForPermissionGPS();
+        this.gps.getCurrentLocation();
+        this.currentLocationLiveData = gps.getCurrentGPSLocationLiveData();
+    }
+    public void initGpsAndAttachLiveData() {
+        if (this.gps != null) {
+            this.currentLocationLiveData = gps.getCurrentGPSLocationLiveData();
+        }
+    }
+
+    public void removeGpsAndLiveData() {
+        this.currentLocationLiveData = null;
+        this.gps = null;
+
     }
 
     public boolean isDateSet() {
