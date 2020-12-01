@@ -47,5 +47,9 @@
 
     <string name="create_account">Create account</string>
     <string name="login">Login</string>
+    <string name="invalid_first_name">Invalid first name</string>
+    <string name="invalid_last_name">Invalid last name</string>
+    <string name="invalid_email">Invalid email</string>
+
 
 </resources>

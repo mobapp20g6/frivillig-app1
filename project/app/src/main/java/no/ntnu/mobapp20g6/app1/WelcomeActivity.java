@@ -1,6 +1,7 @@
 package no.ntnu.mobapp20g6.app1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_activity);
 
+        //Disable night mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Button loginButton = findViewById(R.id.login_button);
         Button registerButton = findViewById(R.id.register_button);
 
