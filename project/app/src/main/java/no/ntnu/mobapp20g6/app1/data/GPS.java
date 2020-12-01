@@ -15,6 +15,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.concurrent.Executor;
+
 import static android.content.Context.LOCATION_SERVICE;
 
 /**
@@ -29,12 +35,16 @@ public class GPS implements LocationListener {
     private boolean countdownFinished = true;
     private final MutableLiveData<Location> currentGPSLocationLiveData;
     private final Context currentContext;
+    private final Activity mainActivity;
     protected LocationManager locationManager;
+    FusedLocationProviderClient fusedLocationClient;
 
-    public GPS(Context currentContext) {
+    public GPS(Context currentContext, Activity mainActivity) {
         currentGPSLocationLiveData = new MutableLiveData<>();
         this.currentContext = currentContext;
+        this.mainActivity = mainActivity;
         locationManager = (LocationManager) currentContext.getSystemService(LOCATION_SERVICE);
+        this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(mainActivity);
     }
 
     /**
@@ -65,14 +75,24 @@ public class GPS implements LocationListener {
         locationManager.removeUpdates(this);
     }
 
+    /**
+     * Start location manager to listen for location updates.
+     * Only works if permission for "ACCESS_FINE_LOCATION" is granted.
+     */
+    public void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("Location permission denied.");
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        }
+    }
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if(countdownFinished) {
-            Location currentLocation = getCurrentLocation();
             startCountDownTimer();
-            if(currentLocation != null) {
-                currentGPSLocationLiveData.setValue(location);
-            }
+            getCurrentLocation();
         }
     }
 
@@ -107,23 +127,22 @@ public class GPS implements LocationListener {
     }
 
     /**
-     * Gets the current GPS location of the user if permission is granted and GPS is enabled.
-     * @return true if GPS location was successfully received else this will return null.
+     * Gets the current GPS location of the user if permission is granted and GPS is enabled
+     * and places it in the Live data object "currentGPSLocationLiveData".
      */
-    public Location getCurrentLocation() {
+    public void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(currentContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("Location permission denied.");
         } else {
-            //Checks for GPS status.
-            Location location;
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                System.out.println("Getting GPS location");
-                return location;
-            }
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(mainActivity, location -> {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            System.out.println("Location found!");
+                            currentGPSLocationLiveData.setValue(location);
+                        }
+                    });
         }
-        return null;
     }
 }
