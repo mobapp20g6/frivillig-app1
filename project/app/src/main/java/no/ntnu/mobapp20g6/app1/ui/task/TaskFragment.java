@@ -86,8 +86,8 @@ public class TaskFragment extends Fragment {
 
         //Disable update and delete button if user is not owner of task.
         if(!taskViewModel.isUserOwnerOfTask()) {
-            buttonUpdateTask.setEnabled(false);
-            buttonDeleteTask.setEnabled(false);
+            buttonUpdateTask.setVisibility(View.GONE);
+            buttonDeleteTask.setVisibility(View.GONE);
         }
         //Disable join task button if user already is member of task and disable add to calendar button if user is not member of task.
         if(taskViewModel.isUserMemberOfTask()) {
