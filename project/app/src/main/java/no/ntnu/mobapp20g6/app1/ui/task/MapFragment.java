@@ -2,7 +2,6 @@ package no.ntnu.mobapp20g6.app1.ui.task;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -35,7 +34,6 @@ public class MapFragment extends Fragment {
     private TaskViewModel taskViewModel;
     private MapView map;
     private Context context;
-    protected LocationManager locationManager;
     private GPS gps;
 
     public MapFragment() {
@@ -63,7 +61,7 @@ public class MapFragment extends Fragment {
         Marker myLocationMarker = new Marker(map);
         myLocationMarker.setTitle("My position");
         myLocationMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_my_location_24, null));
-        gps.askForPermissionGPS(getActivity());
+        gps.askForPermissionGPS();
 
         //Making the map
         if(currentActiveTask != null) {

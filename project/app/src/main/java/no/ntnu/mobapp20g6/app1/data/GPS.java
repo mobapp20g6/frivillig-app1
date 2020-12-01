@@ -57,11 +57,10 @@ public class GPS implements LocationListener {
 
     /**
      * Ask user for permission to use phone GPS.
-     * @param currentActivity activity where call is called from. Cannot be null.
      */
-    public void askForPermissionGPS(Activity currentActivity) {
-        if(currentActivity != null) {
-            ActivityCompat.requestPermissions(currentActivity,
+    public void askForPermissionGPS() {
+        if(mainActivity != null) {
+            ActivityCompat.requestPermissions(mainActivity,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     99);
         }
