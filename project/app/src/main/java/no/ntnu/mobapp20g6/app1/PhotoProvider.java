@@ -22,6 +22,7 @@ public class PhotoProvider {
     public String currentPhotoPath;
     public MutableLiveData<String>currentPhotoUriLiveData;
     private Context context;
+    private File createdImageFile;
 
     public PhotoProvider(Context ctx) {
         this.context = ctx;
@@ -41,10 +42,26 @@ public class PhotoProvider {
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
+        createdImageFile = image;
 
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public boolean deleteCurrentImageFile() {
+        if (createdImageFile != null) {
+            if(createdImageFile.delete()) {
+                createdImageFile = null;
+                currentPhotoPath = null;
+                this.currentPhotoUriLiveData.setValue(null);
+                System.out.println("Photopath: deleted");
+                return  true;
+            } else {
+                System.out.println("Photopath: tried to delete, but failed");
+            }
+        }
+        return  false;
     }
 
 

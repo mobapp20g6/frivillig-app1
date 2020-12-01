@@ -95,12 +95,25 @@ public class NewTaskViewModel extends ViewModel {
     }
 
     public void startImageCaptureIntent(Integer requestCode, Fragment returnFragment, Context context){
-        if (context == null || requestCode == null && returnFragment == null) {
+        if (context == null || requestCode == null || returnFragment == null) {
             return;
         } else {
             pp = new PhotoProvider(context);
             pp.dispatchTakePictureIntent(requestCode,returnFragment);
         }
+    }
+
+    public boolean deleteImageFileAfterCapture() {
+       if (pp != null) {
+          if (pp.deleteCurrentImageFile()) {
+              this.currentImageBitmapUriLiveData.setValue(null);
+              return true;
+          } else {
+              return false;
+          }
+       } else {
+           return false;
+       }
     }
 
     public boolean isDateSet() {
