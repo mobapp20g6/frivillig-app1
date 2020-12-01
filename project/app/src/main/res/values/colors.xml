@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="frivillig_orange">#FFBA08</color>
+    <color name="frivillig_green">#8BC34A</color>
+    <color name="frivillig_teal">#6AE6C4</color>
+    <color name="frivillig_blue">#6880FC</color>
+    <color name="frivillig_purple">#EC63F2</color>
 </resources>

@@ -68,4 +68,12 @@ public class LoginViewModel extends ViewModel {
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }
+
+    public String getUserMail() {
+        return loginRepository.getCurrentUser().getUserEmail();
+    }
+
+    public String getUserName() {
+        return loginRepository.getCurrentUser().getUserFirstName() + " " + loginRepository.getCurrentUser().getUserLastName();
+    }
 }

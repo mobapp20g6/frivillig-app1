@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +19,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PhotoProvider {
-    String currentPhotoPath;
-    Context context;
+    public String currentPhotoPath;
+    public MutableLiveData<String>currentPhotoUriLiveData;
+    private Context context;
 
     public PhotoProvider(Context ctx) {
         this.context = ctx;
+        this.currentPhotoUriLiveData = new MutableLiveData<>();
     }
     public File createImageFile() throws IOException {
         if (context == null) {
@@ -63,12 +67,13 @@ public class PhotoProvider {
                             "no.ntnu.mobapp20g6.app1.fileprovider",
                             photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    currentPhotoUriLiveData.setValue(currentPhotoPath);
+                    System.out.println("foto uri er: " + photoURI.getPath());
                     System.out.println("Sent image to fragment " + fragment.toString());
                     fragment.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
         }
     }
-
-
 }
