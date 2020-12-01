@@ -154,7 +154,12 @@ public class NewTaskFragment extends Fragment {
 
         // Init the state for the UI
         displayDateInUi(newTaskViewModel.getCurrentDateLiveData().getValue());
-        displayLocationBtnUi(newTaskViewModel.getCurrentLocationLiveData().getValue());
+        newTaskViewModel.initGps(getContext(), getActivity());
+        if (newTaskViewModel.getCurrentDateLiveData().getValue() == null) {
+            displayLocationBtnUi(null);
+        } else {
+            displayLocationBtnUi(newTaskViewModel.getCurrentLocationLiveData().getValue());
+        }
         displayPictureInUi(newTaskViewModel.getCurrentImageBitmapUriLiveData().getValue());
 
 
@@ -184,8 +189,8 @@ public class NewTaskFragment extends Fragment {
         newTaskViewModel.currentLocationLiveData.observe(getViewLifecycleOwner(), new Observer<Location>() {
             @Override
             public void onChanged(Location location) {
+                System.out.println("LOCATION DATA UPDATED");
                 displayLocationBtnUi(location);
-                gps.stopLocationUpdates();
             }
         });
 
@@ -205,7 +210,7 @@ public class NewTaskFragment extends Fragment {
         btnSetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.initGpsAndAttachLiveData();
+                newTaskViewModel.getGpsPosition();
             }
         });
         // BUTTONS LOCATION REMOVE

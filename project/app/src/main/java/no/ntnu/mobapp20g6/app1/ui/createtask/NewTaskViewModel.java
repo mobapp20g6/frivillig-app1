@@ -120,13 +120,13 @@ public class NewTaskViewModel extends ViewModel {
 
     public void initGps(Context context, Activity activity) {
         this.gps = new GPS(context,activity);
-        this.gps.askForPermissionGPS();
-        this.gps.getCurrentLocation();
         this.currentLocationLiveData = gps.getCurrentGPSLocationLiveData();
     }
-    public void initGpsAndAttachLiveData() {
+
+    public void getGpsPosition() {
         if (this.gps != null) {
-            this.currentLocationLiveData = gps.getCurrentGPSLocationLiveData();
+            this.gps.askForPermissionGPS();
+            this.gps.getCurrentLocation();
         }
     }
 
