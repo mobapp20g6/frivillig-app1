@@ -1,8 +1,12 @@
 package no.ntnu.mobapp20g6.app1.ui.createtask;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.internal.ContextUtils;
 
 import no.ntnu.mobapp20g6.app1.data.ds.GroupDataSource;
 import no.ntnu.mobapp20g6.app1.data.ds.LocationDataSource;
