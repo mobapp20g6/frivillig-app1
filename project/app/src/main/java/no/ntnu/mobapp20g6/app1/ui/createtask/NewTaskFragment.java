@@ -155,11 +155,7 @@ public class NewTaskFragment extends Fragment {
         // Init the state for the UI
         displayDateInUi(newTaskViewModel.getCurrentDateLiveData().getValue());
         newTaskViewModel.initGps(getContext(), getActivity());
-        if (newTaskViewModel.getCurrentDateLiveData().getValue() == null) {
-            displayLocationBtnUi(null);
-        } else {
-            displayLocationBtnUi(newTaskViewModel.getCurrentLocationLiveData().getValue());
-        }
+        displayLocationBtnUi(newTaskViewModel.getCurrentLocationSetStateLiveData().getValue());
         displayPictureInUi(newTaskViewModel.getCurrentImageBitmapUriLiveData().getValue());
 
 
@@ -186,11 +182,21 @@ public class NewTaskFragment extends Fragment {
             }
         });
 
-        newTaskViewModel.currentLocationLiveData.observe(getViewLifecycleOwner(), new Observer<Location>() {
+        newTaskViewModel.getCurrentLocationLiveData().observe(getViewLifecycleOwner(), new Observer<Location>() {
             @Override
             public void onChanged(Location location) {
                 System.out.println("LOCATION DATA UPDATED");
-                displayLocationBtnUi(location);
+                newTaskViewModel.updateGpsStateLiveData(location);
+
+            }
+        });
+
+        newTaskViewModel.getCurrentLocationSetStateLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                System.out.println("LOCATION UI UPDATED = " + s);
+                displayLocationBtnUi(s);
+
             }
         });
 
@@ -217,7 +223,7 @@ public class NewTaskFragment extends Fragment {
         btnUnsetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.removeGpsAndLiveData();
+                newTaskViewModel.stopGetGpsPosition();
             }
         });
 
@@ -353,20 +359,43 @@ public class NewTaskFragment extends Fragment {
             displayElement.setText("No date scheduled");
             displayElement.setTextColor(Color.GRAY);
         } else {
-            SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             displayElement.setText(selectedDateTxt + " " + shortDate.format(date));
         }
     }
 
-    private void displayLocationBtnUi(Location location) {
+    private void displayLocationBtnUi(String locationStatus) {
         Button btnSetLocation = getView().findViewById(R.id.createtask_extras_btn_location);
         Button btnUnsetLocation = getView().findViewById(R.id.createtask_extras_btn_remove_location);
-        if (location == null) {
+        if (locationStatus == null) {
             btnUnsetLocation.setVisibility(View.GONE);
-            btnSetLocation.setVisibility(View.VISIBLE);
-        } else {
-            btnUnsetLocation.setVisibility(View.VISIBLE);
             btnSetLocation.setVisibility(View.GONE);
+        } else {
+            switch (locationStatus) {
+                case "set":
+                    btnSetLocation.setText("Set location from GPS");
+                    System.out.println("setting gps");
+                    btnSetLocation.setEnabled(true);
+                    btnUnsetLocation.setVisibility(View.VISIBLE);
+                    btnSetLocation.setVisibility(View.GONE);
+                    break;
+                case "aquire":
+                    System.out.println("aquiring gps");
+                    btnSetLocation.setEnabled(false);
+                    //btnSetLocation.setText("Aquiring...");
+                    break;
+                case "ready":
+                    System.out.println("ready gps");
+                    btnSetLocation.setEnabled(true);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    break;
+                case "denied":
+                    System.out.println("denied gps");
+                    btnSetLocation.setText("Permission denied, try again ?");
+                default:
+                    break;
+            }
         }
     }
 

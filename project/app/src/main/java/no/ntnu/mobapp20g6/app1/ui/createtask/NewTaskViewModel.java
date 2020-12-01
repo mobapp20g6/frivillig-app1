@@ -2,18 +2,13 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.location.Location;
-import android.net.Uri;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.material.internal.ContextUtils;
-
-import java.io.File;
 import java.util.Date;
 import java.util.function.Consumer;
 
@@ -27,7 +22,8 @@ import no.ntnu.mobapp20g6.app1.data.repo.TaskRepository;
 
 public class NewTaskViewModel extends ViewModel {
 
-    public LiveData<Location> currentLocationLiveData;
+    private LiveData<Location> currentLocationLiveData;
+    private MutableLiveData<String> currentLocationSetStateLiveData = new MutableLiveData<>();
     public MutableLiveData<String> currentImageBitmapUriLiveData = new MutableLiveData<>();
     public MutableLiveData<Date> currentDateLiveData = new MutableLiveData<>();
     private PhotoProvider pp;
@@ -119,20 +115,36 @@ public class NewTaskViewModel extends ViewModel {
     }
 
     public void initGps(Context context, Activity activity) {
+        System.out.println("GPS init");
         this.gps = new GPS(context,activity);
         this.currentLocationLiveData = gps.getCurrentGPSLocationLiveData();
+        this.currentLocationSetStateLiveData.setValue("ready");
     }
 
     public void getGpsPosition() {
         if (this.gps != null) {
+            System.out.println("GPS get position");
             this.gps.askForPermissionGPS();
             this.gps.getCurrentLocation();
+            if (this.gps.hasGpsPermission()) {
+                this.currentLocationSetStateLiveData.setValue("aquire");
+            } else {
+                this.currentLocationSetStateLiveData.setValue("denied");
+            }
         }
     }
 
+    public void stopGetGpsPosition() {
+        if (this.gps != null) {
+            this.gps.stopLocationUpdates();
+            this.currentLocationSetStateLiveData.setValue("ready");
+        }
+    }
     public void removeGpsAndLiveData() {
-        this.currentLocationLiveData = null;
-        this.gps = null;
+        if (this.gps != null) {
+            System.out.println("GPS remove");
+            this.currentLocationSetStateLiveData.setValue(null);
+        }
 
     }
 
@@ -140,17 +152,36 @@ public class NewTaskViewModel extends ViewModel {
         return currentDateLiveData.getValue() != null ? true : false;
     }
 
-    public boolean isLocationSet() {
-        return currentLocationLiveData.getValue() != null ? true : false;
+    public void updateGpsStateLiveData(Location location) {
+        if (this.gps != null) {
+            if (location != null) {
+                currentLocationSetStateLiveData.setValue("set");
+            }
+        }
     }
 
+    public boolean isLocationSet() {
+        if (this.currentLocationSetStateLiveData.getValue().equals("set") && this.currentLocationLiveData != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public boolean isImageSet() {
         return currentImageBitmapUriLiveData.getValue() != null ? true : false;
     }
 
 
     public LiveData<Location> getCurrentLocationLiveData() {
-        return currentLocationLiveData;
+        if (this.gps != null ) {
+            return this.gps.getCurrentGPSLocationLiveData();
+        } else {
+            return this.currentLocationLiveData;
+        }
+    }
+
+    public LiveData<String> getCurrentLocationSetStateLiveData() {
+        return currentLocationSetStateLiveData;
     }
 
     public LiveData<String> getCurrentImageBitmapUriLiveData() {
