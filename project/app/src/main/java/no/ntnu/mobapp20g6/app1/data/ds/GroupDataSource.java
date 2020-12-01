@@ -234,6 +234,7 @@ public class GroupDataSource {
 
                             default:
                                 Log.d("FAIL_GET_ALL_GROUP_TASKS", "Server error");
+                                Log.d("FAIL_GET_ALL_GROUP_TASKS", "Response code: " + response.code());
                                 getAllGroupTasksCallBack.accept(new Result.Success<>(null));
                         }
                     }
@@ -247,6 +248,7 @@ public class GroupDataSource {
             }
         } catch (Exception e) {
             Log.d("FAIL_GET_ALL_GROUP_TASKS", "Client error");
+            Log.d("FAIL_GET_ALL_GROUP_TASKS", e.getMessage());
             getAllGroupTasksCallBack.accept(new Result.Error(new Exception("Client error")));
         }
     }

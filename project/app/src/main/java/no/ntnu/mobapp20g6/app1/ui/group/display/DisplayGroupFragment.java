@@ -59,20 +59,18 @@ public class DisplayGroupFragment extends Fragment {
 
         Picasso picasso = dgViewModel.loadPicasso(getContext());
 
-        dgViewModel.getGroupOwner().observe(getViewLifecycleOwner(), new
-                Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean aBoolean) {
-                        initOwnerButtons(aBoolean);
-                    }
-                });
-        initOwnerButtons(dgViewModel.getGroupOwner().getValue());
+        dgViewModel.getGroupOwner().observe(getViewLifecycleOwner(),this::initOwnerButtons);
         displayGroup(view, picasso);
 
         final Button fullScreenBtn = view.findViewById(R.id.display_group_map_button);
+        final Button showTasksBtn = view.findViewById(R.id.display_group_btn_show_task);
 
         fullScreenBtn.setOnClickListener(v-> {
             NavHostFragment.findNavController(getParentFragment()).navigate(R.id.action_nav_display_group_to_groupMapFragment);
+        });
+
+        showTasksBtn.setOnClickListener(v -> {
+            NavHostFragment.findNavController(getParentFragment()).navigate(R.id.action_nav_display_group_to_nav_group_tasks);
         });
     }
 

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import org.osmdroid.api.IMapController;

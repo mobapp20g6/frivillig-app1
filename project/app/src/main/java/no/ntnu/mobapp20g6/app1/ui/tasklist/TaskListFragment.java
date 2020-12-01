@@ -25,6 +25,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupViewModel;
+import no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupViewModelFactory;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModel;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModelFactory;
 
@@ -32,6 +34,7 @@ public class TaskListFragment extends Fragment {
 
     private TaskListViewModel taskListViewModel;
     private TaskListViewAdapter taskListViewAdapter;
+    private DisplayGroupViewModel dgViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -48,6 +51,7 @@ public class TaskListFragment extends Fragment {
             taskViewModel.setActiveTask(onClick);
             navController.navigate(R.id.nav_task);
         });
+        dgViewModel = new ViewModelProvider(this, new DisplayGroupViewModelFactory()).get(DisplayGroupViewModel.class);
 
 
         final FloatingActionButton newTaskFab = root.findViewById(R.id.task_list_fab);
@@ -101,6 +105,11 @@ public class TaskListFragment extends Fragment {
                 title.setText(R.string.ic_menu_own_tasks);
                 break;
 
+            case R.id.nav_group_tasks:
+                title = root.findViewById(R.id.task_list_title);
+                title.setText(R.string.ic_menu_group_tasks);
+                break;
+
             default:
         }
     }
@@ -140,6 +149,15 @@ public class TaskListFragment extends Fragment {
                 });
 
                 taskListViewModel.getOwnTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
+                break;
+
+            case R.id.nav_group_tasks:
+                dgViewModel.getAllGroupTasks(listResult -> {
+                    if (listResult == null && view != null) {
+                        setSnackbarText("Unable to load group tasks.", view).show();
+                    }
+                });
+                dgViewModel.getGroupTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
                 break;
 
             default:

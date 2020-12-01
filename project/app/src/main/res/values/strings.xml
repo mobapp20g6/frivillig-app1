@@ -34,6 +34,7 @@
     <string name="ic_menu_public_tasks">Public Tasks</string>
     <string name="ic_menu_own_tasks">Own Tasks</string>
     <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
+    <string name="ic_menu_group_tasks">Group Tasks</string>
 
     <string name="task_group_name">Public</string>
     <string name="task_title">Task Title</string>
