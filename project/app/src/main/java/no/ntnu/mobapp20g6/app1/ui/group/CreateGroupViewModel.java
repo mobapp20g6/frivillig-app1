@@ -1,20 +1,14 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
-import android.graphics.Bitmap;
+import android.location.Location;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
-
-import java.sql.Struct;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
 import java.util.function.Consumer;
 
 import no.ntnu.mobapp20g6.app1.data.Result;
-import no.ntnu.mobapp20g6.app1.data.model.Location;
 import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
@@ -22,7 +16,7 @@ import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 public class CreateGroupViewModel extends ViewModel {
 
     private MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Bitmap> pictureMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> pictureMutableLiveData = new MutableLiveData<>();
 
     private SharedNonCacheRepository sharedRepo;
     private LoginRepository loginRepository;
@@ -56,6 +50,15 @@ public class CreateGroupViewModel extends ViewModel {
         });
     }
 
+    public void addPicToGroup(Long groupID, String picturePath, Consumer<Group> setGroupPictureCallBack) {
+        sharedRepo.setGroupLogo(loginRepository.getToken(), groupID, picturePath, groupResult -> {
+            if (groupResult instanceof Result.Success) {
+                Group updatedGroup = (Group) ((Result.Success) groupResult).getData();
+                setGroupPictureCallBack.accept(updatedGroup);
+            }
+        });
+    }
+
     public void createGroup(String name, String desc, String orgID, Consumer<Group> createGroupCallBack) {
         Long orgIDnum = null;
         if (!orgID.equals("")) {
@@ -83,7 +86,7 @@ public class CreateGroupViewModel extends ViewModel {
         return locationMutableLiveData;
     }
 
-    public MutableLiveData<Bitmap> getPictureMutableLiveData() {
+    public MutableLiveData<String> getPictureMutableLiveData() {
         return pictureMutableLiveData;
     }
 }

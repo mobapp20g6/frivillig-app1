@@ -81,6 +81,8 @@
     <string name="create_group_success_creation">Group Successfully created</string>
     <string name="create_group_failed_loc_add">Failed to add location to group</string>
     <string name="create_group_success_loc_add">Loc successfully added to group</string>
+    <string name="create_group_failed_pic_add">Failed to add picture to group</string>
+    <string name="create_group_success_pic_add">Picture successfully added to group</string>
     <string name="create_group_cancel_action">Canceled group creation.</string>
 
     <!-- General usage strings -->

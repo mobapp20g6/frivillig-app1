@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -55,19 +56,33 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.context = getContext();
         this.navController = NavHostFragment.findNavController(getParentFragment());
         this.cgViewModel = new ViewModelProvider(this, new CreateGroupViewModelFactory())
                 .get(CreateGroupViewModel.class);
-        this.gps = new GPS(context);
-        this.photoProvider = new PhotoProvider(context);
-
+        this.context = getContext();
+        if (context != null) {
+            this.gps = new GPS(context);
+            this.photoProvider = new PhotoProvider(context);
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_create_group, container, false);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        gps.stopLocationUpdates();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            cgViewModel.getPictureMutableLiveData().setValue(photoProvider.currentPhotoUriLiveData.getValue());
+        }
     }
 
     @Override
@@ -81,17 +96,14 @@ public class CreateGroupFragment extends Fragment {
 
         final Button addLocBtn = view.findViewById(R.id.create_group_extras_input_btn_location);
         final Button removeLocBtn = view.findViewById(R.id.create_group_extras_btn_remove_location);
-        final ImageView picture = view.findViewById(R.id.create_group_extras_preview_picture);
         final Button addPicBtn = view.findViewById(R.id.create_group_extras_btn_picture);
         final Button removePicBtn = view.findViewById(R.id.create_group_extras_btn_remove_picture);
 
         final Button createBtn = view.findViewById(R.id.create_group_confirmation_input_btn_create);
         final Button cancelBtn = view.findViewById(R.id.create_group_confirmation_input_btn_cancel);
 
-        removeLocBtn.setVisibility(View.GONE);
-        removePicBtn.setVisibility(View.GONE);
-
-        displayPictureInUi(cgViewModel.getPictureMutableLiveData().getValue());
+        initBtns();
+        observeLiveData();
 
         AtomicBoolean voluntaryOrgFound = new AtomicBoolean(false);
 
@@ -128,32 +140,28 @@ public class CreateGroupFragment extends Fragment {
 
         addLocBtn.setOnClickListener(v -> {
             gps.askForPermissionGPS(getActivity());
+            Location location = gps.getCurrentLocation();
             loc[0] = gps.getCurrentLocation();
             if (loc[0] != null) {
                 showUserFeedback(R.string.location_found);
-                removeLocBtn.setVisibility(View.VISIBLE);
-                addLocBtn.setVisibility(View.GONE);
+                Location observeLoc = loc[0];
+                cgViewModel.getLocationMutableLiveData().setValue(observeLoc);
+
             }
         });
 
         removeLocBtn.setOnClickListener(v -> {
             loc[0] = null;
-            addLocBtn.setVisibility(View.VISIBLE);
-            removeLocBtn.setVisibility(View.GONE);
+            cgViewModel.getLocationMutableLiveData().setValue(null);
             showUserFeedback(R.string.location_removed);
         });
 
         addPicBtn.setOnClickListener(v -> {
-            removePicBtn.setVisibility(View.VISIBLE);
-            picture.setVisibility(View.VISIBLE);
             dispatchIntent();
-            addPicBtn.setVisibility(View.GONE);
         });
 
         removePicBtn.setOnClickListener(v -> {
-            addPicBtn.setVisibility(View.VISIBLE);
-            picture.setVisibility(View.GONE);
-            removePicBtn.setVisibility(View.GONE);
+            cgViewModel.getPictureMutableLiveData().setValue(null);
         });
 
         createBtn.setOnClickListener(v -> {
@@ -181,75 +189,96 @@ public class CreateGroupFragment extends Fragment {
             }
 
             if (validName && validDesc) {
-                createGroup(groupName, groupDesc, groupOrgID, loc);
+                createGroup(groupName, groupDesc, groupOrgID);
                 //TODO: Navigate to GroupFragment.
             }
         });
 
         cancelBtn.setOnClickListener(v -> {
+            groupOrgIdText.setText("");
+            groupNameText.setText("");
+            groupDescText.setText("");
+            cgViewModel.getPictureMutableLiveData().setValue(null);
+            cgViewModel.getLocationMutableLiveData().setValue(null);
             showUserFeedback(R.string.create_group_cancel_action);
             navController.navigate(R.id.action_nav_group_to_nav_home);
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        gps.stopLocationUpdates();
+    private void observeLiveData() {
+        cgViewModel.getPictureMutableLiveData().observe(getViewLifecycleOwner(), this::displayPictureInUi);
+        cgViewModel.getLocationMutableLiveData().observe(getViewLifecycleOwner(), this::displayLoc);
+    }
+
+    private void initBtns() {
+        displayLoc(cgViewModel.getLocationMutableLiveData().getValue());
+        displayPictureInUi(cgViewModel.getPictureMutableLiveData().getValue());
     }
 
     private void dispatchIntent(){
-        photoProvider.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE, getParentFragment());
+        photoProvider.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE, this);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("imageBitmap");
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            cgViewModel.getPictureMutableLiveData().setValue(imageBitmap);
-            displayPictureInUi(imageBitmap);
+    private void displayLoc(Location location) {
+        Button addLocBtn = getView().findViewById(R.id.create_group_extras_input_btn_location);
+        Button removeLocBtn = getView().findViewById(R.id.create_group_extras_btn_remove_location);
+        if (location == null) {
+            removeLocBtn.setVisibility(View.GONE);
+            addLocBtn.setVisibility(View.VISIBLE);
+        } else {
+            removeLocBtn.setVisibility(View.VISIBLE);
+            addLocBtn.setVisibility(View.GONE);
         }
     }
 
-    private void displayPictureInUi(Bitmap image) {
+    private void displayPictureInUi(String filePath) {
+        Button addPicBtn = getView().findViewById(R.id.create_group_extras_btn_picture);
+        Button removePicBtn = getView().findViewById(R.id.create_group_extras_btn_remove_picture);
         ImageView picture = getView().findViewById(R.id.create_group_extras_preview_picture);
-        if (image != null) {
-            picture.setImageBitmap(image);
-            picture.setVisibility(View.VISIBLE);
-        } else {
+        if (filePath == null) {
+            addPicBtn.setVisibility(View.VISIBLE);
+            removePicBtn.setVisibility(View.GONE);
             picture.setVisibility(View.GONE);
             picture.setImageBitmap(null);
+        } else {
+            addPicBtn.setVisibility(View.GONE);
+            removePicBtn.setVisibility(View.VISIBLE);
+            Bitmap image = BitmapFactory.decodeFile(filePath);
+            picture.setImageBitmap(image);
+            picture.setVisibility(View.VISIBLE);
         }
     }
 
-    private void createGroup(String groupName, String groupDesc, String groupOrgID, Location[] loc) {
-        String latitude = null;
-        String longitude = null;
-        if (loc[0] != null) {
-            latitude = String.valueOf(loc[0].getLatitude());
-            longitude= String.valueOf(loc[0].getLongitude());
-        }
-        String finalLatitude = latitude;
-        String finalLongitude = longitude;
-        cgViewModel.createGroup(
-                groupName,
-                groupDesc,
-               groupOrgID,
-                createGroupCallBack -> {
+    private void createGroup(String groupName, String groupDesc, String groupOrgID) {
+        cgViewModel.createGroup(groupName, groupDesc, groupOrgID, createGroupCallBack -> {
                     if (createGroupCallBack == null) {
                         showUserFeedback(R.string.create_group_failed_creation);
                     } else {
                         showUserFeedback(R.string.create_group_success_creation);
-                        if (finalLatitude != null && finalLongitude !=null) {
+                        if (cgViewModel.isLocationSet()) {
+                            String latitude = String.valueOf(cgViewModel.getLocationMutableLiveData().getValue().getLatitude());
+                            String longitude = String.valueOf(cgViewModel.getLocationMutableLiveData().getValue().getLongitude());
                             addLocToGroup(createGroupCallBack.getGroupId(),
-                                    finalLatitude, finalLongitude,
+                                    latitude, longitude,
                                     null, null, null, null);
-
+                        }
+                        if (cgViewModel.isPictureSet()) {
+                            addPicToGroup(createGroupCallBack.getGroupId(),
+                                    cgViewModel.getPictureMutableLiveData().getValue());
                         }
                     }
                 });
+    }
+
+    private void addPicToGroup(
+            Long groupID, String filePath) {
+        cgViewModel.addPicToGroup(groupID, filePath, addPicToGroupCallBack -> {
+            if (addPicToGroupCallBack == null) {
+                showUserFeedback(R.string.create_group_failed_pic_add);
+            } else {
+                showUserFeedback(R.string.create_group_success_pic_add);
+            }
+        });
     }
 
     private void addLocToGroup(
@@ -284,13 +313,4 @@ public class CreateGroupFragment extends Fragment {
                     Toast.LENGTH_LONG).show();
         }
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // TODO: Use the ViewModel
-
-    }
-
 }
