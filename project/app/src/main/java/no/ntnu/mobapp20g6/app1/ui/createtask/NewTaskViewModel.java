@@ -1,17 +1,23 @@
 package no.ntnu.mobapp20g6.app1.ui.createtask;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.google.android.material.internal.ContextUtils;
 
 import java.io.File;
 import java.util.Date;
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.PhotoProvider;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
@@ -23,6 +29,7 @@ public class NewTaskViewModel extends ViewModel {
     public MutableLiveData<Location> currentLocationLiveData = new MutableLiveData<>();
     public MutableLiveData<String> currentImageBitmapUriLiveData = new MutableLiveData<>();
     public MutableLiveData<Date> currentDateLiveData = new MutableLiveData<>();
+    private PhotoProvider pp;
 
     LoginRepository loginRepository;
     TaskRepository taskRepository;
@@ -74,6 +81,25 @@ public class NewTaskViewModel extends ViewModel {
             //TODO: 1. Implement storage of picture in file path
             //TODO: 2. Implement upload of stored picture (bitmap locally OK)
            sharedNonCacheRepository.setTaskImage(loginRepository.getToken(),task.getId(),currentPhotoPath,attachImageResultCallback::accept);
+        }
+    }
+
+    public boolean setImageUriPathAfterCaptureIntent() {
+        if (pp != null) {
+            String imageUriPath = pp.currentPhotoPath;
+            this.currentImageBitmapUriLiveData.setValue(imageUriPath);
+            return imageUriPath != null;
+        } else {
+            return false;
+        }
+    }
+
+    public void startImageCaptureIntent(Integer requestCode, Fragment returnFragment, Context context){
+        if (context == null || requestCode == null && returnFragment == null) {
+            return;
+        } else {
+            pp = new PhotoProvider(context);
+            pp.dispatchTakePictureIntent(requestCode,returnFragment);
         }
     }
 

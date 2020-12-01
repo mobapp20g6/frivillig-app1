@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +42,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import no.ntnu.mobapp20g6.app1.PhotoProvider;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
@@ -68,7 +66,6 @@ public class NewTaskFragment extends Fragment {
     private NavController navController;
     private Context context;
     private GPS gps;
-    PhotoProvider pp;
 
 
     @Override
@@ -85,7 +82,6 @@ public class NewTaskFragment extends Fragment {
         context = getContext();
         if(context != null) {
             gps = new GPS(context);
-            pp = new PhotoProvider(context);
         }
 
     }
@@ -106,9 +102,8 @@ public class NewTaskFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("Got intent in new task fragment");
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            newTaskViewModel.currentImageBitmapUriLiveData.setValue(pp.currentPhotoUriLiveData.getValue());
-            if (newTaskViewModel.currentDateLiveData.getValue() != null) {
+
+            if (newTaskViewModel.setImageUriPathAfterCaptureIntent()) {
                 System.out.println("got picture");
             } else {
                 System.out.println("picture is null");
@@ -383,7 +378,7 @@ public class NewTaskFragment extends Fragment {
     }
 
     private void dispatchTakePictureIntent() {
-        pp.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE,this);
+        newTaskViewModel.startImageCaptureIntent(REQUEST_IMAGE_CAPTURE,this, getContext());
         //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //try {
         //    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
