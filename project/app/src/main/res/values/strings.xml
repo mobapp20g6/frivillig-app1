@@ -47,9 +47,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_createtask">Create task</string>
-=======
     <string name="title_activity_login">LoginActivity</string>
->>>>>>> develop
 
     <!-- Create Group Fragment Creation Text -->
     <string name="create_group_details_step_1">1</string>
