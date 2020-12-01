@@ -122,12 +122,13 @@ public class NewTaskViewModel extends ViewModel {
     }
 
     public void getGpsPosition() {
+        this.gps.askForPermissionGPS();
         if (this.gps != null) {
-            System.out.println("GPS get position");
-            this.gps.askForPermissionGPS();
-            this.gps.getCurrentLocation();
             if (this.gps.hasGpsPermission()) {
+                System.out.println("GPS get position");
                 this.currentLocationSetStateLiveData.setValue("aquire");
+                this.gps.getCurrentLocation();
+                //this.gps.startLocationUpdates();
             } else {
                 this.currentLocationSetStateLiveData.setValue("denied");
             }
@@ -137,13 +138,12 @@ public class NewTaskViewModel extends ViewModel {
     public void stopGetGpsPosition() {
         if (this.gps != null) {
             this.gps.stopLocationUpdates();
-            this.currentLocationSetStateLiveData.setValue("ready");
         }
     }
     public void removeGpsAndLiveData() {
         if (this.gps != null) {
             System.out.println("GPS remove");
-            this.currentLocationSetStateLiveData.setValue(null);
+            this.currentLocationSetStateLiveData.setValue("ready");
         }
 
     }
@@ -156,6 +156,7 @@ public class NewTaskViewModel extends ViewModel {
         if (this.gps != null) {
             if (location != null) {
                 currentLocationSetStateLiveData.setValue("set");
+                stopGetGpsPosition();
             }
         }
     }

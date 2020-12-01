@@ -223,7 +223,7 @@ public class NewTaskFragment extends Fragment {
         btnUnsetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.stopGetGpsPosition();
+                newTaskViewModel.removeGpsAndLiveData();
             }
         });
 
@@ -373,7 +373,6 @@ public class NewTaskFragment extends Fragment {
         } else {
             switch (locationStatus) {
                 case "set":
-                    btnSetLocation.setText("Set location from GPS");
                     System.out.println("setting gps");
                     btnSetLocation.setEnabled(true);
                     btnUnsetLocation.setVisibility(View.VISIBLE);
@@ -386,6 +385,7 @@ public class NewTaskFragment extends Fragment {
                     break;
                 case "ready":
                     System.out.println("ready gps");
+                    btnSetLocation.setText("Set location from GPS");
                     btnSetLocation.setEnabled(true);
                     btnUnsetLocation.setVisibility(View.GONE);
                     btnSetLocation.setVisibility(View.VISIBLE);
@@ -393,6 +393,7 @@ public class NewTaskFragment extends Fragment {
                 case "denied":
                     System.out.println("denied gps");
                     btnSetLocation.setText("Permission denied, try again ?");
+                    newTaskViewModel.initGps(getContext(),getActivity());
                 default:
                     break;
             }
