@@ -1,7 +1,6 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
 import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,7 +33,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import no.ntnu.mobapp20g6.app1.PhotoProvider;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
-import no.ntnu.mobapp20g6.app1.data.model.Group;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,7 +44,6 @@ public class CreateGroupFragment extends Fragment {
     private NavController navController;
     private Context context;
     private GPS gps;
-    private PhotoProvider photoProvider;
 
     public static CreateGroupFragment newInstance() {
         return new CreateGroupFragment();
@@ -62,7 +58,6 @@ public class CreateGroupFragment extends Fragment {
         this.context = getContext();
         if (context != null) {
             this.gps = new GPS(context);
-            this.photoProvider = new PhotoProvider(context);
         }
     }
 
@@ -81,7 +76,9 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            cgViewModel.getPictureMutableLiveData().setValue(photoProvider.currentPhotoUriLiveData.getValue());
+            cgViewModel.setImageUriPathAfterCaptureIntent();
+        } else {
+            cgViewModel.deleteImageFileAfterCapture();
         }
     }
 
@@ -200,6 +197,7 @@ public class CreateGroupFragment extends Fragment {
             groupDescText.setText("");
             cgViewModel.getPictureMutableLiveData().setValue(null);
             cgViewModel.getLocationMutableLiveData().setValue(null);
+            cgViewModel.deleteImageFileAfterCapture();
             showUserFeedback(R.string.create_group_cancel_action);
             navController.navigate(R.id.action_nav_group_to_nav_home);
         });
@@ -216,7 +214,7 @@ public class CreateGroupFragment extends Fragment {
     }
 
     private void dispatchIntent(){
-        photoProvider.dispatchTakePictureIntent(REQUEST_IMAGE_CAPTURE, this);
+        cgViewModel.startImageCaptureIntent(REQUEST_IMAGE_CAPTURE, this, getContext());
     }
 
     private void displayLoc(Location location) {

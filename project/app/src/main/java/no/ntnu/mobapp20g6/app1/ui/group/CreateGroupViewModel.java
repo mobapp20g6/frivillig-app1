@@ -1,13 +1,16 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
+import android.content.Context;
 import android.location.Location;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.PhotoProvider;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
@@ -17,6 +20,7 @@ public class CreateGroupViewModel extends ViewModel {
 
     private MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<String> pictureMutableLiveData = new MutableLiveData<>();
+    private PhotoProvider photoProvider;
 
     private SharedNonCacheRepository sharedRepo;
     private LoginRepository loginRepository;
@@ -46,6 +50,8 @@ public class CreateGroupViewModel extends ViewModel {
             if (addLocToGroupResult instanceof Result.Success) {
                 Group updatedGroup = (Group) ((Result.Success) addLocToGroupResult).getData();
                 addLocationToGroupCallBack.accept(updatedGroup);
+            } else {
+                addLocationToGroupCallBack.accept(null);
             }
         });
     }
@@ -55,6 +61,8 @@ public class CreateGroupViewModel extends ViewModel {
             if (groupResult instanceof Result.Success) {
                 Group updatedGroup = (Group) ((Result.Success) groupResult).getData();
                 setGroupPictureCallBack.accept(updatedGroup);
+            } else {
+                setGroupPictureCallBack.accept(null);
             }
         });
     }
@@ -69,7 +77,7 @@ public class CreateGroupViewModel extends ViewModel {
                 Group createdGroup = (Group) ((Result.Success) groupResult).getData();
                 createGroupCallBack.accept(createdGroup);
             } else {
-
+                createGroupCallBack.accept(null);
             }
         }) );
     }
@@ -88,5 +96,33 @@ public class CreateGroupViewModel extends ViewModel {
 
     public MutableLiveData<String> getPictureMutableLiveData() {
         return pictureMutableLiveData;
+    }
+
+    public boolean setImageUriPathAfterCaptureIntent() {
+        if (photoProvider == null) {
+            return false;
+        }
+        String imageUriPath = photoProvider.currentPhotoPath;
+        this.pictureMutableLiveData.setValue(imageUriPath);
+        return imageUriPath != null;
+    }
+
+    public void startImageCaptureIntent(Integer requestCode, Fragment returnFragment, Context context){
+        if (context == null || requestCode == null || returnFragment == null) {
+            return;
+        } else {
+            photoProvider = new PhotoProvider(context);
+            photoProvider.dispatchTakePictureIntent(requestCode,returnFragment);
+        }
+    }
+
+    public boolean deleteImageFileAfterCapture() {
+        if (photoProvider == null) {
+            return false;
+        }
+        if (photoProvider.deleteCurrentImageFile()) {
+            this.pictureMutableLiveData.setValue(null);
+            return true;
+        } else return false;
     }
 }
