@@ -42,14 +42,12 @@ public class HomeFragment extends Fragment {
         final Button groupBtn = root.findViewById(R.id.home_btn_group);
 
         createTaskBtn.setOnClickListener(onClick -> {
-            Toast.makeText(getContext(), R.string.no_functionality_added, Toast.LENGTH_LONG).show();
             navController.navigate(R.id.action_nav_home_to_nav_createtask);
         });
         groupBtn.setOnClickListener(onClick -> {
             Toast.makeText(getContext(), R.string.no_functionality_added, Toast.LENGTH_LONG).show();
         });
         accountBtn.setOnClickListener(onClick -> {
-            Toast.makeText(getContext(), R.string.no_functionality_added, Toast.LENGTH_LONG).show();
             navController.navigate(R.id.action_nav_home_to_nav_account);
         });
         logoutBtn.setOnClickListener(onClick -> {
