@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_nav_home_self"
             app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_display_group"
+            app:destination="@id/nav_display_group" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_group"
+            app:destination="@id/nav_group" />
     </fragment>
 
     <fragment
@@ -140,7 +146,7 @@
     <fragment
         android:id="@+id/nav_group"
         android:label="Create Group"
-        android:name="no.ntnu.mobapp20g6.app1.ui.group.CreateGroupFragment">
+        android:name="no.ntnu.mobapp20g6.app1.ui.group.create.CreateGroupFragment">
         <action
             android:id="@+id/action_nav_group_to_nav_home"
             app:destination="@id/nav_home" />

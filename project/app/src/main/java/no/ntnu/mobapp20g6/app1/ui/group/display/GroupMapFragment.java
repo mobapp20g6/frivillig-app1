@@ -25,6 +25,7 @@ import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 
 public class GroupMapFragment extends Fragment {
+
     private LoginRepository loginRepo;
     private MapView map;
     private Context context;
@@ -39,7 +40,7 @@ public class GroupMapFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getContext();
         if(context != null) {
-            gps = new GPS(context);
+            gps = new GPS(context, getActivity());
         }
         loginRepo = LoginRepository.getInstance(new LoginDataSource());
     }
@@ -55,20 +56,15 @@ public class GroupMapFragment extends Fragment {
         Marker myLocationMarker = new Marker(map);
         myLocationMarker.setTitle("My position");
         myLocationMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_my_location_24, null));
-        gps.askForPermissionGPS(getActivity());
+        gps.askForPermissionGPS();
 
         //Making the map
         if(group != null) {
             makeMap(group);
         }
 
-        Location location = gps.getCurrentLocation();
-        if(location != null) {
-            GeoPoint myLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
-            myLocationMarker.setPosition(myLocation);
-            myLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            map.getOverlays().add(myLocationMarker);
-        }
+        gps.startLocationUpdates();
+        gps.getCurrentLocation();
 
         //Observes the location live data. When a change happens the GPS marker will be updated in the map.
         gps.getCurrentGPSLocationLiveData().observe(getViewLifecycleOwner(), observer->{

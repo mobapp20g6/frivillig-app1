@@ -96,4 +96,8 @@ public class UserAccountViewModel extends ViewModel {
             changePwdResultCallback.accept(new Result.Error(new Exception("Not logged in")));
         }
     }
+
+    public boolean hasUserGroup() {
+        return loginRepository.userHasGroup();
+    }
 }

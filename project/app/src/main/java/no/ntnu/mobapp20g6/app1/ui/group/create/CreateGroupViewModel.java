@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.ui.group;
+package no.ntnu.mobapp20g6.app1.ui.group.create;
 
 import android.app.Activity;
 import android.content.Context;
