@@ -26,6 +26,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private UserAccountViewModel userAccountViewModel;
     private NavController navController;
+    private Object object;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
