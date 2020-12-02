@@ -13,6 +13,10 @@
             android:icon="@drawable/ic_baseline_account_circle_24"
             android:title="@string/ic_nav_account" />
         <item
+            android:id="@+id/nav_group"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_group" />
+        <item
             android:id="@+id/nav_public_tasks"
             android:icon="@android:drawable/ic_menu_view"
             android:title="@string/ic_menu_public_tasks" />
@@ -24,19 +28,5 @@
             android:id="@+id/nav_assigned_tasks"
             android:icon="@android:drawable/ic_menu_view"
             android:title="@string/ic_menu_assigned_tasks" />
-        <item android:id="@+id/nav_account"
-            android:icon="@drawable/ic_menu_login"
-            android:title="@string/ic_nav_account"/>
-        <item android:id="@+id/nav_createtask"
-            android:icon="@drawable/ic_menu_login"
-            android:title="@string/ic_nav_createtask"/>
-        <item
-            android:id="@+id/nav_group"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_group" />
-        <item
-            android:id="@+id/nav_display_group"
-            android:icon="@android:drawable/btn_star_big_on"
-            android:title="@string/nav_display_group" />
     </group>
 </menu>
