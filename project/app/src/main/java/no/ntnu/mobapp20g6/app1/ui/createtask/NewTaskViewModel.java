@@ -159,10 +159,11 @@ public class NewTaskViewModel extends ViewModel {
      */
     public void onGpsResultUpdateSetState(@Nullable Location currentLocation, @Nullable Exception exception) {
         if (this.gps != null) {
-            if (this.currentLocationSetStateLiveData == null) {
-                //this.currentLocationSetStateLiveData.setValue("aquire");
+            if (currentLocation == null && exception == null) {
+                // Invalid invocation, both shall never be null - as we either have a error or location
             } else {
-                switch (this.currentLocationSetStateLiveData.getValue()) {
+                // Switch based on the current known state
+                switch (currentLocationSetStateLiveData.getValue()) {
                     case "ready":
                         break;
                     case "aquire":
@@ -173,6 +174,7 @@ public class NewTaskViewModel extends ViewModel {
                             gps.stopLocationUpdates();
                             this.currentLocationSetStateLiveData.setValue("set");
                         } else {
+                            // We got an exception, therefore denied to use GPS
                             this.currentLocationSetStateLiveData.setValue("denied");
                         }
                         break;
@@ -305,7 +307,9 @@ public class NewTaskViewModel extends ViewModel {
 
            @Override
            public void onFinish() {
+               // Update the UI
                currentLocationSetStateLiveData.setValue("timeout");
+               // Tell GPS to abort operation and stop
                onGpsResultUpdateSetState(null,new Exception("timeout"));
            }
        }.start();
