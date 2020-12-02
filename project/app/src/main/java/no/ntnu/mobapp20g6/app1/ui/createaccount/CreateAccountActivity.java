@@ -12,10 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.WelcomeActivity;
-import no.ntnu.mobapp20g6.app1.ui.login.LoginActivity;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -46,7 +46,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         createAccountViewModel.getCreateFormStateLiveData().observe(this, createFormState -> {
             //Set create button to enabled if all data is valid.
             createButton.setEnabled(createFormState.isDataValid());
-            //TODO finish
             if(createFormState.getFirstNameError() != null) {
                 firstNameText.setError(getString(createFormState.getFirstNameError()));
             }
@@ -96,14 +95,14 @@ public class CreateAccountActivity extends AppCompatActivity {
             emailText.setEnabled(false);
             passwordText.setEnabled(false);
             passwordVerifyText.setEnabled(false);
-            createAccountViewModel.createAccount(firstNameText.getText().toString(), lastNameText.getText().toString(),
-                    emailText.getText().toString(), passwordText.getText().toString(), result -> {
+            createAccountViewModel.createAccount(emailText.getText().toString(), passwordText.getText().toString(),
+                    firstNameText.getText().toString(), lastNameText.getText().toString(), result -> {
                 loading.setVisibility(View.GONE);
                 if(result) {
-                    //TODO handle result ok
+                    Toast.makeText(this.getBaseContext(), R.string.successfully_made_account, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(this, WelcomeActivity.class));
                 } else {
-                    //TODO give user feedback.
+                    Toast.makeText(this.getBaseContext(), R.string.failed_to_make_account, Toast.LENGTH_LONG).show();
                     createButton.setEnabled(true);
                     clearButton.setEnabled(true);
                     firstNameText.setEnabled(true);
@@ -113,6 +112,14 @@ public class CreateAccountActivity extends AppCompatActivity {
                     passwordVerifyText.setEnabled(true);
                 }
                     });
+        });
+
+        clearButton.setOnClickListener(onClick -> {
+            firstNameText.setText("");
+            lastNameText.setText("");
+            emailText.setText("");
+            passwordText.setText("");
+            passwordVerifyText.setText("");
         });
     }
 }

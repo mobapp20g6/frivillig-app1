@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.Result;
@@ -14,7 +16,10 @@ import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 
 public class CreateAccountViewModel extends ViewModel {
     private final LoginRepository loginRepository;
-    private MutableLiveData<CreateAccountFormState> createFormState = new MutableLiveData<>();
+    private final MutableLiveData<CreateAccountFormState> createFormState = new MutableLiveData<>();
+
+    private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     CreateAccountViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
@@ -58,7 +63,7 @@ public class CreateAccountViewModel extends ViewModel {
         } else if(!isPasswordValid(pwd)) {
             createFormState.setValue(new CreateAccountFormState(null, null, null, R.string.invalid_password, null));
         } else if(!isVerifyPasswordValid(pwd, pwdVerify)) {
-            createFormState.setValue(new CreateAccountFormState(null, null, null, null, R.string.invalid_password));
+            createFormState.setValue(new CreateAccountFormState(null, null, null, null, R.string.mismatch_password));
         } else {
             createFormState.setValue(new CreateAccountFormState(true));
         }
@@ -74,9 +79,9 @@ public class CreateAccountViewModel extends ViewModel {
             return false;
         }
         if (email.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+            return Patterns.EMAIL_ADDRESS.matcher(email).matches() && validate(email);
         } else {
-            return !email.trim().isEmpty();
+            return !email.trim().isEmpty() && validate(email);
         }
     }
 
@@ -110,5 +115,15 @@ public class CreateAccountViewModel extends ViewModel {
      */
     private boolean isVerifyPasswordValid(String password, String verifyPassword) {
         return password.equals(verifyPassword);
+    }
+
+    /**
+     * Validates if param matches a regex. Can only contain [a-z0-9] + @ [a-z0-9] + . + 2-6 long ending.
+     * @param emailStr email to check if valid.
+     * @return true if param matches the regex.
+     */
+    private static boolean validate(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
     }
 }

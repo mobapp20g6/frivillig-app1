@@ -18,7 +18,7 @@ public class CreateAccountViewModelFactory implements ViewModelProvider.Factory 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(LoginViewModel.class)) {
+        if (modelClass.isAssignableFrom(CreateAccountViewModel.class)) {
             return (T) new CreateAccountViewModel(LoginRepository.getInstance(new LoginDataSource()));
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
