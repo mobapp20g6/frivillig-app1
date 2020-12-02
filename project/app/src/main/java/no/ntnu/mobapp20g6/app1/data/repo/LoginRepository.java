@@ -38,10 +38,6 @@ public class LoginRepository {
         return user != null;
     }
 
-    public void logout() {
-        user = null;
-        dataSource.logout();
-    }
 
     /**
      * Other classes can use this with isLoggedIn() to get the auth token
@@ -75,6 +71,12 @@ public class LoginRepository {
 
         } );
     }
+
+    public void logout() {
+        dataSource.logout();
+        user = null;
+    }
+
 
     public void renewSession(Consumer<Boolean> renewResultCallback) {
         if (isLoggedIn()) {

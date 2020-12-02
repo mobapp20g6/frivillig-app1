@@ -43,6 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.WelcomeActivity;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
@@ -90,7 +91,7 @@ public class NewTaskFragment extends Fragment {
         if (userAccountViewModel.isUserLoggedIn()) {
             userAccountViewModel.fetchUserFromServer();
         } else {
-            navController.navigate(R.id.action_nav_createtask_to_nav_login);
+            startActivity(new Intent(getActivity(), WelcomeActivity.class));
         }
         return root;
     }
