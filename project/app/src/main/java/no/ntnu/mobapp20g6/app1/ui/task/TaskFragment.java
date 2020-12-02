@@ -1,5 +1,6 @@
 package no.ntnu.mobapp20g6.app1.ui.task;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
@@ -85,8 +86,8 @@ public class TaskFragment extends Fragment {
 
         //Disable update and delete button if user is not owner of task.
         if(!taskViewModel.isUserOwnerOfTask()) {
-            buttonUpdateTask.setEnabled(false);
-            buttonDeleteTask.setEnabled(false);
+            buttonUpdateTask.setVisibility(View.GONE);
+            buttonDeleteTask.setVisibility(View.GONE);
         }
         //Disable join task button if user already is member of task and disable add to calendar button if user is not member of task.
         if(taskViewModel.isUserMemberOfTask()) {
@@ -158,6 +159,7 @@ public class TaskFragment extends Fragment {
             builder.setMessage("Are you sure you want to delete \"" + currentActiveTask.getTitle() + "\"?");
             builder.setPositiveButton(R.string.alert_confirm, (dialog, which) -> {
                 taskViewModel.deleteActiveTask(success ->{
+                    getActivity().onBackPressed();
                 });
             });
             builder.setNegativeButton(R.string.alert_cancel, (dialog, which) -> {
