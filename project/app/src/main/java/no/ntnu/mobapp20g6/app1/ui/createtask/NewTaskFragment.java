@@ -395,11 +395,11 @@ public class NewTaskFragment extends Fragment {
         newTaskViewModel.currentDateLiveData.setValue(null);
 
         //FIXME: REMOVE BACK STACK DOESNT WORK
-        FragmentManager fm = getActivity().getSupportFragmentManager();
+        //FragmentManager fm = getActivity().getSupportFragmentManager();
         //fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-         for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-             fm.popBackStack();
-         }
+         //for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+         //    fm.popBackStack();
+         //}
 
     }
 
