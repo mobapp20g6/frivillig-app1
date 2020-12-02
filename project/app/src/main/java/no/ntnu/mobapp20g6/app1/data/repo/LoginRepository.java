@@ -38,17 +38,20 @@ public class LoginRepository {
         return user != null;
     }
 
-    public void logout() {
-        user = null;
-        dataSource.logout();
+    public boolean userHasGroup() {
+        if (user != null) {
+            return user.getUserGroup() != null;
+        }
+        return false;
     }
+
 
     /**
      * Other classes can use this with isLoggedIn() to get the auth token
      * @return if logged in a token, else null
      */
     public String getToken() {
-        return this.user.getTokenWithBearer();
+        return user!= null ? this.user.getTokenWithBearer() : null;
     }
 
     /**
@@ -75,6 +78,12 @@ public class LoginRepository {
 
         } );
     }
+
+    public void logout() {
+        dataSource.logout();
+        user = null;
+    }
+
 
     public void renewSession(Consumer<Boolean> renewResultCallback) {
         if (isLoggedIn()) {

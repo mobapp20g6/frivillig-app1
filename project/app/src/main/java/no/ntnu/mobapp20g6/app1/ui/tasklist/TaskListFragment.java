@@ -17,14 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupViewModel;
+import no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupViewModelFactory;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModel;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModelFactory;
 
@@ -32,13 +33,14 @@ public class TaskListFragment extends Fragment {
 
     private TaskListViewModel taskListViewModel;
     private TaskListViewAdapter taskListViewAdapter;
+    private DisplayGroupViewModel dgViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         NavController navController = NavHostFragment.findNavController(getParentFragment());
         int lastUsedNav = navController.getCurrentDestination().getId();
-        View root = inflater.inflate(R.layout.task_list_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_task_list, container, false);
         View view = container.getRootView();
         TaskViewModel taskViewModel = new ViewModelProvider(requireActivity(), new TaskViewModelFactory()).get(TaskViewModel.class);
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
@@ -48,14 +50,16 @@ public class TaskListFragment extends Fragment {
             taskViewModel.setActiveTask(onClick);
             navController.navigate(R.id.nav_task);
         });
+        dgViewModel = new ViewModelProvider(this, new DisplayGroupViewModelFactory()).get(DisplayGroupViewModel.class);
 
 
-        final FloatingActionButton newTaskFab = root.findViewById(R.id.task_list_fab);
+        final Button newTaskButton = root.findViewById(R.id.add_task_button);
         if(taskListViewModel.isLoggedIn()) {
-            newTaskFab.setVisibility(View.VISIBLE);
-            newTaskFab.setOnClickListener(onClick -> {
+            newTaskButton.setVisibility(View.VISIBLE);
+            newTaskButton.setOnClickListener(onClick -> {
                 //TODO Implement functionality when creating a task. Use navController to go to new fragment.
                 System.out.println("New task fab was clicked.");
+                navController.navigate(R.id.nav_createtask);
             });
         }
 
@@ -66,7 +70,6 @@ public class TaskListFragment extends Fragment {
 
         if(taskListViewModel.isLoggedIn()) {
             //Set title of the view.
-            setDisplayName(root, lastUsedNav);
             setRecyclerViewList(view, lastUsedNav);
         } else {
             if(view != null) {
@@ -75,34 +78,6 @@ public class TaskListFragment extends Fragment {
         }
 
         return root;
-    }
-
-    /**
-     * Sets the display name of fragment.
-     * @param root view root.
-     * @param lastUsedNav id of last navigation button which was pressed.
-     */
-    @SuppressLint("NonConstantResourceId")
-    private void setDisplayName(View root, int lastUsedNav) {
-        TextView title;
-        switch (lastUsedNav) {
-            case R.id.nav_public_tasks:
-                title = root.findViewById(R.id.task_list_title);
-                title.setText(R.string.ic_menu_public_tasks);
-                break;
-
-            case R.id.nav_assigned_tasks:
-                title = root.findViewById(R.id.task_list_title);
-                title.setText(R.string.ic_menu_assigned_tasks);
-                break;
-
-            case R.id.nav_own_tasks:
-                title = root.findViewById(R.id.task_list_title);
-                title.setText(R.string.ic_menu_own_tasks);
-                break;
-
-            default:
-        }
     }
 
     /**
@@ -140,6 +115,15 @@ public class TaskListFragment extends Fragment {
                 });
 
                 taskListViewModel.getOwnTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
+                break;
+
+            case R.id.nav_group_tasks:
+                dgViewModel.getAllGroupTasks(listResult -> {
+                    if (listResult == null && view != null) {
+                        setSnackbarText("Unable to load group tasks.", view).show();
+                    }
+                });
+                dgViewModel.getGroupTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
                 break;
 
             default:

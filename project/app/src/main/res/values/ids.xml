@@ -9,6 +9,8 @@
     <item name="account_email" type="id" />
     <item name="account_info_title" type="id" />
     <item name="account_email_value" type="id" />
+    <item name="createtask_field_title" type="id" />
+    <item name="createtask_field_maxusers" type="id" />
     <item name="account_resetpw_title" type="id" />
     <item name="resetpass_old" type="id" />
     <item name="resetpass_new" type="id" />

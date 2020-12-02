@@ -46,6 +46,8 @@ public class TaskListViewAdapter extends RecyclerView.Adapter<TaskListViewAdapte
         if(task.getPicture() != null && !task.getPicture().getId().isEmpty()) {
             System.out.println("Loading picture for task: " + task.getTitle());
             picasso.load(RestService.DOMAIN + PictureApi.PREFIX + "getimage?name=" + task.getPicture().getId() + "&width=" + "480").into(holder.imageView);
+        } else {
+            holder.imageView.setImageResource(android.R.drawable.ic_menu_crop);
         }
         holder.bind(task, listener);
     }

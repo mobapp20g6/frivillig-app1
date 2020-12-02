@@ -51,7 +51,7 @@ public interface ServiceApi {
             @Nullable@Field("description") String description,
             @Field("maxusers") Long maxUsers,
             @Field("scheduledate") String scheduleDate,
-            @Nullable@Field("group") Long groupId
+            @Nullable@Field("groupid") Long groupId
     );
 
     @DELETE(PREFIX + "removetask")
@@ -84,6 +84,7 @@ public interface ServiceApi {
     Call<Group> createGroup (
             @Header("Authorization") String token,
             @Field("title") String title,
+            @Field("description") String description,
             @Nullable@Field("orgid") Long orgId
     );
 
@@ -104,14 +105,12 @@ public interface ServiceApi {
             @Field("groupid") Long groupId
     );
 
-    @FormUrlEncoded
-    @POST(PREFIX + "getallgrouptasks")
+    @GET(PREFIX + "getallgrouptasks")
     Call<List<Task>> getAllGroupTasks(
             @Header("Authorization") String token,
             @Query("groupid") Long groupId
     );
 
-    @FormUrlEncoded
     @GET(PREFIX + "isownerofgroup")
     Call<Void> isOwnerOfGroup(
             @Header("Authorization") String token,
@@ -119,7 +118,7 @@ public interface ServiceApi {
     );
 
     @FormUrlEncoded
-    @GET(PREFIX + "addlocation")
+    @POST(PREFIX + "addlocation")
     Call<Task> addLocationToTask(
             @Header("Authorization") String token,
             @Field("taskid") Long taskId,
@@ -132,7 +131,7 @@ public interface ServiceApi {
     );
 
     @FormUrlEncoded
-    @GET(PREFIX + "addlocation")
+    @POST(PREFIX + "addlocation")
     Call<Group> addLocationToGroup(
             @Header("Authorization") String token,
             @Field("groupid") Long groupId,
