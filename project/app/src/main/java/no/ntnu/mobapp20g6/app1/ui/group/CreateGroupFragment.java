@@ -1,6 +1,7 @@
 package no.ntnu.mobapp20g6.app1.ui.group;
 
 import androidx.annotation.StringRes;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -30,9 +31,9 @@ import com.google.gson.JsonPrimitive;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import no.ntnu.mobapp20g6.app1.PhotoProvider;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.GPS;
+import no.ntnu.mobapp20g6.app1.data.model.Group;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -57,7 +58,7 @@ public class CreateGroupFragment extends Fragment {
                 .get(CreateGroupViewModel.class);
         this.context = getContext();
         if (context != null) {
-            this.gps = new GPS(context);
+            this.gps = new GPS(context, getActivity());
         }
     }
 
@@ -70,7 +71,6 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        gps.stopLocationUpdates();
     }
 
     @Override
@@ -133,24 +133,12 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        final Location[] loc = {null};
-
         addLocBtn.setOnClickListener(v -> {
-            gps.askForPermissionGPS(getActivity());
-            Location location = gps.getCurrentLocation();
-            loc[0] = gps.getCurrentLocation();
-            if (loc[0] != null) {
-                showUserFeedback(R.string.location_found);
-                Location observeLoc = loc[0];
-                cgViewModel.getLocationMutableLiveData().setValue(observeLoc);
-
-            }
+            cgViewModel.onButtonPressRunGpsBasedOnSetState();
         });
 
         removeLocBtn.setOnClickListener(v -> {
-            loc[0] = null;
-            cgViewModel.getLocationMutableLiveData().setValue(null);
-            showUserFeedback(R.string.location_removed);
+            cgViewModel.removeGpsAndLiveData();
         });
 
         addPicBtn.setOnClickListener(v -> {
@@ -196,7 +184,7 @@ public class CreateGroupFragment extends Fragment {
             groupNameText.setText("");
             groupDescText.setText("");
             cgViewModel.getPictureMutableLiveData().setValue(null);
-            cgViewModel.getLocationMutableLiveData().setValue(null);
+            cgViewModel.getLocationStateMutableLiveData().setValue(null);
             cgViewModel.deleteImageFileAfterCapture();
             showUserFeedback(R.string.create_group_cancel_action);
             navController.navigate(R.id.action_nav_group_to_nav_home);
@@ -204,32 +192,83 @@ public class CreateGroupFragment extends Fragment {
     }
 
     private void observeLiveData() {
-        cgViewModel.getPictureMutableLiveData().observe(getViewLifecycleOwner(), this::displayPictureInUi);
-        cgViewModel.getLocationMutableLiveData().observe(getViewLifecycleOwner(), this::displayLoc);
+        cgViewModel.getPictureMutableLiveData().observe(getViewLifecycleOwner(), this::displayPicture);
+        cgViewModel.getLocationLiveData().observe(getViewLifecycleOwner(), new Observer<Location>() {
+            @Override
+            public void onChanged(Location location) {
+                cgViewModel.onGpsResultUpdateSetState(location, null);
+
+            }
+        });
+
+        cgViewModel.getLocationStateMutableLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                displayLoc(s);
+            }
+        });
+
     }
 
     private void initBtns() {
-        displayLoc(cgViewModel.getLocationMutableLiveData().getValue());
-        displayPictureInUi(cgViewModel.getPictureMutableLiveData().getValue());
+        cgViewModel.initGps(getContext(), getActivity());
+        displayLoc(cgViewModel.getLocationStateMutableLiveData().getValue());
+        displayPicture(cgViewModel.getPictureMutableLiveData().getValue());
+    }
+
+    private void displayLoc(String state) {
+        Button addLocBtn = getView().findViewById(R.id.create_group_extras_input_btn_location);
+        Button removeLocBtn = getView().findViewById(R.id.create_group_extras_btn_remove_location);
+        if (state == null) {
+            removeLocBtn.setVisibility(View.GONE);
+            addLocBtn.setVisibility(View.GONE);
+        } else {
+            switch (state) {
+                case "ready":
+                    addLocBtn.setText("Add Location");
+                    addLocBtn.setEnabled(true);
+                    addLocBtn.setVisibility(View.VISIBLE);
+                    removeLocBtn.setVisibility(View.GONE);
+                    break;
+                case "aquire":
+                    addLocBtn.setText("Getting GPS position fix");
+                    addLocBtn.setEnabled(false);
+                    cgViewModel.startGpsFailureTimer();
+                    break;
+                case "set":
+                    addLocBtn.setEnabled(true);
+                    addLocBtn.setVisibility(View.GONE);
+                    removeLocBtn.setVisibility(View.VISIBLE);
+                    break;
+                case "denied":
+                    addLocBtn.setVisibility(View.VISIBLE);
+                    removeLocBtn.setVisibility(View.GONE);
+                    addLocBtn.setText("Permission denied, try again ?");
+                    break;
+                case "failed":
+                    addLocBtn.setEnabled(false);
+                    addLocBtn.setVisibility(View.VISIBLE);
+                    removeLocBtn.setVisibility(View.GONE);
+                    addLocBtn.setText("Unable to get GPS, restart app");
+                    break;
+                case "timeout":
+                    addLocBtn.setText("Failed, try again ?");
+                    addLocBtn.setEnabled(true);
+                    addLocBtn.setVisibility(View.VISIBLE);
+                    removeLocBtn.setVisibility(View.GONE);
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 
     private void dispatchIntent(){
         cgViewModel.startImageCaptureIntent(REQUEST_IMAGE_CAPTURE, this, getContext());
     }
 
-    private void displayLoc(Location location) {
-        Button addLocBtn = getView().findViewById(R.id.create_group_extras_input_btn_location);
-        Button removeLocBtn = getView().findViewById(R.id.create_group_extras_btn_remove_location);
-        if (location == null) {
-            removeLocBtn.setVisibility(View.GONE);
-            addLocBtn.setVisibility(View.VISIBLE);
-        } else {
-            removeLocBtn.setVisibility(View.VISIBLE);
-            addLocBtn.setVisibility(View.GONE);
-        }
-    }
-
-    private void displayPictureInUi(String filePath) {
+    private void displayPicture(String filePath) {
         Button addPicBtn = getView().findViewById(R.id.create_group_extras_btn_picture);
         Button removePicBtn = getView().findViewById(R.id.create_group_extras_btn_remove_picture);
         ImageView picture = getView().findViewById(R.id.create_group_extras_preview_picture);
@@ -254,11 +293,7 @@ public class CreateGroupFragment extends Fragment {
                     } else {
                         showUserFeedback(R.string.create_group_success_creation);
                         if (cgViewModel.isLocationSet()) {
-                            String latitude = String.valueOf(cgViewModel.getLocationMutableLiveData().getValue().getLatitude());
-                            String longitude = String.valueOf(cgViewModel.getLocationMutableLiveData().getValue().getLongitude());
-                            addLocToGroup(createGroupCallBack.getGroupId(),
-                                    latitude, longitude,
-                                    null, null, null, null);
+                            addLocToGroup(createGroupCallBack);
                         }
                         if (cgViewModel.isPictureSet()) {
                             addPicToGroup(createGroupCallBack.getGroupId(),
@@ -280,12 +315,8 @@ public class CreateGroupFragment extends Fragment {
     }
 
     private void addLocToGroup(
-            Long groupID,
-            String latitude, String longitude,
-            String streetAddr, String city, Long postal, String country) {
-        cgViewModel.addLocToGroup(groupID,
-                latitude, longitude,
-                streetAddr, city, postal, country,
+            Group group) {
+        cgViewModel.addLocToGroup(group,
                 addLocToGroupCallBack -> {
                     if (addLocToGroupCallBack == null) {
                         showUserFeedback(R.string.create_group_failed_loc_add);
