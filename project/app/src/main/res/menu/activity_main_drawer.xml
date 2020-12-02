@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_baseline_account_circle_24"
             android:title="@string/ic_nav_account" />
         <item
-            android:id="@+id/nav_group"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_group" />
-        <item
             android:id="@+id/nav_public_tasks"
             android:icon="@android:drawable/ic_menu_view"
             android:title="@string/ic_menu_public_tasks" />

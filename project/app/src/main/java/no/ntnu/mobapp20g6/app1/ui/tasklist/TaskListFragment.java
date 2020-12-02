@@ -24,6 +24,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupViewModel;
+import no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupViewModelFactory;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModel;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModelFactory;
 
@@ -31,6 +33,7 @@ public class TaskListFragment extends Fragment {
 
     private TaskListViewModel taskListViewModel;
     private TaskListViewAdapter taskListViewAdapter;
+    private DisplayGroupViewModel dgViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -47,6 +50,7 @@ public class TaskListFragment extends Fragment {
             taskViewModel.setActiveTask(onClick);
             navController.navigate(R.id.nav_task);
         });
+        dgViewModel = new ViewModelProvider(this, new DisplayGroupViewModelFactory()).get(DisplayGroupViewModel.class);
 
 
         final Button newTaskButton = root.findViewById(R.id.add_task_button);
@@ -111,6 +115,15 @@ public class TaskListFragment extends Fragment {
                 });
 
                 taskListViewModel.getOwnTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
+                break;
+
+            case R.id.nav_group_tasks:
+                dgViewModel.getAllGroupTasks(listResult -> {
+                    if (listResult == null && view != null) {
+                        setSnackbarText("Unable to load group tasks.", view).show();
+                    }
+                });
+                dgViewModel.getGroupTasks().observe(getViewLifecycleOwner(), tasks -> taskListViewAdapter.setTaskList(tasks));
                 break;
 
             default:

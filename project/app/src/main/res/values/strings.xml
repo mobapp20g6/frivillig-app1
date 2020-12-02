@@ -37,7 +37,6 @@
     <string name="ic_menu_public_tasks">Public Tasks</string>
     <string name="ic_menu_own_tasks">Own Tasks</string>
     <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
-    <string name="ic_nav_createtask">Create task</string>
 
     <string name="task_group_name">Public</string>
     <string name="task_title">Task Title</string>
@@ -96,4 +95,17 @@
     <string name="location_found">Location added.</string>
     <string name="location_removed">Location removed.</string>
     <string name="location_not_found">Couldn\'t add location.</string>
+    <!-- Display Group -->
+    <string name="display_group_name_text">Group Name Placeholder</string>
+    <string name="display_group_description_no_data">This group has no description</string>
+    <string name="display_group_map_button_text">Fullscreen Map</string>
+    <string name="display_group_btn_update_text">Update</string>
+    <string name="display_group_btn_delete_text">Delete</string>
+    <string name="display_group_btn_show_tasks_text">Show Tasks</string>
+    <string name="display_group_image_description">Group Image</string>
+
+    <!-- General Use Strings -->
+    <string name="entity_description">Description</string>
+    <string name="nav_display_group">Group</string>
+
 </resources>

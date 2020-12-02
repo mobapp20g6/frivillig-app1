@@ -105,14 +105,12 @@ public interface ServiceApi {
             @Field("groupid") Long groupId
     );
 
-    @FormUrlEncoded
-    @POST(PREFIX + "getallgrouptasks")
+    @GET(PREFIX + "getallgrouptasks")
     Call<List<Task>> getAllGroupTasks(
             @Header("Authorization") String token,
             @Query("groupid") Long groupId
     );
 
-    @FormUrlEncoded
     @GET(PREFIX + "isownerofgroup")
     Call<Void> isOwnerOfGroup(
             @Header("Authorization") String token,

@@ -38,6 +38,13 @@ public class LoginRepository {
         return user != null;
     }
 
+    public boolean userHasGroup() {
+        if (user != null) {
+            return user.getUserGroup() != null;
+        }
+        return false;
+    }
+
 
     /**
      * Other classes can use this with isLoggedIn() to get the auth token
