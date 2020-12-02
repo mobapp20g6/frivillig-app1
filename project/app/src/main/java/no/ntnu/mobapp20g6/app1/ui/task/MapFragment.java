@@ -2,7 +2,6 @@ package no.ntnu.mobapp20g6.app1.ui.task;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -35,7 +34,6 @@ public class MapFragment extends Fragment {
     private TaskViewModel taskViewModel;
     private MapView map;
     private Context context;
-    protected LocationManager locationManager;
     private GPS gps;
 
     public MapFragment() {
@@ -48,7 +46,7 @@ public class MapFragment extends Fragment {
         taskViewModel = new ViewModelProvider(requireActivity(), new TaskViewModelFactory()).get(TaskViewModel.class);
         context = getContext();
         if(context != null) {
-            gps = new GPS(context);
+            gps = new GPS(context, getActivity());
         }
     }
 
@@ -63,20 +61,15 @@ public class MapFragment extends Fragment {
         Marker myLocationMarker = new Marker(map);
         myLocationMarker.setTitle("My position");
         myLocationMarker.setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_my_location_24, null));
-        gps.askForPermissionGPS(getActivity());
+        gps.askForPermissionGPS();
 
         //Making the map
         if(currentActiveTask != null) {
             makeMap(currentActiveTask);
         }
 
-        Location location = gps.getCurrentLocation();
-        if(location != null) {
-            GeoPoint myLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
-            myLocationMarker.setPosition(myLocation);
-            myLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            map.getOverlays().add(myLocationMarker);
-        }
+        gps.startLocationUpdates();
+        gps.getCurrentLocation();
 
         //Observes the location live data. When a change happens the GPS marker will be updated in the map.
         gps.getCurrentGPSLocationLiveData().observe(getViewLifecycleOwner(), observer->{

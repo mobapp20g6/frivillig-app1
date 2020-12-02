@@ -3,7 +3,6 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,15 +40,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import no.ntnu.mobapp20g6.app1.R;
-import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
+import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModel;
+import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModelFactory;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -64,9 +64,8 @@ public class NewTaskFragment extends Fragment {
 
     private NewTaskViewModel newTaskViewModel;
     private UserAccountViewModel userAccountViewModel;
+    private TaskViewModel taskViewModel;
     private NavController navController;
-    private Context context;
-    private GPS gps;
 
 
     @Override
@@ -79,11 +78,7 @@ public class NewTaskFragment extends Fragment {
         this.userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
                 .get(UserAccountViewModel.class);
         this.navController = NavHostFragment.findNavController(getParentFragment());
-
-        context = getContext();
-        if(context != null) {
-            gps = new GPS(context);
-        }
+        this.taskViewModel = new ViewModelProvider(requireActivity(), new TaskViewModelFactory()).get(TaskViewModel.class);
 
     }
 
@@ -115,14 +110,17 @@ public class NewTaskFragment extends Fragment {
         }
     }
 
-
     /**
      *  Cleanup and delete image if taken
      */
     @Override
     public void onDestroy() {
         super.onDestroy();
-        gps.stopLocationUpdates();
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+       // for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+       //     fm.popBackStack();
+       // }
     }
 
     @Override
@@ -155,7 +153,8 @@ public class NewTaskFragment extends Fragment {
 
         // Init the state for the UI
         displayDateInUi(newTaskViewModel.getCurrentDateLiveData().getValue());
-        displayLocationBtnUi(newTaskViewModel.getCurrentLocationLiveData().getValue());
+        newTaskViewModel.initGps(getContext(),getActivity());
+        displayLocationInUiFromStateString(newTaskViewModel.getCurrentLocationSetStateLiveData().getValue());
         displayPictureInUi(newTaskViewModel.getCurrentImageBitmapUriLiveData().getValue());
 
 
@@ -182,11 +181,12 @@ public class NewTaskFragment extends Fragment {
             }
         });
 
-        newTaskViewModel.currentLocationLiveData.observe(getViewLifecycleOwner(), new Observer<Location>() {
+        newTaskViewModel.getCurrentLocationLiveData().observe(getViewLifecycleOwner(), new Observer<Location>() {
             @Override
             public void onChanged(Location location) {
-                displayLocationBtnUi(location);
-                gps.stopLocationUpdatesAfterDelay();
+                System.out.println("LOCATION DATA UPDATED");
+                newTaskViewModel.onGpsResultUpdateSetState(location, null);
+
             }
         });
 
@@ -198,6 +198,15 @@ public class NewTaskFragment extends Fragment {
                 displayDateInUi(date);
             }
         });
+         //UPDATE UI WHEN GPS-STATE IS WRITTEN TO (CAN BE WRITTEN FROM GPS-LIVEDATA OR BY USER BUTTON PRESS
+        newTaskViewModel.getCurrentLocationSetStateLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                System.out.println("UI LOCATION STATE UPDATED => " + s);
+                displayLocationInUiFromStateString(s);
+
+            }
+        });
 
         /**
          *  BUTTONS
@@ -206,16 +215,14 @@ public class NewTaskFragment extends Fragment {
         btnSetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gps.askForPermissionGPS(getActivity());
-                android.location.Location androidStoleOurClass = gps.getCurrentLocation();
-                newTaskViewModel.currentLocationLiveData.setValue(androidStoleOurClass);
+                newTaskViewModel.onButtonPressRunGpsBasedOnSetState();
             }
         });
         // BUTTONS LOCATION REMOVE
         btnUnsetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.currentLocationLiveData.setValue(null);
+                newTaskViewModel.removeGpsAndLiveData();
             }
         });
 
@@ -276,6 +283,7 @@ public class NewTaskFragment extends Fragment {
                 newTaskViewModel.createTask(fieldTaskTitle.getText().toString(),fieldTaskDescr.getText().toString(),participants,radioButtonGroup.isChecked(),(result) -> {
                     if (result instanceof Result.Success && ((Result.Success) result).getData() != null) {
                         Task createdTask = (Task) ((Result.Success) result).getData();
+                        // LOCATION IS SET
                         if (newTaskViewModel.isLocationSet()) {
                             newTaskViewModel.attachLocationToTask(createdTask, (addTaskResult) -> {
                                 if (addTaskResult instanceof Result.Success) {
@@ -283,34 +291,61 @@ public class NewTaskFragment extends Fragment {
                                         //we got null == error
                                         errorOccurred.set(true);
                                     } else {
+                                        // LOCATION AND IMAGE
+                                        if (newTaskViewModel.currentImageBitmapUriLiveData.getValue() != null) {
+                                            newTaskViewModel.attachImageToTask(createdTask, newTaskViewModel.currentImageBitmapUriLiveData.getValue(), (pictureResult) -> {
+                                                if (pictureResult instanceof Result.Success) {
+                                                    if (((Result.Success) pictureResult).getData() != null) {
+                                                        newTaskViewModel.deleteImageFileAfterCapture();
+                                                        System.out.println("Image added OK");
+                                                        Task ok = (Task) ((Result.Success) pictureResult).getData();
+                                                        navigateToCreatedTask(ok,navController);
+                                                    } else {
+                                                        errorOccurred.set(true);
+                                                    }
+                                                } else {
+                                                    errorOccurred.set(true);
+                                                }
+                                            });
+                                        } else {
+                                            // LOCATION AND !IMAGE
+                                            System.out.println("Image not set");
+                                            Task ok = (Task) ((Result.Success) addTaskResult).getData();
+                                            navigateToCreatedTask(ok,navController);
+                                        }
                                         System.out.println("Location added OK");
                                     }
                                 }
                             });
-                        }
-
-                        if (newTaskViewModel.currentImageBitmapUriLiveData.getValue() != null) {
-                            //TODO: Implement in viewmodel
-                            newTaskViewModel.attachImageToTask(createdTask, newTaskViewModel.currentImageBitmapUriLiveData.getValue(), (pictureResult) -> {
-                                if (pictureResult instanceof Result.Success) {
-                                    if (((Result.Success) pictureResult).getData() != null) {
-                                        newTaskViewModel.deleteImageFileAfterCapture();
-                                        System.out.println("Image added OK");
+                        } else {
+                            // !LOCATION SET AND IMAGE SET
+                            if (newTaskViewModel.currentImageBitmapUriLiveData.getValue() != null) {
+                                newTaskViewModel.attachImageToTask(createdTask, newTaskViewModel.currentImageBitmapUriLiveData.getValue(), (pictureResult) -> {
+                                    if (pictureResult instanceof Result.Success) {
+                                        if (((Result.Success) pictureResult).getData() != null) {
+                                            newTaskViewModel.deleteImageFileAfterCapture();
+                                            System.out.println("Image added OK");
+                                            Task ok = (Task) ((Result.Success) pictureResult).getData();
+                                            navigateToCreatedTask(ok,navController);
+                                        } else {
+                                            errorOccurred.set(true);
+                                        }
                                     } else {
                                         errorOccurred.set(true);
                                     }
-                                } else {
-                                    errorOccurred.set(true);
-                                }
-                            });
-                        } else {
-                            System.out.println("Image not set");
+                                });
+                            } else {
+                                // !LOCATION SET AND !IMAGE SET
+                                System.out.println("Image not set");
+                                Task ok = createdTask;
+                                navigateToCreatedTask(ok,navController);
+                            }
                         }
-                        //navController.navigate(R.id.action_nav_account_to_nav_login);
-                        if (errorOccurred.get()) {
-                            snackbar.setText("Error, try again").setTextColor(Color.YELLOW);
+
+                        if (errorOccurred.get() && createdTask != null) {
+                            snackbar.setText("Created task, but error occurred").setTextColor(Color.YELLOW);
                         } else {
-                            snackbar.setText("Task created OK").setTextColor(Color.GREEN);
+                            snackbar.setText("Created task " + createdTask.getTitle()).setTextColor(Color.GREEN);
                         }
                         snackbar.show();
                     } else {
@@ -324,6 +359,10 @@ public class NewTaskFragment extends Fragment {
             }
         });
 
+
+        /**
+         * Cancel create task and navigate one back
+         */
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -331,14 +370,27 @@ public class NewTaskFragment extends Fragment {
                 fieldTaskDescr.setText("");
                 fieldTaskTitle.setText("");
                 fieldTaskTitle.requestFocus();
-                newTaskViewModel.currentLocationLiveData.setValue(null);
                 newTaskViewModel.currentDateLiveData.setValue(null);
                 newTaskViewModel.deleteImageFileAfterCapture();
                 newTaskViewModel.currentImageBitmapUriLiveData.setValue(null);
+                navController.navigateUp();
             }
         });
     }
 
+    private void navigateToCreatedTask(Task task, NavController navController) {
+
+        taskViewModel.setActiveTask(task);
+        taskViewModel.setForceLoadSelectedTaskId(task.getId());
+        navController.navigate(R.id.nav_task);
+        //FIXME: REMOVE BACK STACK DOESNT WORK
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        //fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+         for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+             fm.popBackStack();
+         }
+
+    }
 
     /**
      *  Prettify a date object and display it in a selected displayElement
@@ -352,20 +404,62 @@ public class NewTaskFragment extends Fragment {
             displayElement.setText("No date scheduled");
             displayElement.setTextColor(Color.GRAY);
         } else {
-            SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            SimpleDateFormat shortDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             displayElement.setText(selectedDateTxt + " " + shortDate.format(date));
         }
     }
 
-    private void displayLocationBtnUi(Location location) {
+    private void displayLocationInUiFromStateString(String state) {
         Button btnSetLocation = getView().findViewById(R.id.createtask_extras_btn_location);
         Button btnUnsetLocation = getView().findViewById(R.id.createtask_extras_btn_remove_location);
-        if (location == null) {
+        if (state == null) {
             btnUnsetLocation.setVisibility(View.GONE);
-            btnSetLocation.setVisibility(View.VISIBLE);
-        } else {
-            btnUnsetLocation.setVisibility(View.VISIBLE);
             btnSetLocation.setVisibility(View.GONE);
+        } else {
+            switch (state) {
+                case "ready":
+                    System.out.println("ready gps");
+                    btnSetLocation.setText("Set location from GPS");
+                    btnSetLocation.setEnabled(true);
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    break;
+                case "aquire":
+                    System.out.println("aquiring gps");
+                    btnSetLocation.setText("Getting GPS position fix");
+                    btnSetLocation.setEnabled(false);
+                    newTaskViewModel.startGpsFailureTimer();
+                    break;
+                case "set":
+                    System.out.println("setting gps");
+                    btnSetLocation.setEnabled(true);
+                    btnSetLocation.setVisibility(View.GONE);
+                    btnUnsetLocation.setVisibility(View.VISIBLE);
+                    break;
+                case "denied":
+                    System.out.println("denied gps");
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    btnSetLocation.setText("Permission denied, try again ?");
+                    break;
+                case "failed":
+                    System.out.println("timeout gps");
+                    btnSetLocation.setEnabled(false);
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    btnSetLocation.setText("Unable to get GPS, restart app");
+                    break;
+                case "timeout":
+                    System.out.println("ready gps, failed last time");
+                    btnSetLocation.setText("Failed, try again ?");
+                    btnSetLocation.setEnabled(true);
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 

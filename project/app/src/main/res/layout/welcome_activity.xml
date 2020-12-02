@@ -50,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                    app:srcCompat="@drawable/frivillig_app_icon" />
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -60,7 +60,7 @@
         android:id="@+id/register_button"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="125dp"
         android:backgroundTint="#FFBA08"
         android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
