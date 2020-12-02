@@ -50,7 +50,6 @@ public class HomeFragment extends Fragment {
             } else {
                 navController.navigate(R.id.action_nav_home_to_nav_group);
             }
-            Toast.makeText(getContext(), R.string.no_functionality_added, Toast.LENGTH_LONG).show();
         });
         accountBtn.setOnClickListener(onClick -> {
             navController.navigate(R.id.action_nav_home_to_nav_account);
