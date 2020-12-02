@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -31,6 +32,7 @@ import java.util.Date;
 
 import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.R;
+import no.ntnu.mobapp20g6.app1.WelcomeActivity;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 
@@ -193,16 +195,8 @@ public class UserAccountFragment extends Fragment {
                             fieldOldPass.setText("");
                             fieldNewVerifyPass.setText("");
                             snackbar.setText("Success, password changed! Logging out").setTextColor(Color.GREEN);
-
-                            //Reset side menu to default
-                            //TODO: Fix nav menu to reflect loggedin status
-
-                            Activity main = (MainActivity)getActivity();
-                            TextView navMainText = main.findViewById(R.id.nav_user_name);
-                            TextView navUnderText = main.findViewById(R.id.nav_user_mail);
-                            navMainText.setText(R.string.nav_header_title);
-                            navUnderText.setText(R.string.nav_header_subtitle);
-                            navController.navigate(R.id.action_nav_account_to_nav_login);
+                            userAccountViewModel.logoutCurrentUser();
+                            startActivity(new Intent(getActivity(), WelcomeActivity.class));
                         } else {
                             snackbar.setText("Error, check if current password is correct!").setTextColor(Color.YELLOW);
                         }

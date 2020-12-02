@@ -9,7 +9,17 @@
         android:id="@+id/nav_home"
         android:name="no.ntnu.mobapp20g6.app1.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_account"
+            app:destination="@id/nav_account" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_createtask"
+            app:destination="@id/nav_createtask" />
+        <action
+            android:id="@+id/action_nav_home_self"
+            app:destination="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_login"
@@ -70,9 +80,6 @@
         android:name="no.ntnu.mobapp20g6.app1.ui.createtask.NewTaskFragment"
         android:label="@string/menu_createtask"
         tools:layout="@layout/fragment_createtask" >
-        <action
-            android:id="@+id/action_nav_createtask_to_nav_login"
-            app:destination="@id/nav_login" />
         <action
             android:id="@+id/action_nav_createtask_to_nav_task"
             app:destination="@id/nav_task" />
