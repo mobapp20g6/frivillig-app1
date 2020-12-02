@@ -122,7 +122,7 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:hint="Email"
-                            android:inputType="textPersonName" />
+                            android:inputType="textEmailAddress" />
                     </FrameLayout>
 
                     <FrameLayout
