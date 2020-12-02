@@ -27,7 +27,7 @@ public interface PictureApi {
     Call<Task> setTaskPicture(
             @Header("Authorization") String token,
             @Part("taskid") Long taskId,
-            @Part("image")MultipartBody.Part picture
+            @Part MultipartBody.Part picture
             );
 
     @Multipart
@@ -35,6 +35,6 @@ public interface PictureApi {
     Call<Group> setGroupPicture(
             @Header("Authorization") String token,
             @Part("groupid") Long groupId,
-            @Part("image") MultipartBody.Part picture
+            @Part MultipartBody.Part picture
     );
 }

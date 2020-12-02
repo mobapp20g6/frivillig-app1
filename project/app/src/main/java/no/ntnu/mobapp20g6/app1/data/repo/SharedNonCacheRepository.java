@@ -1,5 +1,7 @@
 package no.ntnu.mobapp20g6.app1.data.repo;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -36,9 +38,9 @@ public class SharedNonCacheRepository {
         return instance;
     }
 
-    public void createGroup(String token, String title, Long orgId,
+    public void createGroup(String token, String title, String description, Long orgId,
                             Consumer<Result<Group>> createGroupCallBack) {
-        groupDataSource.createGroup(token, title, orgId, (createGroupResult) -> {
+        groupDataSource.createGroup(token, title, description, orgId, (createGroupResult) -> {
             createGroupCallBack.accept(createGroupResult);
         });
     }
@@ -72,7 +74,7 @@ public class SharedNonCacheRepository {
     }
 
     public void addLocationToTask(String token, Long taskId,
-                                  String latitude, String longitude,
+                                  Double latitude, Double longitude,
                                   String streetAddr, String city, Long postal, String country,
                                   Consumer<Result<Task>> addLocationToTaskCallBack) {
         locationDataSource.addLocationToTask(token, taskId,
@@ -101,5 +103,11 @@ public class SharedNonCacheRepository {
 
     public void setGroupLogo(String token, Long groupId, String picturePath, Consumer<Result<Group>>setGroupLogoCallback) {
         pictureDataSource.setGroupLogo(token, groupId, picturePath, setGroupLogoCallback);
+    }
+
+    public void getVoluntaryBrregOrg(String orgid, Consumer<Result<JsonObject>> getVoluntaryBrreggOrgCallBack) {
+        groupDataSource.getBrregOrg(orgid, brreggResult -> {
+            getVoluntaryBrreggOrgCallBack.accept(brreggResult);
+        });
     }
 }

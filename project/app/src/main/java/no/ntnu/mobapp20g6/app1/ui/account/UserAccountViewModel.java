@@ -55,6 +55,11 @@ public class UserAccountViewModel extends ViewModel {
         return this.resetFormstate;
     }
 
+    public boolean logoutCurrentUser() {
+        this.loginRepository.logout();
+        return !(loginRepository.isLoggedIn());
+    }
+
 
     public void resetPasswordDataChanged(String oldpass, String newpass, String verifypass) {
         if (!(isPasswordValid(oldpass))) {

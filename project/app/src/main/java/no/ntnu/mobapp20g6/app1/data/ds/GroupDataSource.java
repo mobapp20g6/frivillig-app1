@@ -2,12 +2,17 @@ package no.ntnu.mobapp20g6.app1.data.ds;
 
 import android.util.Log;
 
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import no.ntnu.mobapp20g6.app1.data.BrregService;
 import no.ntnu.mobapp20g6.app1.data.RestService;
 import no.ntnu.mobapp20g6.app1.data.Result;
+import no.ntnu.mobapp20g6.app1.data.api.BrregAPI;
 import no.ntnu.mobapp20g6.app1.data.api.ServiceApi;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
@@ -18,6 +23,7 @@ import retrofit2.Retrofit;
 
 public class GroupDataSource {
     private final ServiceApi serviceApi;
+    private final BrregAPI brregApi;
 
     //http response codes
     private static final int OK = 200;
@@ -29,10 +35,14 @@ public class GroupDataSource {
     public GroupDataSource() {
         Retrofit rest = RestService.getRetrofitClient();
         serviceApi = rest.create(ServiceApi.class);
+
+        Retrofit brreg = BrregService.getRetrofit();
+        brregApi = brreg.create(BrregAPI.class);
+
     }
 
     public void createGroup(
-            String token, String title, Long orgId,
+            String token, String title, String description, Long orgId,
             Consumer<Result<Group>> createGroupCallBack) {
         try {
             if (token == null) {
@@ -40,7 +50,7 @@ public class GroupDataSource {
                 createGroupCallBack.accept(new Result.Error(new Exception("Token")));
             } else {
 
-                Call<Group> createGroupCall = serviceApi.createGroup(token, title, orgId);
+                Call<Group> createGroupCall = serviceApi.createGroup(token, title, description, orgId);
                 createGroupCall.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
@@ -308,6 +318,51 @@ public class GroupDataSource {
             Log.d("FAIL_IS_OWNER_OF_GROUP", "Client error");
             Log.d("FAIL_IS_OWNER_OF_GROUP", e.getMessage());
             isOwnerOfGroupCallBack.accept(new Result.Error(new Exception("Client error")));
+        }
+    }
+
+    public void getBrregOrg(
+            String orgId,
+            Consumer<Result<JsonObject>> brregCallback) {
+        try {
+            Call<JsonObject> brregCall = brregApi.getVoluntaryBrregOrg(orgId, true);
+            brregCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    switch (response.code()) {
+                        case OK:
+                            Log.d("OK_VOLUNTARY_ORG_FOUND", "Voluntary Org Found");
+                            brregCallback.accept(new Result.Success<>(response.body()));
+                            break;
+
+                        case BAD_REQUEST:
+                            Log.d("FAIL_VOLUNTARY_ORG_FOUND", "Voluntary Org Bad Request");
+                            brregCallback.accept(new Result.Success<>(null));
+                            break;
+
+                        case NOT_FOUND:
+                            Log.d("FAIL_VOLUNTARY_ORG_FOUND", "Voluntary Org Not Found.");
+                            brregCallback.accept(new Result.Success<>(null));
+                            break;
+
+                        default:
+                            Log.d("FAIL_VOLUNTARY_ORG_FOUND", "Server error");
+                            brregCallback.accept(new Result.Success<>(null));
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    Log.d("Failure", t.getMessage());
+                    Log.d("FAIL_IS_OWNER_OF_GROUP", "No connection");
+                    brregCallback.accept(new Result.Error(new IOException("Connection fail " + t.getCause())));
+                }
+            });
+        } catch (Exception e) {
+            Log.d("FAIL_VOLUNTARY_ORG_FOUND", "Client error");
+            Log.d("Failure", e.getMessage());
+            brregCallback.accept(new Result.Error(new Exception("Client error")));
         }
     }
 }

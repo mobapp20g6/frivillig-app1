@@ -8,10 +8,12 @@
     <string name="action_settings">Settings</string>
     <string name="alert_cancel">Cancel</string>
     <string name="alert_confirm">Confirm</string>
+    <string name="no_functionality_added">No functionality added</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_group">Group</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in_short">Log in</string>
@@ -27,6 +29,7 @@
     <string name="menu_account">My account</string>
     <string name="ic_nav_account">User account</string>
     <string name="mismatch_password">passwords must match</string>
+    <string name="cancel_button_text">Cancel</string>
 
     <string name="task_item_title">"Task title"</string>
     <string name="task_item_participant_count">"2 / 5"</string>
@@ -34,7 +37,6 @@
     <string name="ic_menu_public_tasks">Public Tasks</string>
     <string name="ic_menu_own_tasks">Own Tasks</string>
     <string name="ic_menu_assigned_tasks">Assigned Tasks</string>
-    <string name="ic_menu_group_tasks">Group Tasks</string>
 
     <string name="task_group_name">Public</string>
     <string name="task_title">Task Title</string>
@@ -44,8 +46,55 @@
     <string name="full_screen_map">Map</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_createtask">Create task</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="create_account">Create account</string>
+    <string name="login">Login</string>
+    <string name="invalid_first_name">Invalid first name</string>
+    <string name="invalid_last_name">Invalid last name</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="successfully_made_account">Account was successfully made!</string>
+    <string name="failed_to_make_account">Something went wrong when trying to create account</string>
+    <!-- MERGER -->
 
+    <!-- Create Group Fragment Creation Text -->
+    <string name="create_group_details_step_1">1</string>
+    <string name="create_group_details_text">Enter details</string>
+    <string name="create_group_details_orgid_input_hint">Organization number…</string>
+    <string name="create_group_details_btn_brreg_text">BRREG</string>
+    <string name="create_group_details_name_input_hint">Name of group…</string>
+    <string name="create_group_details_desc_input_hint">Write a short description…</string>
+
+    <string name="create_group_extras_step_2">2</string>
+    <string name="create_group_extras_text">Add location or picture</string>
+    <string name="create_group_extras_input_btn_location">Add location</string>
+    <string name="create_group_extras_input_btn_remove_location">Remove location</string>
+    <string name="create_group_extras_input_btn_picture">Add picture</string>
+    <string name="create_group_extras_input_picture_desc">User-added picture</string>
+    <string name="create_group_extras_input_btn_remove_picture">Remove picture</string>
+
+    <string name="create_group_confirmation_step_3">3</string>
+    <string name="create_group_confirmation_text">Create group</string>
+    <string name="create_group_confirmation_input_btn_create">Create group</string>
+
+    <!-- Create Group Fragment User Feedback -->
+    <string name="create_group_group_name_invalid">Group name must be provided and under 255 characters</string>
+    <string name="create_group_group_desc_invalid">Group description must be provided and under 255 characters</string>
+    <string name="create_group_group_orgID_invalid">Group Org ID must be 9 numbers</string>
+    <string name="create_group_brreg_search_failed">Did not find any voluntary organizations.</string>
+    <string name="create_group_no_voluntary_org_feedback">Not sending OrgId, can not validate</string>
+    <string name="create_group_failed_creation">Failed to create group</string>
+    <string name="create_group_success_creation">Group Successfully created</string>
+    <string name="create_group_failed_loc_add">Failed to add location to group</string>
+    <string name="create_group_success_loc_add">Loc successfully added to group</string>
+    <string name="create_group_failed_pic_add">Failed to add picture to group</string>
+    <string name="create_group_success_pic_add">Picture successfully added to group</string>
+    <string name="create_group_cancel_action">Canceled group creation.</string>
+
+    <!-- General usage strings -->
+    <string name="location_found">Location added.</string>
+    <string name="location_removed">Location removed.</string>
+    <string name="location_not_found">Couldn\'t add location.</string>
     <!-- Display Group -->
     <string name="display_group_name_text">Group Name Placeholder</string>
     <string name="display_group_description_no_data">This group has no description</string>
