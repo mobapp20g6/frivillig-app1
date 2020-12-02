@@ -55,8 +55,8 @@ public class NewTaskViewModel extends ViewModel {
      * @param resultCallback the result of the operation; either Result.Success or Result.Error
      */
     public void createTask(String title, String description, Long participantCount, boolean isGroup, Consumer<Result<Task>> resultCallback) {
-        if (!loginRepository.isLoggedIn() || isDateSet() == false) {
-           resultCallback.accept(new Result.Error(new Exception("Not loggedIn")));
+        if (!loginRepository.isLoggedIn() || !isDateSet() || title.trim().isEmpty() || description.trim().isEmpty() || participantCount == null) {
+           resultCallback.accept(new Result.Error(new Exception("Not valid")));
         } else {
             Date date = currentDateLiveData.getValue();
             Long groupId;
