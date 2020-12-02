@@ -3,13 +3,13 @@ package no.ntnu.mobapp20g6.app1.ui.createtask;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +43,6 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.ntnu.mobapp20g6.app1.R;
-import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
@@ -64,8 +63,6 @@ public class NewTaskFragment extends Fragment {
     private NewTaskViewModel newTaskViewModel;
     private UserAccountViewModel userAccountViewModel;
     private NavController navController;
-    private Context context;
-    private GPS gps;
 
 
     @Override
@@ -78,11 +75,6 @@ public class NewTaskFragment extends Fragment {
         this.userAccountViewModel = new ViewModelProvider(requireActivity(), new UserAccountViewModelFactory())
                 .get(UserAccountViewModel.class);
         this.navController = NavHostFragment.findNavController(getParentFragment());
-
-        context = getContext();
-        if(context != null) {
-            gps = new GPS(context,getActivity());
-        }
 
     }
 
@@ -121,7 +113,7 @@ public class NewTaskFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        gps.stopLocationUpdates();
+        newTaskViewModel.stopGetGpsPosition();
     }
 
     @Override
@@ -154,8 +146,8 @@ public class NewTaskFragment extends Fragment {
 
         // Init the state for the UI
         displayDateInUi(newTaskViewModel.getCurrentDateLiveData().getValue());
-        newTaskViewModel.initGps(getContext(), getActivity());
-        displayLocationBtnUi(newTaskViewModel.getCurrentLocationSetStateLiveData().getValue());
+        newTaskViewModel.initGps(getContext(),getActivity());
+        displayLocationInUiFromStateString(newTaskViewModel.getCurrentLocationSetStateLiveData().getValue());
         displayPictureInUi(newTaskViewModel.getCurrentImageBitmapUriLiveData().getValue());
 
 
@@ -186,16 +178,7 @@ public class NewTaskFragment extends Fragment {
             @Override
             public void onChanged(Location location) {
                 System.out.println("LOCATION DATA UPDATED");
-                newTaskViewModel.updateGpsStateLiveData(location);
-
-            }
-        });
-
-        newTaskViewModel.getCurrentLocationSetStateLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                System.out.println("LOCATION UI UPDATED = " + s);
-                displayLocationBtnUi(s);
+                newTaskViewModel.onGpsResultUpdateSetState(location, null);
 
             }
         });
@@ -208,6 +191,15 @@ public class NewTaskFragment extends Fragment {
                 displayDateInUi(date);
             }
         });
+         //UPDATE UI WHEN GPS-STATE IS WRITTEN TO (CAN BE WRITTEN FROM GPS-LIVEDATA OR BY USER BUTTON PRESS
+        newTaskViewModel.getCurrentLocationSetStateLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                System.out.println("UI LOCATION STATE UPDATED => " + s);
+                displayLocationInUiFromStateString(s);
+
+            }
+        });
 
         /**
          *  BUTTONS
@@ -216,7 +208,7 @@ public class NewTaskFragment extends Fragment {
         btnSetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                newTaskViewModel.getGpsPosition();
+                newTaskViewModel.onButtonPressRunGpsBasedOnSetState();
             }
         });
         // BUTTONS LOCATION REMOVE
@@ -364,36 +356,54 @@ public class NewTaskFragment extends Fragment {
         }
     }
 
-    private void displayLocationBtnUi(String locationStatus) {
+    private void displayLocationInUiFromStateString(String state) {
         Button btnSetLocation = getView().findViewById(R.id.createtask_extras_btn_location);
         Button btnUnsetLocation = getView().findViewById(R.id.createtask_extras_btn_remove_location);
-        if (locationStatus == null) {
+        if (state == null) {
             btnUnsetLocation.setVisibility(View.GONE);
             btnSetLocation.setVisibility(View.GONE);
         } else {
-            switch (locationStatus) {
-                case "set":
-                    System.out.println("setting gps");
-                    btnSetLocation.setEnabled(true);
-                    btnUnsetLocation.setVisibility(View.VISIBLE);
-                    btnSetLocation.setVisibility(View.GONE);
-                    break;
-                case "aquire":
-                    System.out.println("aquiring gps");
-                    btnSetLocation.setEnabled(false);
-                    //btnSetLocation.setText("Aquiring...");
-                    break;
+            switch (state) {
                 case "ready":
                     System.out.println("ready gps");
                     btnSetLocation.setText("Set location from GPS");
                     btnSetLocation.setEnabled(true);
-                    btnUnsetLocation.setVisibility(View.GONE);
                     btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    break;
+                case "aquire":
+                    System.out.println("aquiring gps");
+                    btnSetLocation.setText("Getting GPS position fix");
+                    btnSetLocation.setEnabled(false);
+                    newTaskViewModel.startGpsFailureTimer();
+                    break;
+                case "set":
+                    System.out.println("setting gps");
+                    btnSetLocation.setEnabled(true);
+                    btnSetLocation.setVisibility(View.GONE);
+                    btnUnsetLocation.setVisibility(View.VISIBLE);
                     break;
                 case "denied":
                     System.out.println("denied gps");
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
                     btnSetLocation.setText("Permission denied, try again ?");
-                    newTaskViewModel.initGps(getContext(),getActivity());
+                    break;
+                case "failed":
+                    System.out.println("timeout gps");
+                    btnSetLocation.setEnabled(false);
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    btnSetLocation.setText("Unable to get GPS, restart app");
+                    break;
+                case "timeout":
+                    System.out.println("ready gps, failed last time");
+                    btnSetLocation.setText("Failed, try again ?");
+                    btnSetLocation.setEnabled(true);
+                    btnSetLocation.setVisibility(View.VISIBLE);
+                    btnUnsetLocation.setVisibility(View.GONE);
+                    break;
+
                 default:
                     break;
             }
