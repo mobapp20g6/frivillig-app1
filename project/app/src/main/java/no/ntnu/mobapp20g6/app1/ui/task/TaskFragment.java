@@ -1,6 +1,5 @@
 package no.ntnu.mobapp20g6.app1.ui.task;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;

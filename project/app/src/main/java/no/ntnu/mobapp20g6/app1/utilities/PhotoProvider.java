@@ -1,16 +1,13 @@
-package no.ntnu.mobapp20g6.app1;
+package no.ntnu.mobapp20g6.app1.utilities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.io.File;

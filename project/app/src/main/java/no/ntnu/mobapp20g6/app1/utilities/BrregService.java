@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.utilities;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

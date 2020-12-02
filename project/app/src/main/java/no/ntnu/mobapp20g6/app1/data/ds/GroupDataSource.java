@@ -5,11 +5,10 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import no.ntnu.mobapp20g6.app1.data.BrregService;
+import no.ntnu.mobapp20g6.app1.utilities.BrregService;
 import no.ntnu.mobapp20g6.app1.data.RestService;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.api.BrregAPI;

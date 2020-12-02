@@ -21,7 +21,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import no.ntnu.mobapp20g6.app1.R;
-import no.ntnu.mobapp20g6.app1.data.GPS;
+import no.ntnu.mobapp20g6.app1.utilities.GPS;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 
 /**

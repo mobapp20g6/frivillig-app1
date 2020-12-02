@@ -18,9 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public class TaskListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         NavController navController = NavHostFragment.findNavController(getParentFragment());
         int lastUsedNav = navController.getCurrentDestination().getId();
-        View root = inflater.inflate(R.layout.task_list_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_task_list, container, false);
         View view = container.getRootView();
         TaskViewModel taskViewModel = new ViewModelProvider(requireActivity(), new TaskViewModelFactory()).get(TaskViewModel.class);
         taskListViewModel = new ViewModelProvider(this, new TaskListViewModelFactory()).get(TaskListViewModel.class);
