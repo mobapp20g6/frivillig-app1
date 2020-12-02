@@ -84,6 +84,7 @@ public interface ServiceApi {
     Call<Group> createGroup (
             @Header("Authorization") String token,
             @Field("title") String title,
+            @Field("description") String description,
             @Nullable@Field("orgid") Long orgId
     );
 

@@ -150,6 +150,7 @@ public class LocationDataSource {
                 }
             } catch (Exception e) {
                 Log.d("FAIL_ADD_LOCATION_TO_GROUP", "Client error");
+                Log.d("CLIENT ERROR", e.getMessage());
                 addLocationToGroupCallBack.accept(new Result.Error(new Exception("Client error")));
             }
         }
