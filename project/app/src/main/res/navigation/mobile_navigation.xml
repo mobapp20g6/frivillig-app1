@@ -82,7 +82,7 @@
         tools:layout="@layout/fragment_createtask" >
         <action
             android:id="@+id/action_nav_createtask_to_nav_task"
-            app:destination="@id/nav_task"
+            app:destination="@id/nav_task" ></action>
     </fragment>
         tools:layout="@layout/task_list_fragment" >
         <action
