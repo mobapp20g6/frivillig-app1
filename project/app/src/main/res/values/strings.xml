@@ -56,6 +56,7 @@
     <string name="invalid_email">Invalid email</string>
     <string name="successfully_made_account">Account was successfully made!</string>
     <string name="failed_to_make_account">Something went wrong when trying to create account</string>
+    <!-- MERGER -->
 
     <!-- Create Group Fragment Creation Text -->
     <string name="create_group_details_step_1">1</string>
