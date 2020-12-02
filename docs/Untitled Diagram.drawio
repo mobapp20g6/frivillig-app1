@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-12-02T16:21:50.356Z" agent="5.0 (X11)" etag="sF5nA8Zrv27JWPLtjGjG" version="13.10.5" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-02T16:22:22.416Z" agent="5.0 (X11)" etag="PblmG1aHz3ZGo6NF7_VM" version="13.10.5" type="github">
   <diagram id="vnSreKOgDY3ID4QjmNT7" name="Page-1">
     <mxGraphModel dx="1662" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -8,10 +8,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="vulZ_JFEH84F024nTpnq-1" value="WelcomeActivity" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="170" y="100" width="120" height="60" as="geometry" />
+          <mxGeometry x="180" y="100" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="vulZ_JFEH84F024nTpnq-2" value="" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="160" y="230" width="120" height="60" as="geometry" />
+          <mxGeometry x="170" y="230" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="vulZ_JFEH84F024nTpnq-8" value="" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="vulZ_JFEH84F024nTpnq-4" target="vulZ_JFEH84F024nTpnq-7">
           <mxGeometry relative="1" as="geometry" />
@@ -20,7 +20,7 @@
           <mxGeometry x="338" y="100" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="vulZ_JFEH84F024nTpnq-6" value="LoginActivity" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="150" y="240" width="120" height="60" as="geometry" />
+          <mxGeometry x="160" y="240" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="vulZ_JFEH84F024nTpnq-7" value="" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="353" y="230" width="120" height="60" as="geometry" />
