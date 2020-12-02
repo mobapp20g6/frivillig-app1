@@ -19,11 +19,11 @@ public interface AuthApi {
     );
 
     @FormUrlEncoded
-    @POST(PREFIX + "/createuser")
+    @POST(PREFIX + "/create")
     Call<User> createUser(
             @Field("firstname") String firstName,
             @Field("lastname") String lastName,
-            @Field("password") String pwd,
+            @Field("pwd") String pwd,
             @Field("email") String email
     );
 
