@@ -87,11 +87,17 @@
         android:label="Tasks"
         tools:layout="@layout/fragment_task" >
         <action
-            android:id="@+id/action_nav_task_to_nav_home"
-            app:destination="@id/nav_home" />
-        <action
             android:id="@+id/action_nav_task_to_nav_full_screen_map"
             app:destination="@id/nav_full_screen_map" />
+        <action
+            android:id="@+id/action_nav_task_to_nav_own_tasks"
+            app:destination="@id/nav_own_tasks" />
+        <action
+            android:id="@+id/action_nav_task_to_nav_assigned_tasks"
+            app:destination="@id/nav_assigned_tasks" />
+        <action
+            android:id="@+id/action_nav_task_to_nav_public_tasks"
+            app:destination="@id/nav_public_tasks" />
     </fragment>
     <fragment
         android:id="@+id/nav_full_screen_map"

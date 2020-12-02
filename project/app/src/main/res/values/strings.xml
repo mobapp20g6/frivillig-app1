@@ -49,4 +49,13 @@
     <string name="title_activity_login">LoginActivity</string>
 >>>>>>> develop
 
+    <string name="create_account">Create account</string>
+    <string name="login">Login</string>
+    <string name="invalid_first_name">Invalid first name</string>
+    <string name="invalid_last_name">Invalid last name</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="successfully_made_account">Account was successfully made!</string>
+    <string name="failed_to_make_account">Something went wrong when trying to create account</string>
+
+
 </resources>
