@@ -66,7 +66,8 @@ public class UserAccountFragment extends Fragment {
         if (userAccountViewModel.isUserLoggedIn()) {
             userAccountViewModel.fetchUserFromServer();
         } else {
-            navController.navigate(R.id.action_nav_account_to_nav_login);
+            // User not logged in -> GOTO login activity
+            startActivity(new Intent(getActivity(), WelcomeActivity.class));
         }
 
         return root;
