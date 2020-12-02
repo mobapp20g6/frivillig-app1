@@ -86,7 +86,7 @@
         android:id="@+id/nav_group_tasks"
         android:name="no.ntnu.mobapp20g6.app1.ui.tasklist.TaskListFragment"
         android:label="Group Tasks"
-        tools:layout="@layout/task_list_fragment" >
+        tools:layout="@layout/fragment_task_list" >
         <action
             android:id="@+id/action_nav_assigned_tasks_to_nav_task"
             app:destination="@id/nav_task" />
@@ -117,7 +117,7 @@
     <fragment
         android:id="@+id/nav_display_group"
         android:name="no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupFragment"
-        android:label="fragment_display_group"
+        android:label="@string/nav_display_group"
         tools:layout="@layout/fragment_display_group" >
         <action
             android:id="@+id/action_nav_display_group_to_groupMapFragment"

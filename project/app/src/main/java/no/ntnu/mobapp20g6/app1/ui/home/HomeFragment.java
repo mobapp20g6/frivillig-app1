@@ -39,6 +39,8 @@ public class HomeFragment extends Fragment {
         final Button logoutBtn = root.findViewById(R.id.home_btn_logout);
         final Button groupBtn = root.findViewById(R.id.home_btn_group);
 
+        userAccountViewModel.fetchUserFromServer();
+
         createTaskBtn.setOnClickListener(onClick -> {
             navController.navigate(R.id.action_nav_home_to_nav_createtask);
         });

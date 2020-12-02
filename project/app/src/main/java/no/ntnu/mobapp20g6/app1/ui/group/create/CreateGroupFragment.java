@@ -299,6 +299,7 @@ public class CreateGroupFragment extends Fragment {
                             addPicToGroup(createGroupCallBack.getGroupId(),
                                     cgViewModel.getPictureMutableLiveData().getValue());
                         }
+                        navController.navigate(R.id.action_nav_group_to_nav_home);
                     }
                 });
     }
@@ -339,7 +340,7 @@ public class CreateGroupFragment extends Fragment {
             Toast.makeText(
                     getContext().getApplicationContext(),
                     string,
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -19,10 +19,10 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import no.ntnu.mobapp20g6.app1.R;
-import no.ntnu.mobapp20g6.app1.data.GPS;
 import no.ntnu.mobapp20g6.app1.data.ds.LoginDataSource;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
+import no.ntnu.mobapp20g6.app1.utilities.GPS;
 
 public class GroupMapFragment extends Fragment {
 
