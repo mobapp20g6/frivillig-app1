@@ -1,4 +1,4 @@
-package no.ntnu.mobapp20g6.app1.data;
+package no.ntnu.mobapp20g6.app1.utilities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,9 +17,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.util.concurrent.Executor;
 
 import static android.content.Context.LOCATION_SERVICE;
 

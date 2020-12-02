@@ -32,7 +32,7 @@ import com.google.gson.JsonPrimitive;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.ntnu.mobapp20g6.app1.R;
-import no.ntnu.mobapp20g6.app1.data.GPS;
+import no.ntnu.mobapp20g6.app1.utilities.GPS;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 
 import static android.app.Activity.RESULT_OK;

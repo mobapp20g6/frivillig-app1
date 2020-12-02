@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModel;
 import java.util.Date;
 import java.util.function.Consumer;
 
-import no.ntnu.mobapp20g6.app1.PhotoProvider;
-import no.ntnu.mobapp20g6.app1.data.GPS;
+import no.ntnu.mobapp20g6.app1.utilities.PhotoProvider;
+import no.ntnu.mobapp20g6.app1.utilities.GPS;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;

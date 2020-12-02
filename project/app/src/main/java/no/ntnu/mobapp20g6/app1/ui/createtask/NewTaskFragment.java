@@ -384,12 +384,22 @@ public class NewTaskFragment extends Fragment {
         taskViewModel.setActiveTask(task);
         taskViewModel.setForceLoadSelectedTaskId(task.getId());
         navController.navigate(R.id.nav_task);
+
+        final EditText fieldTaskTitle = getView().findViewById(R.id.createtask_field_title);
+        final EditText fieldTaskDescr = getView().findViewById(R.id.createtask_field_description);
+        final EditText fieldTaskParticipants = getView().findViewById(R.id.createtask_field_participants);
+
+        fieldTaskTitle.setText("");
+        fieldTaskDescr.setText("");
+        fieldTaskParticipants.setText("");
+        newTaskViewModel.currentDateLiveData.setValue(null);
+
         //FIXME: REMOVE BACK STACK DOESNT WORK
-        FragmentManager fm = getActivity().getSupportFragmentManager();
+        //FragmentManager fm = getActivity().getSupportFragmentManager();
         //fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-         for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-             fm.popBackStack();
-         }
+         //for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+         //    fm.popBackStack();
+         //}
 
     }
 

@@ -18,15 +18,12 @@ import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.WelcomeActivity;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
-import no.ntnu.mobapp20g6.app1.ui.login.LoginViewModel;
-import no.ntnu.mobapp20g6.app1.ui.login.LoginViewModelFactory;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private UserAccountViewModel userAccountViewModel;
     private NavController navController;
-    private Object object;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
