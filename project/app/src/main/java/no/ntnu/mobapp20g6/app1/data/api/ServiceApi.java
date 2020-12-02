@@ -51,7 +51,7 @@ public interface ServiceApi {
             @Nullable@Field("description") String description,
             @Field("maxusers") Long maxUsers,
             @Field("scheduledate") String scheduleDate,
-            @Nullable@Field("group") Long groupId
+            @Nullable@Field("groupid") Long groupId
     );
 
     @DELETE(PREFIX + "removetask")
@@ -119,7 +119,7 @@ public interface ServiceApi {
     );
 
     @FormUrlEncoded
-    @GET(PREFIX + "addlocation")
+    @POST(PREFIX + "addlocation")
     Call<Task> addLocationToTask(
             @Header("Authorization") String token,
             @Field("taskid") Long taskId,
@@ -132,7 +132,7 @@ public interface ServiceApi {
     );
 
     @FormUrlEncoded
-    @GET(PREFIX + "addlocation")
+    @POST(PREFIX + "addlocation")
     Call<Group> addLocationToGroup(
             @Header("Authorization") String token,
             @Field("groupid") Long groupId,

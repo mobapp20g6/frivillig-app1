@@ -21,6 +21,7 @@ public class TaskViewModel extends ViewModel {
     private final TaskRepository taskRepository;
     private final LoginRepository loginRepository;
     private MutableLiveData<Task> activeTaskLiveData;
+    private Long forceLoadSelectedTaskId;
 
     public TaskViewModel(TaskRepository taskRepository, LoginRepository loginRepository) {
         this.taskRepository = taskRepository;
@@ -75,7 +76,7 @@ public class TaskViewModel extends ViewModel {
         activeTaskLiveData.setValue(task);
     }
 
-    private void loadActiveTask(Long id) {
+    public void loadActiveTask(Long id) {
         taskRepository.getTask(loginRepository.getToken(), id, this::setActiveTask);
     }
 
@@ -136,5 +137,13 @@ public class TaskViewModel extends ViewModel {
      */
     public boolean isTaskFull() {
         return activeTaskLiveData.getValue().getParticipantCount() >= activeTaskLiveData.getValue().getParticipantLimit();
+    }
+
+    public void setForceLoadSelectedTaskId(Long forceLoadSelectedTaskId) {
+        this.forceLoadSelectedTaskId = forceLoadSelectedTaskId;
+    }
+
+    public Long getForceLoadSelectedTaskId() {
+        return forceLoadSelectedTaskId;
     }
 }

@@ -33,7 +33,7 @@ public class LocationDataSource {
 
         public void addLocationToTask(
                 String token, Long taskId,
-                String latitude, String longitude,
+                Double latitude, Double longitude,
                 String streetAddr, String city, Long postal, String country,
                 Consumer<Result<Task>> addLocationToTaskCallBack) {
             try {
@@ -41,9 +41,11 @@ public class LocationDataSource {
                     Log.d("FAIL_ADD_LOCATION_TO_TASK", "Token cannot be null when trying add location to task");
                     addLocationToTaskCallBack.accept(new Result.Error(new Exception("Token")));
                 } else {
-
+                    // Conversion to string to not break REST API
+                    String latString = latitude.toString();
+                    String lonString = longitude.toString();
                     Call<Task> addLocationToTaskCall = serviceApi.addLocationToTask(token, taskId,
-                            latitude, longitude, streetAddr, city, postal, country);
+                            latString, lonString, streetAddr, city, postal, country);
                     addLocationToTaskCall.enqueue(new Callback<Task>() {
                         @Override
                         public void onResponse(Call<Task> call, Response<Task> response) {
@@ -87,6 +89,7 @@ public class LocationDataSource {
                 }
             } catch (Exception e) {
                 Log.d("FAIL_ADD_LOCATION_TO_TASK", "Client error");
+                //System.err.println("Stacktrace + " + e);
                 addLocationToTaskCallBack.accept(new Result.Error(new Exception("Client error")));
             }
         }

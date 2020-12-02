@@ -90,6 +90,7 @@
                             android:layout_marginTop="8dp"
                             android:text="Created"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black"
                             app:layout_constraintEnd_toStartOf="@+id/account_created_value"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -100,6 +101,7 @@
                             android:layout_height="wrap_content"
                             android:text="21.01.2020 15:34"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="@+id/account_created"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/account_created"
@@ -112,6 +114,7 @@
                             android:layout_marginTop="8dp"
                             android:text="Email"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="@+id/account_created"
                             app:layout_constraintTop_toBottomOf="@+id/account_created" />
 
@@ -121,6 +124,7 @@
                             android:layout_height="wrap_content"
                             android:text="appleseed@appletrrrrrr.net"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="@+id/account_email"
                             app:layout_constraintEnd_toEndOf="@+id/account_created_value"
                             app:layout_constraintStart_toStartOf="@+id/account_created_value"
@@ -133,6 +137,7 @@
                             android:layout_marginTop="8dp"
                             android:text="Group"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="@+id/account_created"
                             app:layout_constraintTop_toBottomOf="@+id/account_email" />
 
@@ -142,6 +147,7 @@
                             android:layout_height="wrap_content"
                             android:text="My Best Group"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="@+id/account_group"
                             app:layout_constraintEnd_toEndOf="@+id/account_email_value"
                             app:layout_constraintStart_toStartOf="@+id/account_email_value"
@@ -205,6 +211,8 @@
                             android:ems="10"
                             android:hint="your current password"
                             android:inputType="textPassword"
+                            android:textColor="@color/black"
+                            android:textColorHint="#AEAEAE"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -217,6 +225,8 @@
                             android:ems="10"
                             android:hint="your new password"
                             android:inputType="textPassword"
+                            android:textColor="@color/black"
+                            android:textColorHint="#AEAEAE"
                             app:layout_constraintEnd_toEndOf="@+id/resetpass_old"
                             app:layout_constraintStart_toStartOf="@+id/resetpass_old"
                             app:layout_constraintTop_toBottomOf="@+id/resetpass_old" />
@@ -229,6 +239,8 @@
                             android:ems="10"
                             android:hint="verify password"
                             android:inputType="textPassword"
+                            android:textColor="@color/black"
+                            android:textColorHint="#AEAEAE"
                             app:layout_constraintEnd_toEndOf="@+id/resetpass_new"
                             app:layout_constraintStart_toStartOf="@+id/resetpass_new"
                             app:layout_constraintTop_toBottomOf="@+id/resetpass_new" />
@@ -240,6 +252,7 @@
                             android:layout_marginTop="8dp"
                             android:backgroundTint="@android:color/holo_green_dark"
                             android:text="Reset password"
+                            android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/account_resetpw_cancel"
@@ -251,6 +264,7 @@
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/design_default_color_error"
                             android:text="Clear"
+                            android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="@+id/account_resetpw_ok"
                             app:layout_constraintEnd_toStartOf="@+id/account_resetpw_ok"
                             app:layout_constraintStart_toStartOf="parent"
