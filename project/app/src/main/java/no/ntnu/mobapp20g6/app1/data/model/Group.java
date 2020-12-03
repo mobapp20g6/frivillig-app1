@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+/**
+ * @author maardal
+ */
 public class Group {
 
     @Expose

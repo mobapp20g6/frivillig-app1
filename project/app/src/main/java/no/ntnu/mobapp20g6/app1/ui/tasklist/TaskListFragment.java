@@ -29,6 +29,9 @@ import no.ntnu.mobapp20g6.app1.ui.group.display.DisplayGroupViewModelFactory;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModel;
 import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModelFactory;
 
+/**
+ * @author TrymV
+ */
 public class TaskListFragment extends Fragment {
 
     private TaskListViewModel taskListViewModel;

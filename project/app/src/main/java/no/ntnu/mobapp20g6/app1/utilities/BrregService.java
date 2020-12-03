@@ -5,6 +5,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * @author maardal
+ */
 public class BrregService {
     public static final String DOMAIN = "https://data.brreg.no/";
 

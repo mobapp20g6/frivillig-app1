@@ -22,6 +22,9 @@ import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import no.ntnu.mobapp20g6.app1.data.repo.TaskRepository;
 
+/**
+ * @author nilsjha
+ */
 public class NewTaskViewModel extends ViewModel {
 
     private LiveData<Location> currentLocationLiveData;

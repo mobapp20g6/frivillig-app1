@@ -6,6 +6,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * @author nilsjha
+ */
 public class RestService {
     public static String DOMAIN = "https://mobapp.haugen.ch/";
 

@@ -15,6 +15,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+/**
+ * @author maardal
+ */
 public class LocationDataSource {
 
         private final ServiceApi serviceApi;

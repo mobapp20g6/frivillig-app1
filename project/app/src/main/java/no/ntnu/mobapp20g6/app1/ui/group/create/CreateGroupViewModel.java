@@ -21,6 +21,9 @@ import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import no.ntnu.mobapp20g6.app1.data.model.Group;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 
+/**
+ * @author maardal
+ */
 public class CreateGroupViewModel extends ViewModel {
 
     private LiveData<Location> locationLiveData;

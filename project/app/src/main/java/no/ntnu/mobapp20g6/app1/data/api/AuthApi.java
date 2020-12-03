@@ -10,6 +10,9 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
+/**
+ * @author nilsjha
+ */
 public interface AuthApi {
     public static String PREFIX = "resources/auth";
 

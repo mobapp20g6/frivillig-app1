@@ -37,6 +37,9 @@ import no.ntnu.mobapp20g6.app1.data.model.Group;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * @author maardal
+ */
 public class CreateGroupFragment extends Fragment {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;

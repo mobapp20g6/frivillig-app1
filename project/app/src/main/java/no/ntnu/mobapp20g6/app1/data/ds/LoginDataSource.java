@@ -19,6 +19,7 @@ import javax.security.auth.login.LoginException;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
+ * @author nilsjha
  */
 public class LoginDataSource {
     private Retrofit rest;

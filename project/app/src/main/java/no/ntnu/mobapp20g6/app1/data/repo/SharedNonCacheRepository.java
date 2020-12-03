@@ -16,6 +16,7 @@ import no.ntnu.mobapp20g6.app1.data.model.Task;
  * Requests information regarding Group and Location.
  * Does not hold caches of this information.
  * Is a singleton.
+ * @author maardal, TrymV
  */
 public class SharedNonCacheRepository {
 

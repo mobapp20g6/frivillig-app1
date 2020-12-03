@@ -54,6 +54,9 @@ import no.ntnu.mobapp20g6.app1.ui.task.TaskViewModelFactory;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * @author nilsjha
+ */
 public class NewTaskFragment extends Fragment {
 
     private static final int REQUEST_IMAGE_CAPTURE = 777;

@@ -17,6 +17,9 @@ import android.widget.Toast;
 import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.WelcomeActivity;
 
+/**
+ * @author TrymV
+ */
 public class CreateAccountActivity extends AppCompatActivity {
 
     private CreateAccountViewModel createAccountViewModel;
