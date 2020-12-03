@@ -22,6 +22,9 @@ import android.widget.Toast;
 import no.ntnu.mobapp20g6.app1.MainActivity;
 import no.ntnu.mobapp20g6.app1.R;
 
+/**
+ * @author nilsjha
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;

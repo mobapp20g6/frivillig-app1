@@ -37,6 +37,9 @@ import no.ntnu.mobapp20g6.app1.data.model.Picture;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 import no.ntnu.mobapp20g6.app1.data.model.User;
 
+/**
+ * @author maardal
+ */
 public class DisplayGroupFragment extends Fragment {
 
     private DisplayGroupViewModel dgViewModel;

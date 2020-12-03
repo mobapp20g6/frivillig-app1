@@ -12,6 +12,9 @@ import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.model.LoggedInUser;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 
+/**
+ * @author nilsjha
+ */
 public class UserAccountViewModel extends ViewModel {
     // TODO: Implement the ViewModel
     private MutableLiveData<UserAccountResetFormState> resetFormstate = new MutableLiveData<>();

@@ -19,6 +19,9 @@ import androidx.appcompat.widget.Toolbar;
 import no.ntnu.mobapp20g6.app1.ui.login.LoginViewModel;
 import no.ntnu.mobapp20g6.app1.ui.login.LoginViewModelFactory;
 
+/**
+ * @author TrymV , nilsjha, maardal
+ */
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;

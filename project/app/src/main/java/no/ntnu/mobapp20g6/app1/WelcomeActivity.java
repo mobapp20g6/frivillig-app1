@@ -10,6 +10,9 @@ import android.widget.Button;
 import no.ntnu.mobapp20g6.app1.ui.createaccount.CreateAccountActivity;
 import no.ntnu.mobapp20g6.app1.ui.login.LoginActivity;
 
+/**
+ * @author TrymV
+ */
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override

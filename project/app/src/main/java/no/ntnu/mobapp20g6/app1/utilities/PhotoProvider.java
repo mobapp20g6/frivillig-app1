@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author nilsjha
+ */
 public class PhotoProvider {
     public String currentPhotoPath;
     public MutableLiveData<String>currentPhotoUriLiveData;

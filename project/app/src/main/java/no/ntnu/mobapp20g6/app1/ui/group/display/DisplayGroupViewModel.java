@@ -21,6 +21,9 @@ import no.ntnu.mobapp20g6.app1.data.repo.SharedNonCacheRepository;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
+/**
+ * @author maardal
+ */
 public class DisplayGroupViewModel extends ViewModel {
 
     private SharedNonCacheRepository shareRepo;

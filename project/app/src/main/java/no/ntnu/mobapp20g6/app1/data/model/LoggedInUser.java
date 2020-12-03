@@ -11,6 +11,7 @@ import java.util.Date;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
+ * @author nilsjha
  */
 public class LoggedInUser extends User{
 

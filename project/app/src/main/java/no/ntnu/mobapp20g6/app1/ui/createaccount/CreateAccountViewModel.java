@@ -14,6 +14,9 @@ import no.ntnu.mobapp20g6.app1.R;
 import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.repo.LoginRepository;
 
+/**
+ * @author TrymV
+ */
 public class CreateAccountViewModel extends ViewModel {
     private final LoginRepository loginRepository;
     private final MutableLiveData<CreateAccountFormState> createFormState = new MutableLiveData<>();

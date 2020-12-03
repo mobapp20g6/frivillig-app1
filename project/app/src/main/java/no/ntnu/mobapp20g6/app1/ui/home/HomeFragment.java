@@ -19,6 +19,9 @@ import no.ntnu.mobapp20g6.app1.WelcomeActivity;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModel;
 import no.ntnu.mobapp20g6.app1.ui.account.UserAccountViewModelFactory;
 
+/**
+ * @author nilsjha, TrymV
+ */
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;

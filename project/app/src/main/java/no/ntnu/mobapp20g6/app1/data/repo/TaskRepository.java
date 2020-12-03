@@ -13,6 +13,9 @@ import no.ntnu.mobapp20g6.app1.data.Result;
 import no.ntnu.mobapp20g6.app1.data.ds.TaskDataSource;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 
+/**
+ * @author TrymV
+ */
 public class TaskRepository {
 
     private static volatile TaskRepository instance;

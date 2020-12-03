@@ -40,6 +40,9 @@ import no.ntnu.mobapp20g6.app1.data.RestService;
 import no.ntnu.mobapp20g6.app1.data.api.PictureApi;
 import no.ntnu.mobapp20g6.app1.data.model.Task;
 
+/**
+ * @author TrymV
+ */
 public class TaskFragment extends Fragment {
 
     private TaskViewModel taskViewModel;

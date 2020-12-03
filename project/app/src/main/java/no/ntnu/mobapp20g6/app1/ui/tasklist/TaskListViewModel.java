@@ -18,6 +18,9 @@ import no.ntnu.mobapp20g6.app1.data.repo.TaskRepository;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
+/**
+ * @author TrymV
+ */
 public class TaskListViewModel extends ViewModel {
     private final TaskRepository taskRepo;
     private final LoginRepository loginRepo;
