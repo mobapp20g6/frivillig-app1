@@ -1,0 +1,13 @@
+version: 0.2
+env:
+  variables:
+    CODEBUILD_SRC_DIR "./project"
+phases:
+  build:
+    commands:
+      - chmod +x ./gradlew
+      - ./gradlew assembleDebug
+artifacts:
+  files:
+     - './android/app/build/outputs/**/*.apk'
+  discard-paths: yes
